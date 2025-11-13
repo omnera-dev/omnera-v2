@@ -390,8 +390,14 @@ test.describe('Pages', () => {
               lang: 'en-US',
               title: 'Amazing Product',
               description: 'The best product ever',
-              openGraph: { title: 'Amazing Product', image: '/og-image.jpg' },
-              twitterCard: { card: 'summary_large_image', image: '/twitter-image.jpg' },
+              openGraph: {
+                title: 'Amazing Product',
+                image: 'https://example.com/og-image.jpg',
+              },
+              twitterCard: {
+                card: 'summary_large_image',
+                image: 'https://example.com/twitter-image.jpg',
+              },
               structuredData: {
                 '@type': 'Product',
                 name: 'Amazing Product',

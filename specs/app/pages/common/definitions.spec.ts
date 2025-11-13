@@ -317,7 +317,11 @@ test.describe('Common Definitions', () => {
             path: '/',
             meta: { lang: 'en-US', title: 'Test' },
             sections: [
-              { type: 'image', props: { src: '/image.jpg', width: 800, height: 600 }, children: [] },
+              {
+                type: 'image',
+                props: { src: '/image.jpg', width: 800, height: 600 },
+                children: [],
+              },
             ],
           },
         ],

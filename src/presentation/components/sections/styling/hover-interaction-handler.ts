@@ -62,10 +62,12 @@ export function buildHoverTransitionStyles(
 export function buildHoverData(
   hover: HoverInteraction | undefined,
   uniqueId: string
-): {
-  readonly attributes: Record<string, string>
-  readonly styleContent: string
-} | undefined {
+):
+  | {
+      readonly attributes: Record<string, string>
+      readonly styleContent: string
+    }
+  | undefined {
   if (!hover) return undefined
 
   // Build hover rules list (immutable)
