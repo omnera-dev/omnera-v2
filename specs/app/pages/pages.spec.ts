@@ -464,15 +464,12 @@ test.describe('Pages', () => {
       await startServerWithSchema({
         name: 'test-app',
         languages: {
-          default: 'en-US',
+          default: 'en',
           supported: [
-            { code: 'en-US', label: 'English', direction: 'ltr' },
-            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+            { code: 'en', label: 'English' },
+            { code: 'fr', label: 'Français' },
           ],
-          translations: {
-            'en-US': { 'hero.title': 'Welcome' },
-            'fr-FR': { 'hero.title': 'Bienvenue' },
-          },
+          translations: { en: { 'hero.title': 'Welcome' }, fr: { 'hero.title': 'Bienvenue' } },
         },
         pages: [
           {
