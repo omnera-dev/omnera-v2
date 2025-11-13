@@ -190,13 +190,18 @@ export function renderButton(
   children: readonly React.ReactNode[],
   interactions?: unknown
 ): ReactElement {
-  const clickInteractions = interactions as { click?: { animation?: string } } | undefined
+  const interactionsTyped = interactions as
+    | { click?: { animation?: string; navigate?: string } }
+    | undefined
 
-  // Store interaction data in data attribute for client-side JavaScript handler
-  const buttonProps = clickInteractions
+  const clickInteraction = interactionsTyped?.click
+
+  // Store interaction data in data attributes for client-side JavaScript handler
+  const buttonProps = clickInteraction
     ? {
         ...props,
-        'data-click-animation': clickInteractions.click?.animation,
+        ...(clickInteraction.animation && { 'data-click-animation': clickInteraction.animation }),
+        ...(clickInteraction.navigate && { 'data-click-navigate': clickInteraction.navigate }),
       }
     : props
 

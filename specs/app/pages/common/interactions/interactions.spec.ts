@@ -59,7 +59,7 @@ test.describe('Component Interactions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-MAIN-002: should support click actions without other interaction types',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
