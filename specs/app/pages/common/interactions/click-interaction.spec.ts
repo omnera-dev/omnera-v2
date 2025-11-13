@@ -169,7 +169,7 @@ test.describe('Click Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-CLICK-005: should open the URL in the same tab',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
