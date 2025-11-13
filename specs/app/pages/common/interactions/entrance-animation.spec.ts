@@ -90,7 +90,7 @@ test.describe('Entrance Animation', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-ENTRANCE-003: should zoom in from small to normal size',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
