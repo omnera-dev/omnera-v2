@@ -32,7 +32,16 @@ export function resolvePageLanguage(
   languages: Languages | undefined,
   detectedLanguage: string | undefined
 ): PageLangConfig {
-  const lang = page.meta?.lang || detectedLanguage || languages?.default || 'en-US'
+  // Priority: page.meta.lang (EXPLICIT) > detectedLanguage > languages.default > fallback
+  // NOTE: Using explicit check to ensure page.meta.lang is always preferred when present
+  const lang =
+    page.meta && page.meta.lang
+      ? page.meta.lang
+      : detectedLanguage
+        ? detectedLanguage
+        : languages?.default
+          ? languages.default
+          : 'en-US'
 
   // Determine text direction from language configuration
   const langConfig = languages?.supported.find((l) => l.code === lang)

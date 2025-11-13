@@ -52,30 +52,75 @@ describe('Style Processor', () => {
 
   describe('buildFinalClassName', () => {
     test('returns undefined when no classes apply', () => {
-      const result = buildFinalClassName(
-        'section' as Component['type'],
-        undefined,
-        undefined,
-        undefined
-      )
+      const result = buildFinalClassName({
+        type: 'section' as Component['type'],
+        className: undefined,
+        theme: undefined,
+        substitutedProps: undefined,
+        interactions: undefined,
+      })
       expect(result).toBeUndefined()
     })
 
     test('adds type class for component types in COMPONENT_TYPE_CLASSES', () => {
-      expect(buildFinalClassName('card', undefined, undefined, undefined)).toBe('card')
-      expect(buildFinalClassName('badge', undefined, undefined, undefined)).toBe('badge')
-      expect(buildFinalClassName('btn', undefined, undefined, undefined)).toBe('btn')
+      expect(
+        buildFinalClassName({
+          type: 'card',
+          className: undefined,
+          theme: undefined,
+          substitutedProps: undefined,
+          interactions: undefined,
+        })
+      ).toBe('card')
+      expect(
+        buildFinalClassName({
+          type: 'badge',
+          className: undefined,
+          theme: undefined,
+          substitutedProps: undefined,
+          interactions: undefined,
+        })
+      ).toBe('badge')
+      expect(
+        buildFinalClassName({
+          type: 'btn',
+          className: undefined,
+          theme: undefined,
+          substitutedProps: undefined,
+          interactions: undefined,
+        })
+      ).toBe('btn')
     })
 
     test('does not add type class for other component types', () => {
       expect(
-        buildFinalClassName('section' as Component['type'], undefined, undefined, undefined)
+        buildFinalClassName({
+          type: 'section' as Component['type'],
+          className: undefined,
+          theme: undefined,
+          substitutedProps: undefined,
+          interactions: undefined,
+        })
       ).toBeUndefined()
-      expect(buildFinalClassName('container', undefined, undefined, undefined)).toBeUndefined()
+      expect(
+        buildFinalClassName({
+          type: 'container',
+          className: undefined,
+          theme: undefined,
+          substitutedProps: undefined,
+          interactions: undefined,
+        })
+      ).toBeUndefined()
     })
 
     test('adds flex classes when type is flex', () => {
-      const result = buildFinalClassName('flex', undefined, undefined, { align: 'center', gap: 4 })
+      const result = buildFinalClassName({
+        type: 'flex',
+        className: undefined,
+        theme: undefined,
+        substitutedProps: { align: 'center', gap: 4 },
+        interactions: undefined,
+      })
       expect(result).toContain('flex')
       expect(result).toContain('items-center')
       expect(result).toContain('gap-4')
@@ -85,13 +130,25 @@ describe('Style Processor', () => {
       const theme: Theme = {
         breakpoints: { md: '768px' },
       }
-      const result = buildFinalClassName('grid', undefined, theme, undefined)
+      const result = buildFinalClassName({
+        type: 'grid',
+        className: undefined,
+        theme,
+        substitutedProps: undefined,
+        interactions: undefined,
+      })
       expect(result).toContain('grid')
       expect(result).toContain('md:grid-cols-2')
     })
 
     test('includes custom className when provided', () => {
-      const result = buildFinalClassName('card', 'custom-class', undefined, undefined)
+      const result = buildFinalClassName({
+        type: 'card',
+        className: 'custom-class',
+        theme: undefined,
+        substitutedProps: undefined,
+        interactions: undefined,
+      })
       expect(result).toBe('card custom-class')
     })
 
@@ -99,20 +156,38 @@ describe('Style Processor', () => {
       const theme: Theme = {
         breakpoints: { md: '768px' },
       }
-      const result = buildFinalClassName('card', 'my-custom-class', theme, { some: 'prop' })
+      const result = buildFinalClassName({
+        type: 'card',
+        className: 'my-custom-class',
+        theme,
+        substitutedProps: { some: 'prop' },
+        interactions: undefined,
+      })
       expect(result).toContain('card')
       expect(result).toContain('my-custom-class')
     })
 
     test('handles flex with custom className', () => {
-      const result = buildFinalClassName('flex', 'flex-container', undefined, { align: 'center' })
+      const result = buildFinalClassName({
+        type: 'flex',
+        className: 'flex-container',
+        theme: undefined,
+        substitutedProps: { align: 'center' },
+        interactions: undefined,
+      })
       expect(result).toContain('flex')
       expect(result).toContain('items-center')
       expect(result).toContain('flex-container')
     })
 
     test('preserves class order: type, flex/grid, custom', () => {
-      const result = buildFinalClassName('card', 'custom', undefined, undefined)
+      const result = buildFinalClassName({
+        type: 'card',
+        className: 'custom',
+        theme: undefined,
+        substitutedProps: undefined,
+        interactions: undefined,
+      })
       expect(result).toBe('card custom')
     })
   })

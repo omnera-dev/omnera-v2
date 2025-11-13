@@ -76,7 +76,7 @@ function renderDirectComponent(
   component: Component,
   props: ComponentRendererProps
 ): ReactElement | null {
-  const { type, props: componentProps, children, content } = component
+  const { type, props: componentProps, children, content, interactions } = component
 
   // Build component props (theme tokens, styles, className, etc.)
   const { elementProps, elementPropsWithSpacing } = buildComponentProps({
@@ -90,6 +90,7 @@ function renderDirectComponent(
     languages: props.languages,
     currentLang: props.currentLang,
     childIndex: props.childIndex,
+    interactions,
   })
 
   // Render children recursively
@@ -123,6 +124,7 @@ function renderDirectComponent(
     renderedChildren,
     theme: props.theme,
     languages: props.languages,
+    interactions,
   })
 }
 
