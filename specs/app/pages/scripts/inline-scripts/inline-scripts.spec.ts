@@ -174,7 +174,7 @@ test.describe('Inline Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INLINE-006: should inject global configuration',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
