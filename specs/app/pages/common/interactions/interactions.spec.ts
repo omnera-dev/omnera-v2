@@ -93,7 +93,7 @@ test.describe('Component Interactions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-MAIN-003: should support scroll animations without other interaction types',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
