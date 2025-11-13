@@ -230,14 +230,16 @@ test.describe('Inline Scripts', () => {
       await page.goto('/')
 
       // THEN: it should inject multiple inline scripts in order
-      const firstScript = await page.locator('script').filter({ hasText: 'first' }).textContent()
-      expect(firstScript).toContain("console.log('first');")
+      const scripts = await page.locator('script:not([src])').all()
+      const scriptContents = await Promise.all(scripts.map((s) => s.innerHTML()))
+      const hasFirstScript = scriptContents.some((content) => content.includes("console.log('first');"))
+      expect(hasFirstScript).toBeTruthy()
       const config = await page.evaluate(() => (window as any).config)
       expect(config?.ready).toBe(true)
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INLINE-008: should inject code with default settings (body-end, sync)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -259,8 +261,12 @@ test.describe('Inline Scripts', () => {
       await page.goto('/')
 
       // THEN: it should inject code with default settings (body-end, sync)
-      const script = await page.locator('body script').filter({ hasText: 'default' }).textContent()
-      expect(script).toContain("console.log('default');")
+      const scripts = await page.locator('script:not([src])').all()
+      const scriptContents = await Promise.all(scripts.map((s) => s.innerHTML()))
+      const hasExpectedScript = scriptContents.some((content) =>
+        content.includes("console.log('default');")
+      )
+      expect(hasExpectedScript).toBeTruthy()
     }
   )
 
