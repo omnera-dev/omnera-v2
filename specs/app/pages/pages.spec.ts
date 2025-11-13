@@ -464,15 +464,12 @@ test.describe('Pages', () => {
       await startServerWithSchema({
         name: 'test-app',
         languages: {
-          default: 'en-US',
+          default: 'en',
           supported: [
-            { code: 'en-US', label: 'English', direction: 'ltr' },
-            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+            { code: 'en', label: 'English' },
+            { code: 'fr', label: 'Français' },
           ],
-          translations: {
-            'en-US': { 'hero.title': 'Welcome' },
-            'fr-FR': { 'hero.title': 'Bienvenue' },
-          },
+          translations: { en: { 'hero.title': 'Welcome' }, fr: { 'hero.title': 'Bienvenue' } },
         },
         pages: [
           {
@@ -494,6 +491,7 @@ test.describe('Pages', () => {
       await page.goto('/')
       await expect(page.locator('h1')).toHaveText('Welcome')
       await page.goto('/fr')
+      await page.waitForLoadState('networkidle')
       await expect(page.locator('h1')).toHaveText('Bienvenue')
 
       // THEN: it should adapt page content based on selected language without page-level translations
