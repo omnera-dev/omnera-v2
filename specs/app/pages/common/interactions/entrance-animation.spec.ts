@@ -406,8 +406,9 @@ test.describe('Entrance Animation', () => {
 
       // Verify staggered list animations
       const features = page.locator('div').filter({ hasText: /Feature/ })
-      await expect(features.nth(0)).toHaveCSS('animation-delay', '100ms')
-      await expect(features.nth(1)).toHaveCSS('animation-delay', '200ms')
+      // Note: Browsers may normalize 100ms to 0.1s and 200ms to 0.2s, both are equivalent
+      await expect(features.nth(0)).toHaveCSS('animation-delay', '0.1s')
+      await expect(features.nth(1)).toHaveCSS('animation-delay', '0.2s')
 
       // Focus on workflow continuity, not exhaustive coverage
     }
