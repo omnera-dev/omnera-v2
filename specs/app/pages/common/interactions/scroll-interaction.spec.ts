@@ -466,7 +466,7 @@ test.describe('Scroll Interaction', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTIONS-SCROLL-INTERACTION-REGRESSION-001: user can complete full scroll interaction workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
