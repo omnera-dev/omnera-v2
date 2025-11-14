@@ -347,7 +347,7 @@ test.describe('Hover Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-HOVER-010: should become completely transparent',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
