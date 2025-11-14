@@ -7,7 +7,7 @@
 
 import { Scalar } from '@scalar/hono-api-reference'
 import { Console, Effect } from 'effect'
-import { Hono } from 'hono'
+import { type Context, Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { ServerCreationError } from '@/infrastructure/errors/server-creation-error'
 import { detectLanguageFromHeader } from '@/infrastructure/utils/accept-language-parser'
@@ -212,7 +212,7 @@ function setupCSSRoute(honoApp: Readonly<Hono>, app: App): Readonly<Hono> {
  * Create handler for serving JavaScript file
  */
 function createJavaScriptHandler(scriptName: string, scriptPath: string) {
-  return async (c: Parameters<Parameters<Hono['get']>[1]>[0]) => {
+  return async (c: Context) => {
     try {
       const file = Bun.file(scriptPath)
       const content = await file.text()
