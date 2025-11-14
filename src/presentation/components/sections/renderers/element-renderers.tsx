@@ -191,6 +191,40 @@ export function renderIframe(
 }
 
 /**
+ * Click interaction type definition
+ */
+type ClickInteraction = {
+  animation?: string
+  navigate?: string
+  openUrl?: string
+  openInNewTab?: boolean
+  scrollTo?: string
+  toggleElement?: string
+  submitForm?: string
+}
+
+/**
+ * Build data attributes for click interactions (immutable)
+ */
+function buildClickDataAttributes(clickInteraction: ClickInteraction): Record<string, string> {
+  return {
+    ...(clickInteraction.animation && { 'data-click-animation': clickInteraction.animation }),
+    ...(clickInteraction.navigate && { 'data-click-navigate': clickInteraction.navigate }),
+    ...(clickInteraction.openUrl && { 'data-click-open-url': clickInteraction.openUrl }),
+    ...(clickInteraction.openInNewTab !== undefined && {
+      'data-click-open-in-new-tab': String(clickInteraction.openInNewTab),
+    }),
+    ...(clickInteraction.scrollTo && { 'data-click-scroll-to': clickInteraction.scrollTo }),
+    ...(clickInteraction.toggleElement && {
+      'data-click-toggle-element': clickInteraction.toggleElement,
+    }),
+    ...(clickInteraction.submitForm && {
+      'data-click-submit-form': clickInteraction.submitForm,
+    }),
+  }
+}
+
+/**
  * Renders button element with click interactions
  */
 export function renderButton(
@@ -199,40 +233,12 @@ export function renderButton(
   children: readonly React.ReactNode[],
   interactions?: unknown
 ): ReactElement {
-  const interactionsTyped = interactions as
-    | {
-        click?: {
-          animation?: string
-          navigate?: string
-          openUrl?: string
-          openInNewTab?: boolean
-          scrollTo?: string
-          toggleElement?: string
-          submitForm?: string
-        }
-      }
-    | undefined
-
+  const interactionsTyped = interactions as { click?: ClickInteraction } | undefined
   const clickInteraction = interactionsTyped?.click
 
   // Store interaction data in data attributes for client-side JavaScript handler
   const buttonProps = clickInteraction
-    ? {
-        ...props,
-        ...(clickInteraction.animation && { 'data-click-animation': clickInteraction.animation }),
-        ...(clickInteraction.navigate && { 'data-click-navigate': clickInteraction.navigate }),
-        ...(clickInteraction.openUrl && { 'data-click-open-url': clickInteraction.openUrl }),
-        ...(clickInteraction.openInNewTab !== undefined && {
-          'data-click-open-in-new-tab': String(clickInteraction.openInNewTab),
-        }),
-        ...(clickInteraction.scrollTo && { 'data-click-scroll-to': clickInteraction.scrollTo }),
-        ...(clickInteraction.toggleElement && {
-          'data-click-toggle-element': clickInteraction.toggleElement,
-        }),
-        ...(clickInteraction.submitForm && {
-          'data-click-submit-form': clickInteraction.submitForm,
-        }),
-      }
+    ? { ...props, ...buildClickDataAttributes(clickInteraction) }
     : props
 
   return <button {...buttonProps}>{content || children}</button>
