@@ -121,13 +121,11 @@ function renderConditionalScripts(config: {
           defer={true}
         />
       )}
-      {/* Client-side scroll animation functionality - inject when scroll animations configured */}
-      {theme?.animations?.scaleUp && (
-        <script
-          src="/assets/scroll-animation.js"
-          defer={true}
-        />
-      )}
+      {/* Client-side scroll animation functionality - always inject (script has guard for zero elements) */}
+      <script
+        src="/assets/scroll-animation.js"
+        defer={true}
+      />
       {/* Client-side language switcher functionality - always inject when languages configured */}
       {languages && (
         <LanguageSwitcherScripts
@@ -154,17 +152,27 @@ function renderConditionalScripts(config: {
 const CLICK_INTERACTION_SCRIPT = `
 (function() {
   document.addEventListener('click', function(event) {
-    const button = event.target.closest('[data-click-animation], [data-click-navigate], [data-click-open-url]');
+    const button = event.target.closest('[data-click-animation], [data-click-navigate], [data-click-open-url], [data-click-scroll-to]');
     if (!button) return;
 
     const animation = button.getAttribute('data-click-animation');
     const navigate = button.getAttribute('data-click-navigate');
     const openUrl = button.getAttribute('data-click-open-url');
     const openInNewTab = button.getAttribute('data-click-open-in-new-tab') === 'true';
+    const scrollTo = button.getAttribute('data-click-scroll-to');
 
-    // Determine target action (navigate or openUrl)
+    // Determine target action (navigate, openUrl, or scrollTo)
     const targetUrl = openUrl || navigate;
     const isExternalUrl = !!openUrl;
+
+    // Handle scrollTo action
+    if (scrollTo) {
+      const targetElement = document.querySelector(scrollTo);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      return;
+    }
 
     // Handle animation and navigation/openUrl together
     if (animation && animation !== 'none') {
@@ -212,53 +220,6 @@ const CLICK_INTERACTION_SCRIPT = `
 })();
 `.trim()
 
-/**
- * Scroll interaction handler script using IntersectionObserver
- */
-const SCROLL_INTERACTION_SCRIPT = `
-(function() {
-  const elements = document.querySelectorAll('[data-scroll-animation]');
-  if (elements.length === 0) return;
-
-  const observers = new Map();
-
-  elements.forEach(function(element) {
-    const animation = element.getAttribute('data-scroll-animation');
-    if (!animation) return;
-
-    const threshold = parseFloat(element.getAttribute('data-scroll-threshold') || '0.1');
-    const delay = element.getAttribute('data-scroll-delay') || '0ms';
-    const duration = element.getAttribute('data-scroll-duration') || '600ms';
-    const once = element.getAttribute('data-scroll-once') !== 'false';
-
-    const animationClass = 'animate-' + animation;
-
-    // Apply animation delay and duration via inline styles
-    if (delay !== '0ms') {
-      element.style.animationDelay = delay;
-    }
-    if (duration !== '600ms') {
-      element.style.animationDuration = duration;
-    }
-
-    const observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          element.classList.add(animationClass);
-          if (once) {
-            observer.unobserve(element);
-          }
-        } else if (!once) {
-          element.classList.remove(animationClass);
-        }
-      });
-    }, { threshold: threshold });
-
-    observer.observe(element);
-    observers.set(element, observer);
-  });
-})();
-`.trim()
 
 /**
  * Renders scripts for body end position
@@ -276,7 +237,6 @@ function renderBodyEndScripts(config: {
       {renderScripts(scripts.external.bodyEnd, scripts.inline.bodyEnd, 'body-end')}
       {renderConditionalScripts({ page, theme, languages, direction })}
       <script dangerouslySetInnerHTML={{ __html: CLICK_INTERACTION_SCRIPT }} />
-      <script dangerouslySetInnerHTML={{ __html: SCROLL_INTERACTION_SCRIPT }} />
     </>
   )
 }

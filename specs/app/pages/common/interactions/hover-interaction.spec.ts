@@ -200,7 +200,7 @@ test.describe('Hover Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-HOVER-006: all effects should apply simultaneously with coordinated timing',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -236,13 +236,14 @@ test.describe('Hover Interaction', () => {
       await button.hover()
 
       // THEN: all effects should apply simultaneously with coordinated timing
-      await expect(button).toHaveCSS('transform', /scale/)
+      // Note: Browsers compute scale(1.05) to matrix(1.05, 0, 0, 1.05, 0, 0)
+      await expect(button).toHaveCSS('transform', /matrix\(1\.05,.*\)/)
       await expect(button).toHaveCSS('box-shadow', /rgba/)
-      await expect(button).toHaveCSS('transition-duration', /300ms/)
+      await expect(button).toHaveCSS('transition-duration', /300ms|0\.3s/)
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-HOVER-007: should change border color smoothly',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

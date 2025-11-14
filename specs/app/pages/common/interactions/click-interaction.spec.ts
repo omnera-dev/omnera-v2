@@ -241,7 +241,7 @@ test.describe('Click Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-CLICK-007: should smoothly scroll to the hero section',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

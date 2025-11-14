@@ -5,6 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
+import { calculateTotalDelay } from '../utils/time-parser'
 import type { ElementPropsConfig, TestIdConfig } from './props-builder-config'
 
 /**
@@ -135,10 +136,13 @@ function buildAnimationProps(hasScrollAnimation: boolean): Record<string, unknow
 function buildEntranceInteractionProps(config: ElementPropsConfig): Record<string, unknown> {
   if (!config.interactions?.entrance) return {}
 
-  const { delay, duration } = config.interactions.entrance
+  const { delay, duration, stagger } = config.interactions.entrance
+
+  // Calculate total delay including stagger
+  const totalDelay = calculateTotalDelay(delay, stagger, config.childIndex)
 
   // Build animation styles immutably
-  const delayStyle = delay ? { animationDelay: delay } : {}
+  const delayStyle = totalDelay ? { animationDelay: totalDelay } : {}
   const durationStyle = duration ? { animationDuration: duration } : {}
   const animationStyles = { ...delayStyle, ...durationStyle }
 

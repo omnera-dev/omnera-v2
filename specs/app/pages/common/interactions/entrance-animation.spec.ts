@@ -191,7 +191,7 @@ test.describe('Entrance Animation', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-ENTRANCE-006: each component should animate 100ms after the previous sibling',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -238,13 +238,16 @@ test.describe('Entrance Animation', () => {
 
       // THEN: each component should animate 100ms after the previous sibling
       const items = page.locator('div > div')
-      await expect(items.nth(0)).toHaveCSS('animation-delay', '0ms')
-      await expect(items.nth(1)).toHaveCSS('animation-delay', '100ms')
-      await expect(items.nth(2)).toHaveCSS('animation-delay', '200ms')
+      // Note: Browsers normalize '0ms' to '0s' - both are equivalent
+      await expect(items.nth(0)).toHaveCSS('animation-delay', '0s')
+      // Note: Browsers normalize '100ms' to '0.1s' - both are equivalent
+      await expect(items.nth(1)).toHaveCSS('animation-delay', '0.1s')
+      // Note: Browsers normalize '200ms' to '0.2s' - both are equivalent
+      await expect(items.nth(2)).toHaveCSS('animation-delay', '0.2s')
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-ENTRANCE-007: should wait 200ms base delay plus 50ms per sibling index before animating',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -289,8 +292,10 @@ test.describe('Entrance Animation', () => {
 
       // THEN: it should wait 200ms base delay plus 50ms per sibling index before animating
       const items = page.locator('div > div')
-      await expect(items.nth(0)).toHaveCSS('animation-delay', '200ms')
-      await expect(items.nth(1)).toHaveCSS('animation-delay', '250ms')
+      // Note: Browsers normalize '200ms' to '0.2s' - both are equivalent
+      await expect(items.nth(0)).toHaveCSS('animation-delay', '0.2s')
+      // Note: Browsers normalize '250ms' to '0.25s' - both are equivalent
+      await expect(items.nth(1)).toHaveCSS('animation-delay', '0.25s')
     }
   )
 
