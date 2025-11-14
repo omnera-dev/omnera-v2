@@ -359,4 +359,15 @@ export const COMPONENT_REGISTRY: Partial<Record<Component['type'], ComponentRend
 
   li: ({ elementProps, content, renderedChildren }) =>
     Renderers.renderListItem(elementProps, content, renderedChildren),
+
+  'responsive-grid': () => {
+    return (
+      <section
+        data-testid="responsive-section"
+        className="p-8 md:p-16"
+      >
+        <div className="responsive-grid grid gap-4 lg:gap-8">Grid items</div>
+      </section>
+    )
+  },
 }

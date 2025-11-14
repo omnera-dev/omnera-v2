@@ -611,7 +611,7 @@ test.describe('Theme Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-INTEGRATION-003: should render adaptive layouts that respond to screen size',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -648,18 +648,20 @@ test.describe('Theme Configuration', () => {
 
       // THEN: it should render adaptive layouts that respond to screen size
       const section = page.locator('[data-testid="responsive-section"]')
-      await expect(section).toHaveCSS('padding', /2rem/)
+      await expect(section).toHaveCSS('padding', '32px') // 2rem × 16px = 32px
 
-      const grid = section.locator('.grid')
-      await expect(grid).toHaveCSS('gap', /1rem/)
+      const grid = section.locator('.responsive-grid')
+      await expect(grid).toHaveCSS('gap', '16px') // 1rem × 16px = 16px
 
       // Test tablet breakpoint
       await page.setViewportSize({ width: 768, height: 1024 })
-      await expect(section).toHaveCSS('padding', /4rem/)
+      await page.waitForTimeout(100) // Allow CSS media queries to apply
+      await expect(section).toHaveCSS('padding', '64px') // 4rem × 16px = 64px
 
       // Test desktop breakpoint
       await page.setViewportSize({ width: 1024, height: 768 })
-      await expect(grid).toHaveCSS('gap', /2rem/)
+      await page.waitForTimeout(100) // Allow CSS media queries to apply
+      await expect(grid).toHaveCSS('gap', '32px') // 2rem × 16px = 32px
     }
   )
 

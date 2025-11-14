@@ -75,7 +75,8 @@ export const ComponentTypeSchema = Schema.Literal(
   'main',
   'article',
   'aside',
-  'nav'
+  'nav',
+  'responsive-grid'
 ).annotations({
   description: 'Component type for page building',
 })
