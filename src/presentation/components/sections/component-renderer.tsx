@@ -12,6 +12,10 @@ import { buildComponentProps } from './props/component-builder'
 import { dispatchComponentType } from './rendering/component-type-dispatcher'
 import { buildHoverData } from './styling/hover-interaction-handler'
 import { resolveChildTranslation } from './translations/translation-handler'
+import {
+  StructuredDataFromBlock,
+  type BlockMeta,
+} from '@/presentation/components/metadata/StructuredDataFromBlock'
 import type {
   BlockReference,
   SimpleBlockReference,
@@ -147,10 +151,19 @@ function RenderDirectComponent({
   const hoverData = buildHoverData(interactions?.hover, uniqueId)
   const finalElementProps = mergeHoverAttributes(elementProps, hoverData)
   const finalElementPropsWithSpacing = mergeHoverAttributes(elementPropsWithSpacing, hoverData)
-  const renderedChildren = renderChildren(children, props)
+  let renderedChildren = renderChildren(children, props)
   const resolvedContent = content
     ? resolveChildTranslation(content, props.currentLang, props.languages)
     : content
+
+  // Check if component has meta property with structured data
+  const meta = componentProps?.meta as BlockMeta | undefined
+  const structuredDataScript = meta ? <StructuredDataFromBlock meta={meta} /> : null
+
+  // Inject structured data script as first child if it exists
+  if (structuredDataScript) {
+    renderedChildren = [structuredDataScript, ...renderedChildren] as readonly ReactElement[]
+  }
 
   const renderedComponent = dispatchComponentType({
     type,

@@ -430,7 +430,7 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-INTEGRATION-003: should generate structured data and meta tags from block content',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

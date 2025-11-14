@@ -6,6 +6,7 @@
  */
 
 import { type ReactElement } from 'react'
+import { extractBlockMetaFromSections } from '@/presentation/components/metadata/extract-block-meta'
 import { PageBodyScripts } from '@/presentation/components/pages/PageBodyScripts'
 import { PageHead } from '@/presentation/components/pages/PageHead'
 import { resolvePageLanguage } from '@/presentation/components/pages/PageLangResolver'
@@ -42,6 +43,21 @@ export function DynamicPage({
   const langConfig = resolvePageLanguage(page, languages, detectedLanguage)
   const scripts = groupScriptsByPosition(page)
 
+  // Extract Open Graph meta from blocks and merge with page meta
+  const blockOpenGraph = extractBlockMetaFromSections(page.sections, blocks)
+  const mergedPage: Page = blockOpenGraph
+    ? {
+        ...page,
+        meta: {
+          ...page.meta,
+          openGraph: {
+            ...page.meta?.openGraph,
+            ...blockOpenGraph,
+          },
+        },
+      }
+    : page
+
   return (
     <html
       lang={langConfig.lang}
@@ -49,7 +65,7 @@ export function DynamicPage({
     >
       <head>
         <PageHead
-          page={page}
+          page={mergedPage}
           theme={theme}
           directionStyles={langConfig.directionStyles}
           title={metadata.title}
