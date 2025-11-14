@@ -198,6 +198,26 @@ export const MetaSchema = Schema.Struct({
   // Aliases for test compatibility
   twitterCard: Schema.optional(TwitterCardSchema),
   structuredData: Schema.optional(Schema.Unknown),
+  // Internationalization for metadata
+  i18n: Schema.optional(
+    Schema.Record({
+      key: LanguageCodeSchema,
+      value: Schema.Struct({
+        title: Schema.optional(
+          Schema.String.pipe(Schema.maxLength(60)).annotations({
+            description: 'Translated page title (max 60 characters)',
+          })
+        ),
+        description: Schema.optional(
+          Schema.String.pipe(Schema.maxLength(160)).annotations({
+            description: 'Translated page description (max 160 characters)',
+          })
+        ),
+      }),
+    }).annotations({
+      description: 'Localized metadata translations per language',
+    })
+  ),
 }).annotations({
   title: 'Page Metadata',
   description:

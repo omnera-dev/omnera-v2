@@ -177,6 +177,77 @@
   }
 
   /**
+   * Updates page content with i18n translations
+   * Finds all elements with data-i18n-content attribute and updates their text content
+   */
+  function updateContentI18n() {
+    const i18nElements = document.querySelectorAll('[data-i18n-content]')
+    i18nElements.forEach((element) => {
+      const i18nJson = element.getAttribute('data-i18n-content')
+      if (!i18nJson) {
+        return
+      }
+
+      try {
+        const i18nData = JSON.parse(i18nJson)
+
+        // Try current language first
+        let content = i18nData[currentLanguage]
+
+        // Try fallback language if missing
+        if (!content && languagesConfig.fallback) {
+          content = i18nData[languagesConfig.fallback]
+        }
+
+        // Try default language if still missing
+        if (!content) {
+          content = i18nData[languagesConfig.default]
+        }
+
+        // Update element text content if translation found
+        if (content) {
+          element.textContent = content
+        }
+      } catch (error) {
+        console.error('Failed to parse i18n content data:', error)
+      }
+    })
+  }
+
+  /**
+   * Updates page metadata (title, HTML lang) for the current language
+   * Reads metadata from data-page-meta attribute and applies localized values
+   */
+  function updatePageMetadata() {
+    // Read page metadata configuration
+    const pageMetaEl = document.querySelector('[data-page-meta]')
+    if (!pageMetaEl) {
+      return
+    }
+
+    let pageMeta
+    try {
+      pageMeta = JSON.parse(pageMetaEl.dataset.pageMeta || '{}')
+    } catch (error) {
+      console.error('Language switcher: failed to parse page metadata', error)
+      return
+    }
+
+    // Update HTML lang attribute
+    document.documentElement.setAttribute('lang', currentLanguage)
+
+    // Update page title if i18n translations are available
+    if (pageMeta.i18n && pageMeta.i18n[currentLanguage]) {
+      const localizedMeta = pageMeta.i18n[currentLanguage]
+      if (localizedMeta.title) {
+        document.title = localizedMeta.title
+      }
+      // Note: We don't update meta description dynamically as it's primarily for SEO
+      // and search engines read it from the initial server response
+    }
+  }
+
+  /**
    * Updates the language switcher UI to reflect current language
    * Finds the label for currentLanguage and updates DOM element
    * Also updates the HTML dir attribute for RTL/LTR text direction
@@ -198,6 +269,12 @@
     if (window.APP_THEME) {
       window.APP_THEME.direction = direction
     }
+
+    // Update page metadata (title, HTML lang)
+    updatePageMetadata()
+
+    // Update content with i18n translations
+    updateContentI18n()
 
     // Update all translated text when language changes
     updateTranslations()

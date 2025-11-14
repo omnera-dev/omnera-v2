@@ -796,7 +796,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-INTEGRATION-002: should update page metadata and content while maintaining state',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

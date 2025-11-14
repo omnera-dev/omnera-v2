@@ -131,7 +131,7 @@ function RenderDirectComponent({
   component: Component
   props: ComponentRendererProps
 }): ReactElement | null {
-  const { type, props: componentProps, children, content, interactions } = component
+  const { type, props: componentProps, children, content, interactions, i18n } = component
   const uniqueId = useId()
 
   const { elementProps, elementPropsWithSpacing } = buildComponentProps({
@@ -149,12 +149,46 @@ function RenderDirectComponent({
   })
 
   const hoverData = buildHoverData(interactions?.hover, uniqueId)
-  const finalElementProps = mergeHoverAttributes(elementProps, hoverData)
-  const finalElementPropsWithSpacing = mergeHoverAttributes(elementPropsWithSpacing, hoverData)
+  let finalElementProps = mergeHoverAttributes(elementProps, hoverData)
+  let finalElementPropsWithSpacing = mergeHoverAttributes(elementPropsWithSpacing, hoverData)
   const baseRenderedChildren = renderChildren(children, props)
-  const resolvedContent = content
-    ? resolveChildTranslation(content, props.currentLang, props.languages)
-    : content
+
+  // Resolve content with i18n priority: component.i18n[lang].content > $t: pattern > content
+  let resolvedContent = content
+  if (i18n && props.currentLang && i18n[props.currentLang]?.content) {
+    resolvedContent = i18n[props.currentLang].content
+  } else if (content) {
+    resolvedContent = resolveChildTranslation(content, props.currentLang, props.languages)
+  }
+
+  // Add data-i18n-content attribute for client-side language switching
+  if (i18n && content) {
+    // Build i18n content data from i18n object, filtering out entries without content
+    const i18nContentData: Record<string, string> = {}
+
+    for (const [lang, value] of Object.entries(i18n)) {
+      if (typeof value === 'object' && value !== null && 'content' in value && value.content) {
+        i18nContentData[lang] = value.content as string
+      }
+    }
+
+    // Add the default language content if not already in i18n
+    // This ensures client-side switching can find the base content
+    if (props.languages?.default && !i18nContentData[props.languages.default]) {
+      i18nContentData[props.languages.default] = content
+    }
+
+    if (Object.keys(i18nContentData).length > 0) {
+      finalElementProps = {
+        ...finalElementProps,
+        'data-i18n-content': JSON.stringify(i18nContentData),
+      }
+      finalElementPropsWithSpacing = {
+        ...finalElementPropsWithSpacing,
+        'data-i18n-content': JSON.stringify(i18nContentData),
+      }
+    }
+  }
 
   // Check if component has meta property with structured data
   const meta = componentProps?.meta as BlockMeta | undefined
