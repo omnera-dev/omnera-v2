@@ -41,6 +41,10 @@ function buildTestId(config: TestIdConfig): string | undefined {
     return 'flex'
   }
 
+  if (type === 'hero-section') {
+    return 'hero-section'
+  }
+
   return undefined
 }
 

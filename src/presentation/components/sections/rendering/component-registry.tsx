@@ -39,6 +39,18 @@ function convertBadgeProps(elementProps: Record<string, unknown>): Record<string
 }
 
 /**
+ * Shared renderer for hero and hero-section component types
+ */
+const renderHeroSection: ComponentRenderer = ({ elementProps, theme, renderedChildren }) => (
+  <Hero
+    theme={theme}
+    data-testid={elementProps['data-testid'] as string | undefined}
+  >
+    {renderedChildren}
+  </Hero>
+)
+
+/**
  * Component registry mapping component types to their renderer functions
  */
 export const COMPONENT_REGISTRY: Partial<Record<Component['type'], ComponentRenderer>> = {
@@ -329,14 +341,9 @@ export const COMPONENT_REGISTRY: Partial<Record<Component['type'], ComponentRend
       interactions: interactions,
     }),
 
-  hero: ({ elementProps, theme, renderedChildren }) => (
-    <Hero
-      theme={theme}
-      data-testid={elementProps['data-testid'] as string | undefined}
-    >
-      {renderedChildren}
-    </Hero>
-  ),
+  hero: renderHeroSection,
+
+  'hero-section': renderHeroSection,
 
   list: ({ elementProps, content, theme }) => Renderers.renderList(elementProps, content, theme),
 
