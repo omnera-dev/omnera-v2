@@ -85,6 +85,93 @@ function mergeHoverAttributes(
 }
 
 /**
+ * Builds i18n content data attribute for client-side language switching (functional approach)
+ *
+ * Extracts content translations from i18n object and serializes to JSON.
+ * Includes default language content as fallback.
+ *
+ * @param i18n - Component i18n translations object
+ * @param defaultContent - Default content for base language
+ * @param defaultLang - Default language code
+ * @returns JSON-stringified i18n content data or undefined if no translations
+ */
+function buildI18nContentAttribute(
+  i18n: Record<string, unknown>,
+  defaultContent: string,
+  defaultLang: string | undefined
+): string | undefined {
+  // Extract content from i18n object using functional approach (reduce instead of for loop)
+  const i18nContentData = Object.entries(i18n).reduce<Record<string, string>>(
+    (acc, [lang, value]) => {
+      if (typeof value === 'object' && value !== null && 'content' in value && value.content) {
+        return { ...acc, [lang]: value.content as string }
+      }
+      return acc
+    },
+    {}
+  )
+
+  // Add default language content if not already present
+  const contentWithDefault =
+    defaultLang && !i18nContentData[defaultLang]
+      ? { ...i18nContentData, [defaultLang]: defaultContent }
+      : i18nContentData
+
+  // Only return attribute if there are translations
+  return Object.keys(contentWithDefault).length > 0
+    ? JSON.stringify(contentWithDefault)
+    : undefined
+}
+
+/**
+ * Resolves component content with i18n priority
+ *
+ * Priority: component.i18n[lang].content > $t: pattern > content
+ *
+ * @param content - Base content string
+ * @param i18n - Component i18n translations
+ * @param currentLang - Current language code
+ * @param languages - Languages configuration
+ * @returns Resolved content string
+ */
+function resolveComponentContent(
+  content: string | undefined,
+  i18n: Record<string, unknown> | undefined,
+  currentLang: string | undefined,
+  languages: Languages | undefined
+): string | undefined {
+  if (i18n && currentLang) {
+    const langData = i18n[currentLang]
+    if (
+      langData &&
+      typeof langData === 'object' &&
+      'content' in langData &&
+      typeof langData.content === 'string'
+    ) {
+      return langData.content
+    }
+  }
+  if (content) {
+    return resolveChildTranslation(content, currentLang, languages)
+  }
+  return content
+}
+
+/**
+ * Builds final element props with i18n data attribute
+ *
+ * @param baseProps - Base element props
+ * @param i18nAttribute - Optional i18n content JSON string
+ * @returns Element props with i18n data merged if present
+ */
+function buildFinalElementProps(
+  baseProps: Record<string, unknown>,
+  i18nAttribute: string | undefined
+): Record<string, unknown> {
+  return i18nAttribute ? { ...baseProps, 'data-i18n-content': i18nAttribute } : baseProps
+}
+
+/**
  * Renders children recursively
  *
  * @param children - Child components or strings
@@ -131,7 +218,7 @@ function RenderDirectComponent({
   component: Component
   props: ComponentRendererProps
 }): ReactElement | null {
-  const { type, props: componentProps, children, content, interactions } = component
+  const { type, props: componentProps, children, content, interactions, i18n } = component
   const uniqueId = useId()
 
   const { elementProps, elementPropsWithSpacing } = buildComponentProps({
@@ -149,12 +236,21 @@ function RenderDirectComponent({
   })
 
   const hoverData = buildHoverData(interactions?.hover, uniqueId)
-  const finalElementProps = mergeHoverAttributes(elementProps, hoverData)
-  const finalElementPropsWithSpacing = mergeHoverAttributes(elementPropsWithSpacing, hoverData)
+  const baseElementProps = mergeHoverAttributes(elementProps, hoverData)
+  const baseElementPropsWithSpacing = mergeHoverAttributes(elementPropsWithSpacing, hoverData)
   const baseRenderedChildren = renderChildren(children, props)
-  const resolvedContent = content
-    ? resolveChildTranslation(content, props.currentLang, props.languages)
-    : content
+
+  // Resolve content with i18n priority: component.i18n[lang].content > $t: pattern > content
+  const resolvedContent = resolveComponentContent(content, i18n, props.currentLang, props.languages)
+
+  // Build i18n content data attribute and merge into element props (functional approach)
+  const i18nContentAttribute =
+    i18n && content ? buildI18nContentAttribute(i18n, content, props.languages?.default) : undefined
+  const finalElementProps = buildFinalElementProps(baseElementProps, i18nContentAttribute)
+  const finalElementPropsWithSpacing = buildFinalElementProps(
+    baseElementPropsWithSpacing,
+    i18nContentAttribute
+  )
 
   // Check if component has meta property with structured data
   const meta = componentProps?.meta as BlockMeta | undefined

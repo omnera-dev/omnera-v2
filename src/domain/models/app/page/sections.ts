@@ -151,6 +151,25 @@ export const ComponentSchema: Schema.Schema<any, any, never> = Schema.Struct({
   ),
   interactions: Schema.optional(InteractionsSchema),
   responsive: Schema.optional(ResponsiveSchema),
+  i18n: Schema.optional(
+    Schema.Record({
+      key: Schema.String.pipe(
+        Schema.pattern(/^[a-z]{2}(-[A-Z]{2})?$/, {
+          message: () => 'Language code must be ISO 639-1 format (e.g., en-US, fr-FR)',
+        })
+      ),
+      value: Schema.Struct({
+        content: Schema.optional(
+          Schema.String.annotations({
+            description: 'Translated content text',
+          })
+        ),
+        props: Schema.optional(PropsSchema),
+      }),
+    }).annotations({
+      description: 'Localized translations per language for this component',
+    })
+  ),
 }).annotations({
   description: 'Direct component definition',
 })

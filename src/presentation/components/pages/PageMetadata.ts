@@ -84,10 +84,32 @@ function determineDirection(languages: Languages | undefined, lang: string): 'lt
 
 /**
  * Determine page title with translation resolution
+ * Priority: meta.i18n[lang].title > meta.title (with $t: pattern) > page.name > page.path
  */
 function determineTitle(page: Page, lang: string, languages: Languages | undefined): string {
+  // Check if page has i18n translations for this language
+  if (page.meta?.i18n?.[lang]?.title) {
+    return page.meta.i18n[lang].title
+  }
+
+  // Fall back to base title with translation pattern resolution
   const rawTitle = page.meta?.title || page.name || page.path
   return resolveTranslationPattern(rawTitle, lang, languages)
+}
+
+/**
+ * Determine page description with translation resolution
+ * Priority: meta.i18n[lang].description > meta.description (with $t: pattern)
+ */
+function determineDescription(page: Page, lang: string, languages: Languages | undefined): string {
+  // Check if page has i18n translations for this language
+  if (page.meta?.i18n?.[lang]?.description) {
+    return page.meta.i18n[lang].description
+  }
+
+  // Fall back to base description with translation pattern resolution
+  const rawDescription = page.meta?.description || ''
+  return resolveTranslationPattern(rawDescription, lang, languages)
 }
 
 /**
@@ -111,8 +133,7 @@ export function extractPageMetadata(
   const lang = determineLanguage(page, languages, detectedLanguage)
   const direction = determineDirection(languages, lang)
   const title = determineTitle(page, lang, languages)
-  const rawDescription = page.meta?.description || ''
-  const description = resolveTranslationPattern(rawDescription, lang, languages)
+  const description = determineDescription(page, lang, languages)
   const bodyStyle = buildBodyStyle(theme)
 
   return {

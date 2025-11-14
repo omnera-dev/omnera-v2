@@ -60,10 +60,12 @@ function renderScripts(
  * Renders language switcher scripts and configuration
  */
 function LanguageSwitcherScripts({
+  page,
   languages,
   theme,
   direction,
 }: {
+  readonly page: Page
   readonly languages: Languages
   readonly theme: Theme | undefined
   readonly direction: 'ltr' | 'rtl'
@@ -73,6 +75,11 @@ function LanguageSwitcherScripts({
       {/* Configuration data for external script (CSP-compliant) */}
       <div
         data-language-switcher-config={JSON.stringify(languages)}
+        style={{ display: 'none' }}
+      />
+      {/* Page metadata for client-side updates (title, i18n) */}
+      <div
+        data-page-meta={JSON.stringify(page.meta || {})}
         style={{ display: 'none' }}
       />
       {/* Expose languages config to window for testing/debugging - fallback defaults to default language */}
@@ -129,6 +136,7 @@ function renderConditionalScripts(config: {
       {/* Client-side language switcher functionality - always inject when languages configured */}
       {languages && (
         <LanguageSwitcherScripts
+          page={page}
           languages={languages}
           theme={theme}
           direction={direction}
