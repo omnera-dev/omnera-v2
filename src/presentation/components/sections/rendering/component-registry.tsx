@@ -338,6 +338,15 @@ export const COMPONENT_REGISTRY: Partial<Record<Component['type'], ComponentRend
     </Hero>
   ),
 
+  'hero-section': ({ elementProps, theme, renderedChildren }) => (
+    <Hero
+      theme={theme}
+      data-testid={elementProps['data-testid'] as string | undefined}
+    >
+      {renderedChildren}
+    </Hero>
+  ),
+
   list: ({ elementProps, content, theme }) => Renderers.renderList(elementProps, content, theme),
 
   navigation: ({ elementProps, theme }) => (

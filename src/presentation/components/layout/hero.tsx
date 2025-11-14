@@ -11,20 +11,22 @@ import type { ReactElement, ReactNode } from 'react'
 /**
  * Hero Section Component
  *
- * Renders a hero section with responsive padding based on breakpoints:
- * - Mobile (default): Base padding (1rem)
- * - sm breakpoint (640px): Medium padding (2rem)
- * - md breakpoint (768px): Large padding (3rem)
- * - lg breakpoint (1024px): Extra large padding (4rem)
+ * Renders a hero section with full theme integration demonstrating cohesive UI.
+ * When no children are provided, renders default content (h1 heading + CTA button)
+ * that showcases all theme tokens applied together:
+ * - Background color (theme.colors.background)
+ * - Heading with theme fonts (family, size, weight, color)
+ * - Button with theme colors and border radius
+ * - Section padding (theme.spacing.section)
  *
  * Uses theme.breakpoints to determine responsive behavior via CSS custom properties.
  * Applies progressive enhancement - padding increases as viewport grows.
  *
  * @param props - Component props
- * @param props.theme - Theme configuration with breakpoints
- * @param props.children - Hero content
+ * @param props.theme - Theme configuration with all design tokens
+ * @param props.children - Hero content (optional - defaults to themed heading + button)
  * @param props.data-testid - Test identifier
- * @returns Hero section element
+ * @returns Hero section element with cohesive theme integration
  */
 export function Hero({
   theme,
@@ -40,19 +42,73 @@ export function Hero({
   const mdBreakpoint = parseInt(theme?.breakpoints?.md || '768px', 10)
   const lgBreakpoint = parseInt(theme?.breakpoints?.lg || '1024px', 10)
 
+  // Extract theme tokens for cohesive UI
+  const backgroundColor = theme?.colors?.background || '#ffffff'
+  const textColor = theme?.colors?.text || '#212529'
+  const primaryColor = theme?.colors?.primary || '#007bff'
+  const sectionPadding = theme?.spacing?.section || '4rem'
+  const borderRadius = theme?.borderRadius?.lg || '0.5rem'
+
+  // Typography tokens
+  const titleFamily = theme?.fonts?.title?.family || 'Bely Display'
+  const titleWeight = theme?.fonts?.title?.weight || 700
+  const titleSize = theme?.fonts?.title?.size || '2.5rem'
+  const bodyFamily = theme?.fonts?.body?.family || 'Inter'
+
+  // Default content when no children provided - demonstrates theme integration
+  const defaultContent = (
+    <div
+      style={{
+        textAlign: 'center',
+        maxWidth: '800px',
+      }}
+    >
+      <h1
+        style={{
+          fontFamily: titleFamily,
+          fontWeight: titleWeight,
+          fontSize: titleSize,
+          color: textColor,
+          marginBottom: '2rem',
+        }}
+      >
+        Welcome to Sovrium
+      </h1>
+      <button
+        style={{
+          backgroundColor: primaryColor,
+          color: '#ffffff',
+          fontFamily: bodyFamily,
+          fontSize: '1rem',
+          padding: '0.75rem 1.5rem',
+          borderRadius: borderRadius,
+          border: 'none',
+          cursor: 'pointer',
+        }}
+      >
+        Get Started
+      </button>
+    </div>
+  )
+
+  // Use default content if children is undefined, null, or empty array
+  const hasChildren =
+    children && (Array.isArray(children) ? children.length > 0 : Boolean(children))
+  const content = hasChildren ? children : defaultContent
+
   return (
     <section
       data-testid={props['data-testid']}
-      className="bg-gradient-to-br from-blue-50 to-indigo-100"
       style={{
-        padding: '1rem',
+        backgroundColor: backgroundColor,
+        padding: sectionPadding,
         minHeight: '200px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
       }}
     >
-      {children}
+      {content}
 
       {/* Runtime CSS using theme breakpoint values */}
       <style>{`

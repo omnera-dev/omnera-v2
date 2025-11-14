@@ -59,6 +59,7 @@ export const ComponentTypeSchema = Schema.Literal(
   'sidebar',
   'toast',
   'hero',
+  'hero-section',
   'fab',
   'spinner',
   'list',
