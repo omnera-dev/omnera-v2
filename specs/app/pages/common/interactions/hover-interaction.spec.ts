@@ -313,7 +313,7 @@ test.describe('Hover Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-HOVER-009: should display at full opacity',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
