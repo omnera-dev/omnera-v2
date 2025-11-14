@@ -6,15 +6,15 @@
  */
 
 import { type ReactElement } from 'react'
+import { resolveTranslationPattern } from '@/presentation/translations/translation-resolver'
 import { buildProviderElements } from './analytics-builders'
 import { buildCustomElement } from './custom-elements-builders'
-import { resolveTranslationPattern } from '@/presentation/translations/translation-resolver'
+import type { Languages } from '@/domain/models/app/languages'
 import type { Analytics } from '@/domain/models/app/page/meta/analytics'
 import type { CustomElements } from '@/domain/models/app/page/meta/custom-elements'
 import type { FaviconSet } from '@/domain/models/app/page/meta/favicon-set'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
 import type { Page } from '@/domain/models/app/pages'
-import type { Languages } from '@/domain/models/app/languages'
 
 /**
  * Render Open Graph metadata tags

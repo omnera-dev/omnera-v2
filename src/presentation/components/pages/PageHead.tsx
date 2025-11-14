@@ -18,11 +18,11 @@ import {
 import { renderInlineScriptTag, renderScriptTag } from '@/presentation/scripts/script-renderers'
 import { resolveTranslationPattern } from '@/presentation/translations/translation-resolver'
 import type { GroupedScripts } from './PageScripts'
+import type { Languages } from '@/domain/models/app/languages'
 import type { CustomElement } from '@/domain/models/app/page/meta/custom-elements'
+import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
-import type { Languages } from '@/domain/models/app/languages'
-import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
 
 /**
  * Props for PageHead component
@@ -209,14 +209,14 @@ function HreflangLinks({
         <link
           key={lang.code}
           rel="alternate"
-          hreflang={lang.code}
+          hrefLang={lang.code}
           href={`/${lang.code}${basePath}/`}
         />
       ))}
       <link
         key="x-default"
         rel="alternate"
-        hreflang="x-default"
+        hrefLang="x-default"
         href={`/${languages.default}${basePath}/`}
       />
     </>

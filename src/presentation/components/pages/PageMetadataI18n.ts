@@ -7,8 +7,8 @@
 
 import { resolveTranslationPattern } from '@/presentation/translations/translation-resolver'
 import type { Languages } from '@/domain/models/app/languages'
-import type { Page } from '@/domain/models/app/pages'
 import type { Meta } from '@/domain/models/app/page/meta'
+import type { Page } from '@/domain/models/app/pages'
 
 /**
  * Builds i18n metadata structure for client-side language switching
@@ -21,54 +21,59 @@ import type { Meta } from '@/domain/models/app/page/meta'
  * @param languages - Languages configuration
  * @returns Page meta with i18n structure populated
  */
-export function buildPageMetadataI18n(page: Page, languages: Languages | undefined): Meta {
+export function buildPageMetadataI18n(
+  page: Page,
+  languages: Languages | undefined
+): Meta | Record<string, never> {
   if (!page.meta || !languages) {
-    return page.meta || {}
+    return (page.meta || {}) as Meta | Record<string, never>
   }
 
-  // Build i18n structure for all supported languages
-  const i18n: Record<string, { title?: string; description?: string; keywords?: string; 'og:site_name'?: string }> = {}
+  // Store reference to meta to avoid undefined access in reduce
+  const {meta} = page
 
-  for (const lang of languages.supported) {
-    const langCode = lang.code
-    i18n[langCode] = {}
+  // Build i18n structure for all supported languages using reduce
+  const i18n = languages.supported.reduce(
+    (acc, lang) => {
+      const langCode = lang.code
+      const metaRecord = meta as Record<string, unknown>
+      const ogSiteName = metaRecord['og:site_name']
 
-    // Resolve title
-    if (page.meta.title) {
-      i18n[langCode].title = resolveTranslationPattern(page.meta.title, langCode, languages)
-    }
-
-    // Resolve description
-    if (page.meta.description) {
-      i18n[langCode].description = resolveTranslationPattern(
-        page.meta.description,
-        langCode,
-        languages
-      )
-    }
-
-    // Resolve keywords
-    if (page.meta.keywords) {
-      i18n[langCode].keywords = resolveTranslationPattern(page.meta.keywords, langCode, languages)
-    }
-
-    // Resolve og:site_name (handle both formats)
-    const metaRecord = page.meta as Record<string, unknown>
-    const ogSiteName = metaRecord['og:site_name']
-    if (typeof ogSiteName === 'string') {
-      i18n[langCode]['og:site_name'] = resolveTranslationPattern(ogSiteName, langCode, languages)
-    } else if (page.meta.openGraph?.siteName) {
-      i18n[langCode]['og:site_name'] = resolveTranslationPattern(
-        page.meta.openGraph.siteName,
-        langCode,
-        languages
-      )
-    }
-  }
+      return {
+        ...acc,
+        [langCode]: {
+          ...(meta.title && {
+            title: resolveTranslationPattern(meta.title, langCode, languages),
+          }),
+          ...(meta.description && {
+            description: resolveTranslationPattern(meta.description, langCode, languages),
+          }),
+          ...(meta.keywords && {
+            keywords: resolveTranslationPattern(meta.keywords, langCode, languages),
+          }),
+          ...(typeof ogSiteName === 'string' && {
+            'og:site_name': resolveTranslationPattern(ogSiteName, langCode, languages),
+          }),
+          ...(meta.openGraph?.siteName &&
+            typeof ogSiteName !== 'string' && {
+              'og:site_name': resolveTranslationPattern(
+                meta.openGraph.siteName,
+                langCode,
+                languages
+              ),
+            }),
+        },
+      }
+    },
+    {} as Record<
+      string,
+      { title?: string; description?: string; keywords?: string; 'og:site_name'?: string }
+    >
+  )
 
   // Return meta with i18n structure
   return {
-    ...page.meta,
+    ...meta,
     i18n,
   }
 }
