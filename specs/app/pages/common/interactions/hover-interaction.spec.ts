@@ -243,7 +243,7 @@ test.describe('Hover Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-HOVER-007: should change border color smoothly',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
