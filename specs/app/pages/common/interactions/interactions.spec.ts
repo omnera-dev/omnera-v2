@@ -238,7 +238,7 @@ test.describe('Component Interactions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-MAIN-007: all interactions should work independently and not interfere with each other',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -274,7 +274,8 @@ test.describe('Component Interactions', () => {
       const button = page.locator('button')
       await expect(button).toHaveClass(/animate-fadeIn/)
       await button.hover()
-      await expect(button).toHaveCSS('transform', /scale/)
+      // Note: Browsers convert scale(1.05) to matrix(1.05, 0, 0, 1.05, 0, 0)
+      await expect(button).toHaveCSS('transform', /matrix\(1\.05, 0, 0, 1\.05, 0, 0\)/)
       await button.click()
       await expect(button).toHaveClass(/animate-pulse/)
     }

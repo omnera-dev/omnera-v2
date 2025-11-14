@@ -55,8 +55,9 @@
         rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
         rect.right <= (window.innerWidth || document.documentElement.clientWidth)
 
-      // Track if we should apply scroll animation (skip first intersection if initially visible)
-      let hasIntersected = isInitiallyVisible
+      // Track if we should apply scroll animation
+      // For initially visible elements, don't apply scroll animation at all
+      let shouldSkipScrollAnimation = isInitiallyVisible
 
       // Create observer for this element with its specific threshold
       const observer = new IntersectionObserver(
@@ -65,9 +66,9 @@
             const animationClass = `animate-${animationName}`
 
             if (entry.isIntersecting) {
-              // If this is the first intersection and element was initially visible, skip
-              if (isInitiallyVisible && !hasIntersected) {
-                hasIntersected = true
+              // Skip scroll animation for elements that are initially visible
+              // This preserves entrance animations
+              if (shouldSkipScrollAnimation) {
                 return
               }
 
@@ -82,16 +83,20 @@
 
               // Add the scroll animation class
               element.classList.add(animationClass)
-              hasIntersected = true
 
               // If once is true, stop observing
               if (once) {
                 observer.unobserve(element)
               }
-            } else if (!once) {
-              // Element left viewport and once is false, remove animation class for re-trigger
-              if (element.classList.contains(animationClass)) {
-                element.classList.remove(animationClass)
+            } else {
+              // Element left viewport, mark that scroll animation should apply on next intersection
+              shouldSkipScrollAnimation = false
+
+              if (!once) {
+                // Element left viewport and once is false, remove animation class for re-trigger
+                if (element.classList.contains(animationClass)) {
+                  element.classList.remove(animationClass)
+                }
               }
             }
           })
