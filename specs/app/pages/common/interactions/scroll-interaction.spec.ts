@@ -331,7 +331,7 @@ test.describe('Scroll Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-SCROLL-010: should animate only on the first entry',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
