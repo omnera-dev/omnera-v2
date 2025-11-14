@@ -191,9 +191,9 @@ export function renderIframe(
 }
 
 /**
- * Click interaction type definition
+ * Build data attributes for click interactions
  */
-type ClickInteraction = {
+function buildClickDataAttributes(clickInteraction: {
   animation?: string
   navigate?: string
   openUrl?: string
@@ -201,12 +201,7 @@ type ClickInteraction = {
   scrollTo?: string
   toggleElement?: string
   submitForm?: string
-}
-
-/**
- * Build data attributes for click interactions (immutable)
- */
-function buildClickDataAttributes(clickInteraction: ClickInteraction): Record<string, string> {
+}): Record<string, string> {
   return {
     ...(clickInteraction.animation && { 'data-click-animation': clickInteraction.animation }),
     ...(clickInteraction.navigate && { 'data-click-navigate': clickInteraction.navigate }),
@@ -233,7 +228,19 @@ export function renderButton(
   children: readonly React.ReactNode[],
   interactions?: unknown
 ): ReactElement {
-  const interactionsTyped = interactions as { click?: ClickInteraction } | undefined
+  const interactionsTyped = interactions as
+    | {
+        click?: {
+          animation?: string
+          navigate?: string
+          openUrl?: string
+          openInNewTab?: boolean
+          scrollTo?: string
+          toggleElement?: string
+          submitForm?: string
+        }
+      }
+    | undefined
   const clickInteraction = interactionsTyped?.click
 
   // Store interaction data in data attributes for client-side JavaScript handler
