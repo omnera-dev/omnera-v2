@@ -209,64 +209,54 @@ function setupCSSRoute(honoApp: Readonly<Hono>, app: App): Readonly<Hono> {
 }
 
 /**
+ * Create handler for serving JavaScript file
+ */
+function createJavaScriptHandler(scriptName: string, scriptPath: string) {
+  return async (c: Parameters<Parameters<Hono['get']>[1]>[0]) => {
+    try {
+      const file = Bun.file(scriptPath)
+      const content = await file.text()
+
+      return c.text(content, 200, {
+        'Content-Type': 'application/javascript',
+        'Cache-Control': `public, max-age=${STATIC_ASSET_CACHE_DURATION_SECONDS}`,
+      })
+    } catch (error) {
+      // eslint-disable-next-line functional/no-expression-statements
+      await Effect.runPromise(Console.error(`Failed to load ${scriptName}:`, error))
+      return c.text(`/* ${scriptName} failed to load */`, 500, {
+        'Content-Type': 'application/javascript',
+      })
+    }
+  }
+}
+
+/**
  * Setup JavaScript asset routes
  */
 function setupJavaScriptRoutes(honoApp: Readonly<Hono>): Readonly<Hono> {
   return honoApp
-    .get('/assets/language-switcher.js', async (c) => {
-      try {
-        const scriptPath = './src/presentation/scripts/client/language-switcher.js'
-        const file = Bun.file(scriptPath)
-        const content = await file.text()
-
-        return c.text(content, 200, {
-          'Content-Type': 'application/javascript',
-          'Cache-Control': `public, max-age=${STATIC_ASSET_CACHE_DURATION_SECONDS}`,
-        })
-      } catch (error) {
-        // eslint-disable-next-line functional/no-expression-statements
-        await Effect.runPromise(Console.error('Failed to load language-switcher.js:', error))
-        return c.text('/* Language switcher script failed to load */', 500, {
-          'Content-Type': 'application/javascript',
-        })
-      }
-    })
-    .get('/assets/banner-dismiss.js', async (c) => {
-      try {
-        const scriptPath = './src/presentation/scripts/client/banner-dismiss.js'
-        const file = Bun.file(scriptPath)
-        const content = await file.text()
-
-        return c.text(content, 200, {
-          'Content-Type': 'application/javascript',
-          'Cache-Control': `public, max-age=${STATIC_ASSET_CACHE_DURATION_SECONDS}`,
-        })
-      } catch (error) {
-        // eslint-disable-next-line functional/no-expression-statements
-        await Effect.runPromise(Console.error('Failed to load banner-dismiss.js:', error))
-        return c.text('/* Banner dismiss script failed to load */', 500, {
-          'Content-Type': 'application/javascript',
-        })
-      }
-    })
-    .get('/assets/scroll-animation.js', async (c) => {
-      try {
-        const scriptPath = './src/presentation/scripts/client/scroll-animation.js'
-        const file = Bun.file(scriptPath)
-        const content = await file.text()
-
-        return c.text(content, 200, {
-          'Content-Type': 'application/javascript',
-          'Cache-Control': `public, max-age=${STATIC_ASSET_CACHE_DURATION_SECONDS}`,
-        })
-      } catch (error) {
-        // eslint-disable-next-line functional/no-expression-statements
-        await Effect.runPromise(Console.error('Failed to load scroll-animation.js:', error))
-        return c.text('/* Scroll animation script failed to load */', 500, {
-          'Content-Type': 'application/javascript',
-        })
-      }
-    })
+    .get(
+      '/assets/language-switcher.js',
+      createJavaScriptHandler(
+        'language-switcher.js',
+        './src/presentation/scripts/client/language-switcher.js'
+      )
+    )
+    .get(
+      '/assets/banner-dismiss.js',
+      createJavaScriptHandler(
+        'banner-dismiss.js',
+        './src/presentation/scripts/client/banner-dismiss.js'
+      )
+    )
+    .get(
+      '/assets/scroll-animation.js',
+      createJavaScriptHandler(
+        'scroll-animation.js',
+        './src/presentation/scripts/client/scroll-animation.js'
+      )
+    )
 }
 
 /**
