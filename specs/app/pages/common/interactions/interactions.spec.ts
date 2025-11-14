@@ -375,7 +375,8 @@ test.describe('Component Interactions', () => {
       // Verify hover and click
       const button = page.locator('button')
       await button.hover()
-      await expect(button).toHaveCSS('transform', /scale/)
+      // Note: Browsers convert scale(1.05) to matrix(1.05, 0, 0, 1.05, 0, 0)
+      await expect(button).toHaveCSS('transform', /matrix\(1\.05, 0, 0, 1\.05, 0, 0\)/)
       await button.click()
       await expect(page).toHaveURL('/about')
 

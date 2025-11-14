@@ -431,7 +431,8 @@ test.describe('Hover Interaction', () => {
       // Verify transform + shadow hover
       const button1 = page.locator('button').filter({ hasText: 'Button 1' })
       await button1.hover()
-      await expect(button1).toHaveCSS('transform', /scale/)
+      // Note: Browsers convert scale(1.05) to matrix(1.05, 0, 0, 1.05, 0, 0)
+      await expect(button1).toHaveCSS('transform', /matrix\(1\.05, 0, 0, 1\.05, 0, 0\)/)
       await expect(button1).toHaveCSS('box-shadow', /rgba/)
 
       // Verify color change hover
