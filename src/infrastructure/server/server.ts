@@ -212,7 +212,7 @@ function setupCSSRoute(honoApp: Readonly<Hono>, app: App): Readonly<Hono> {
  * Create handler for serving JavaScript file
  */
 function createJavaScriptHandler(scriptName: string, scriptPath: string) {
-  return async (c: Context) => {
+  return async (c: Readonly<Context>) => {
     try {
       const file = Bun.file(scriptPath)
       const content = await file.text()
