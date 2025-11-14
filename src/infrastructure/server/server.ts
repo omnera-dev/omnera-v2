@@ -249,6 +249,24 @@ function setupJavaScriptRoutes(honoApp: Readonly<Hono>): Readonly<Hono> {
         })
       }
     })
+    .get('/assets/scroll-animation.js', async (c) => {
+      try {
+        const scriptPath = './src/presentation/scripts/client/scroll-animation.js'
+        const file = Bun.file(scriptPath)
+        const content = await file.text()
+
+        return c.text(content, 200, {
+          'Content-Type': 'application/javascript',
+          'Cache-Control': `public, max-age=${STATIC_ASSET_CACHE_DURATION_SECONDS}`,
+        })
+      } catch (error) {
+        // eslint-disable-next-line functional/no-expression-statements
+        await Effect.runPromise(Console.error('Failed to load scroll-animation.js:', error))
+        return c.text('/* Scroll animation script failed to load */', 500, {
+          'Content-Type': 'application/javascript',
+        })
+      }
+    })
 }
 
 /**
