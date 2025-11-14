@@ -324,7 +324,7 @@ test.describe('Click Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-CLICK-009: should submit the contact form',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

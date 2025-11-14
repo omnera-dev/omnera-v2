@@ -152,7 +152,7 @@ function renderConditionalScripts(config: {
 const CLICK_INTERACTION_SCRIPT = `
 (function() {
   document.addEventListener('click', function(event) {
-    const button = event.target.closest('[data-click-animation], [data-click-navigate], [data-click-open-url], [data-click-scroll-to], [data-click-toggle-element]');
+    const button = event.target.closest('[data-click-animation], [data-click-navigate], [data-click-open-url], [data-click-scroll-to], [data-click-toggle-element], [data-click-submit-form]');
     if (!button) return;
 
     const animation = button.getAttribute('data-click-animation');
@@ -161,10 +161,20 @@ const CLICK_INTERACTION_SCRIPT = `
     const openInNewTab = button.getAttribute('data-click-open-in-new-tab') === 'true';
     const scrollTo = button.getAttribute('data-click-scroll-to');
     const toggleElement = button.getAttribute('data-click-toggle-element');
+    const submitForm = button.getAttribute('data-click-submit-form');
 
     // Determine target action (navigate, openUrl, or scrollTo)
     const targetUrl = openUrl || navigate;
     const isExternalUrl = !!openUrl;
+
+    // Handle submitForm action
+    if (submitForm) {
+      const formElement = document.querySelector(submitForm);
+      if (formElement && formElement.tagName === 'FORM') {
+        formElement.requestSubmit();
+      }
+      return;
+    }
 
     // Handle toggleElement action
     if (toggleElement) {

@@ -208,6 +208,7 @@ export function renderButton(
           openInNewTab?: boolean
           scrollTo?: string
           toggleElement?: string
+          submitForm?: string
         }
       }
     | undefined
@@ -227,6 +228,9 @@ export function renderButton(
         ...(clickInteraction.scrollTo && { 'data-click-scroll-to': clickInteraction.scrollTo }),
         ...(clickInteraction.toggleElement && {
           'data-click-toggle-element': clickInteraction.toggleElement,
+        }),
+        ...(clickInteraction.submitForm && {
+          'data-click-submit-form': clickInteraction.submitForm,
         }),
       }
     : props
