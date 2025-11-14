@@ -480,7 +480,7 @@ test.describe('Click Interaction', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTIONS-CLICK-INTERACTION-REGRESSION-001: user can complete full click interaction workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
