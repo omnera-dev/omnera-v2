@@ -45,6 +45,10 @@ function buildTestId(config: TestIdConfig): string | undefined {
     return 'hero-section'
   }
 
+  if (type === 'hero') {
+    return 'hero'
+  }
+
   return undefined
 }
 
