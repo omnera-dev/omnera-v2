@@ -24,6 +24,77 @@
  */
 export function generateClickAnimationCSS(): string {
   return `/* Click interaction animations */
+      /* Pulse animation - subtle scale pulse */
+      @keyframes pulse {
+        0%, 100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.05);
+          opacity: 0.9;
+        }
+      }
+
+      .animate-pulse {
+        animation: pulse 300ms ease-in-out;
+      }
+
+      /* Bounce animation - playful bounce effect */
+      @keyframes bounce {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        25% {
+          transform: translateY(-8px);
+        }
+        50% {
+          transform: translateY(-4px);
+        }
+        75% {
+          transform: translateY(-2px);
+        }
+      }
+
+      .animate-bounce {
+        animation: bounce 300ms ease-out;
+      }
+
+      /* Shake animation - horizontal shake */
+      @keyframes shake {
+        0%, 100% {
+          transform: translateX(0);
+        }
+        10%, 30%, 50%, 70%, 90% {
+          transform: translateX(-4px);
+        }
+        20%, 40%, 60%, 80% {
+          transform: translateX(4px);
+        }
+      }
+
+      .animate-shake {
+        animation: shake 300ms ease-in-out;
+      }
+
+      /* Flash animation - quick opacity flash */
+      @keyframes flash {
+        0%, 100% {
+          opacity: 1;
+        }
+        25%, 75% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .animate-flash {
+        animation: flash 300ms ease-in-out;
+      }
+
+      /* Ripple animation - Material Design ripple */
       @keyframes ripple {
         0% {
           transform: scale(0);

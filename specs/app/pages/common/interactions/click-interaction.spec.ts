@@ -407,7 +407,7 @@ test.describe('Click Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-CLICK-011: should play a bounce animation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
