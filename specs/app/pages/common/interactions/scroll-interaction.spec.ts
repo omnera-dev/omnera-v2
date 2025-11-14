@@ -374,7 +374,7 @@ test.describe('Scroll Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-SCROLL-011: should animate every time it enters the viewport',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
