@@ -489,7 +489,7 @@ test.describe('Theme Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-INTEGRATION-001: should render cohesive UI with all theme tokens applied together',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -545,16 +545,16 @@ test.describe('Theme Configuration', () => {
       const heroSection = page.locator('[data-testid="hero-section"]')
       await expect(heroSection).toBeVisible()
       await expect(heroSection).toHaveCSS('background-color', /255, 255, 255/)
-      await expect(heroSection).toHaveCSS('padding', /4rem/)
+      await expect(heroSection).toHaveCSS('padding', '64px 0px') // 4rem × 16px = 64px (computed value)
 
       const heading = heroSection.locator('h1')
       await expect(heading).toHaveCSS('font-family', /Bely Display/)
-      await expect(heading).toHaveCSS('font-size', '2.5rem')
+      await expect(heading).toHaveCSS('font-size', '40px') // 2.5rem × 16px = 40px (computed value)
       await expect(heading).toHaveCSS('color', /33, 37, 41/)
 
       const button = heroSection.locator('button')
-      await expect(button).toHaveCSS('background-color', /7, 123, 255/)
-      await expect(button).toHaveCSS('border-radius', '0.5rem')
+      await expect(button).toHaveCSS('background-color', /0, 123, 255/) // #007bff = rgb(0, 123, 255)
+      await expect(button).toHaveCSS('border-radius', '8px') // 0.5rem × 16px = 8px (computed value)
       await expect(button).toHaveCSS('font-family', /Inter/)
     }
   )
