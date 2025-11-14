@@ -262,7 +262,7 @@ test.describe('Scroll Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-SCROLL-008: should wait 200ms before starting the animation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -292,7 +292,8 @@ test.describe('Scroll Interaction', () => {
       await element.scrollIntoViewIfNeeded()
 
       // THEN: it should wait 200ms before starting the animation
-      await expect(element).toHaveCSS('animation-delay', '200ms')
+      // Note: Browsers may normalize 200ms to 0.2s, both are equivalent
+      await expect(element).toHaveCSS('animation-delay', '0.2s')
     }
   )
 

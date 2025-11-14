@@ -65,15 +65,39 @@ function buildElementPropsFromConfig(config: ElementPropsConfig): Record<string,
     childIndex: config.childIndex,
   })
 
+  // Build all props
+  const coreProps = buildCoreProps(config, testId)
+  const blockProps = buildBlockProps(config)
+  const translationProps = buildTranslationProps(config)
+  const animationProps = buildAnimationProps(hasScrollAnimation)
+  const entranceProps = buildEntranceInteractionProps(config)
+  const scrollProps = buildScrollInteractionProps(config)
+  const emptyStyleProps = buildEmptyElementStyles(config)
+
+  // Merge all style objects to prevent overwrites
+  const mergedStyle = {
+    ...(coreProps.style as Record<string, unknown> | undefined),
+    ...(entranceProps.style as Record<string, unknown> | undefined),
+    ...(scrollProps.style as Record<string, unknown> | undefined),
+    ...(emptyStyleProps.style as Record<string, unknown> | undefined),
+  }
+
+  // Remove style from individual prop objects
+  const { style: _coreStyle, ...corePropsWithoutStyle } = coreProps
+  const { style: _entranceStyle, ...entrancePropsWithoutStyle } = entranceProps
+  const { style: _scrollStyle, ...scrollPropsWithoutStyle } = scrollProps
+  const { style: _emptyStyle, ...emptyStylePropsWithoutStyle } = emptyStyleProps
+
   return {
     ...config.substitutedProps,
-    ...buildCoreProps(config, testId),
-    ...buildBlockProps(config),
-    ...buildTranslationProps(config),
-    ...buildAnimationProps(hasScrollAnimation),
-    ...buildEntranceInteractionProps(config),
-    ...buildScrollInteractionProps(config),
-    ...buildEmptyElementStyles(config),
+    ...corePropsWithoutStyle,
+    ...blockProps,
+    ...translationProps,
+    ...animationProps,
+    ...entrancePropsWithoutStyle,
+    ...scrollPropsWithoutStyle,
+    ...emptyStylePropsWithoutStyle,
+    ...(Object.keys(mergedStyle).length > 0 && { style: mergedStyle }),
   }
 }
 
