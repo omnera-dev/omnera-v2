@@ -299,7 +299,7 @@ test.describe('Entrance Animation', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-ENTRANCE-008: should wait the delay period then animate for the specified duration',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -331,8 +331,10 @@ test.describe('Entrance Animation', () => {
       // THEN: it should wait the delay period then animate for the specified duration
       const element = page.locator('div').first()
       await expect(element).toHaveClass(/animate-fadeInUp/)
-      await expect(element).toHaveCSS('animation-delay', '300ms')
-      await expect(element).toHaveCSS('animation-duration', '800ms')
+      // Note: Browsers normalize '300ms' to '0.3s' - both are equivalent
+      await expect(element).toHaveCSS('animation-delay', '0.3s')
+      // Note: Browsers normalize '800ms' to '0.8s' - both are equivalent
+      await expect(element).toHaveCSS('animation-duration', '0.8s')
     }
   )
 
