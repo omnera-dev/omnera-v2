@@ -277,7 +277,7 @@ test.describe('Hover Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-HOVER-008: should apply effects instantly without transition',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -308,7 +308,8 @@ test.describe('Hover Interaction', () => {
 
       // THEN: it should apply effects instantly without transition
       await expect(button).toHaveCSS('transition-duration', '0s')
-      await expect(button).toHaveCSS('transform', /scale/)
+      // Note: Browsers compute scale(1.1) to matrix(1.1, 0, 0, 1.1, 0, 0)
+      await expect(button).toHaveCSS('transform', /matrix\(1\.1,.*\)/)
     }
   )
 
