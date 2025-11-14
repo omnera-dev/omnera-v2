@@ -366,7 +366,7 @@ test.describe('Click Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-CLICK-010: should play pulse animation then navigate to signup page',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
