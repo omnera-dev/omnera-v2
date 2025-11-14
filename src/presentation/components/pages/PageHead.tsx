@@ -16,10 +16,13 @@ import {
   TwitterCardMeta,
 } from '@/presentation/components/metadata'
 import { renderInlineScriptTag, renderScriptTag } from '@/presentation/scripts/script-renderers'
+import { resolveTranslationPattern } from '@/presentation/translations/translation-resolver'
 import type { GroupedScripts } from './PageScripts'
 import type { CustomElement } from '@/domain/models/app/page/meta/custom-elements'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
+import type { Languages } from '@/domain/models/app/languages'
+import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
 
 /**
  * Props for PageHead component
@@ -30,6 +33,9 @@ type PageHeadProps = {
   readonly directionStyles: string
   readonly title: string
   readonly description: string
+  readonly keywords?: string
+  readonly lang: string
+  readonly languages?: Languages
   readonly scripts: GroupedScripts
 }
 
@@ -44,15 +50,49 @@ function hasCustomViewportMeta(customElements: readonly CustomElement[] | undefi
 }
 
 /**
- * Renders basic meta tags (charset, viewport, title, description)
+ * Extracts OpenGraph properties from meta object
+ * Handles both standard openGraph object and og:* prefixed direct properties
+ */
+function extractOpenGraphData(
+  page: Page,
+  lang: string,
+  languages: Languages | undefined
+): OpenGraph | undefined {
+  if (!page.meta) return undefined
+
+  // Start with existing openGraph object if present
+  const openGraph = page.meta.openGraph || {}
+
+  // Extract og:* prefixed properties from meta (type assertion needed for dynamic access)
+  const metaRecord = page.meta as Record<string, unknown>
+  const ogSiteName = metaRecord['og:site_name']
+
+  // Resolve translation patterns in extracted properties
+  const resolvedSiteName =
+    typeof ogSiteName === 'string' ? resolveTranslationPattern(ogSiteName, lang, languages) : undefined
+
+  // Merge og:* properties into openGraph structure
+  const merged = {
+    ...openGraph,
+    ...(resolvedSiteName && { siteName: resolvedSiteName }),
+  }
+
+  // Only return if there's at least one property
+  return Object.keys(merged).length > 0 ? merged : undefined
+}
+
+/**
+ * Renders basic meta tags (charset, viewport, title, description, keywords)
  */
 function BasicMetaTags({
   title,
   description,
+  keywords,
   hasCustomViewport,
 }: {
   readonly title: string
   readonly description: string
+  readonly keywords?: string
   readonly hasCustomViewport: boolean
 }): ReactElement {
   return (
@@ -69,6 +109,12 @@ function BasicMetaTags({
         <meta
           name="description"
           content={description}
+        />
+      )}
+      {keywords && (
+        <meta
+          name="keywords"
+          content={keywords}
         />
       )}
     </>
@@ -141,6 +187,43 @@ function HeadScripts({ scripts }: { readonly scripts: GroupedScripts }): ReactEl
 }
 
 /**
+ * Renders hreflang alternate links for multi-language SEO
+ * Generates <link rel="alternate" hreflang="..."> tags for each supported language
+ */
+function HreflangLinks({
+  page,
+  languages,
+}: {
+  readonly page: Page
+  readonly languages: Languages | undefined
+}): ReactElement | undefined {
+  if (!languages || languages.supported.length <= 1) {
+    return undefined
+  }
+
+  const basePath = page.path === '/' ? '' : page.path
+
+  return (
+    <>
+      {languages.supported.map((lang) => (
+        <link
+          key={lang.code}
+          rel="alternate"
+          hreflang={lang.code}
+          href={`/${lang.code}${basePath}/`}
+        />
+      ))}
+      <link
+        key="x-default"
+        rel="alternate"
+        hreflang="x-default"
+        href={`/${languages.default}${basePath}/`}
+      />
+    </>
+  )
+}
+
+/**
  * Renders the complete <head> section of a dynamic page
  *
  * Includes:
@@ -165,21 +248,34 @@ export function PageHead({
   directionStyles,
   title,
   description,
+  keywords,
+  lang,
+  languages,
   scripts,
 }: PageHeadProps): Readonly<ReactElement> {
   const hasCustomViewport = hasCustomViewportMeta(page.meta?.customElements)
+  const openGraphData = extractOpenGraphData(page, lang, languages)
 
   return (
     <>
       <BasicMetaTags
         title={title}
         description={description}
+        keywords={keywords}
         hasCustomViewport={hasCustomViewport}
       />
-      <OpenGraphMeta openGraph={page.meta?.openGraph} />
+      <OpenGraphMeta
+        openGraph={openGraphData}
+        lang={lang}
+        languages={languages}
+      />
       <TwitterCardMeta page={page} />
       <StructuredDataScript page={page} />
       <DnsPrefetchLinks dnsPrefetch={page.meta?.dnsPrefetch} />
+      <HreflangLinks
+        page={page}
+        languages={languages}
+      />
       <AnalyticsHead analytics={page.meta?.analytics} />
       <CustomElementsHead customElements={page.meta?.customElements} />
       {page.meta?.favicon && (

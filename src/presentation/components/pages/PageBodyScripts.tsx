@@ -7,6 +7,7 @@
 
 import { type ReactElement } from 'react'
 import { renderInlineScriptTag, renderScriptTag } from '@/presentation/scripts/script-renderers'
+import { buildPageMetadataI18n } from './PageMetadataI18n'
 import type { GroupedScripts } from './PageScripts'
 import type { Languages } from '@/domain/models/app/languages'
 import type { Page } from '@/domain/models/app/pages'
@@ -70,6 +71,9 @@ function LanguageSwitcherScripts({
   readonly theme: Theme | undefined
   readonly direction: 'ltr' | 'rtl'
 }): ReactElement {
+  // Build enriched metadata with i18n translations for all languages
+  const enrichedMeta = buildPageMetadataI18n(page, languages)
+
   return (
     <>
       {/* Configuration data for external script (CSP-compliant) */}
@@ -79,7 +83,7 @@ function LanguageSwitcherScripts({
       />
       {/* Page metadata for client-side updates (title, i18n) */}
       <div
-        data-page-meta={JSON.stringify(page.meta || {})}
+        data-page-meta={JSON.stringify(enrichedMeta)}
         style={{ display: 'none' }}
       />
       {/* Expose languages config to window for testing/debugging - fallback defaults to default language */}

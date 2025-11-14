@@ -8,34 +8,49 @@
 import { type ReactElement } from 'react'
 import { buildProviderElements } from './analytics-builders'
 import { buildCustomElement } from './custom-elements-builders'
+import { resolveTranslationPattern } from '@/presentation/translations/translation-resolver'
 import type { Analytics } from '@/domain/models/app/page/meta/analytics'
 import type { CustomElements } from '@/domain/models/app/page/meta/custom-elements'
 import type { FaviconSet } from '@/domain/models/app/page/meta/favicon-set'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
 import type { Page } from '@/domain/models/app/pages'
+import type { Languages } from '@/domain/models/app/languages'
 
 /**
  * Render Open Graph metadata tags
  * Generates <meta property="og:*"> tags for Facebook/LinkedIn sharing
  *
  * @param openGraph - Open Graph configuration from page.meta
+ * @param lang - Current language code for translation resolution
+ * @param languages - Languages configuration for translation resolution
  * @returns React fragment with OG meta tags
  */
 export function OpenGraphMeta({
   openGraph,
+  lang,
+  languages,
 }: {
   readonly openGraph?: OpenGraph
+  readonly lang?: string
+  readonly languages?: Languages
 }): Readonly<ReactElement | undefined> {
   if (!openGraph) {
     return undefined
   }
 
+  // Resolve translation patterns in OpenGraph fields
+  const resolveValue = (value: string | undefined): string | undefined => {
+    if (!value || !lang) return value
+    return resolveTranslationPattern(value, lang, languages)
+  }
+
   const fields: ReadonlyArray<{ readonly key: string; readonly value?: string }> = [
-    { key: 'title', value: openGraph.title },
-    { key: 'description', value: openGraph.description },
+    { key: 'title', value: resolveValue(openGraph.title) },
+    { key: 'description', value: resolveValue(openGraph.description) },
     { key: 'image', value: openGraph.image },
     { key: 'url', value: openGraph.url },
     { key: 'type', value: openGraph.type },
+    { key: 'site_name', value: resolveValue(openGraph.siteName) },
   ]
 
   return (

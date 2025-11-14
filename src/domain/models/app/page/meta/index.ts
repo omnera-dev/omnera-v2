@@ -198,6 +198,11 @@ export const MetaSchema = Schema.Struct({
   // Aliases for test compatibility
   twitterCard: Schema.optional(TwitterCardSchema),
   structuredData: Schema.optional(Schema.Unknown),
+  'og:site_name': Schema.optional(
+    Schema.String.annotations({
+      description: 'OpenGraph site name (shorthand for openGraph.siteName)',
+    })
+  ),
   // Internationalization for metadata
   i18n: Schema.optional(
     Schema.Record({

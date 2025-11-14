@@ -18,6 +18,7 @@ export type PageMetadata = {
   readonly direction: 'ltr' | 'rtl'
   readonly title: string
   readonly description: string
+  readonly keywords?: string
   readonly bodyStyle:
     | {
         readonly fontFamily?: string
@@ -113,6 +114,22 @@ function determineDescription(page: Page, lang: string, languages: Languages | u
 }
 
 /**
+ * Determine page keywords with translation resolution
+ * Resolves $t: patterns in keywords
+ */
+function determineKeywords(
+  page: Page,
+  lang: string,
+  languages: Languages | undefined
+): string | undefined {
+  if (!page.meta?.keywords) {
+    return undefined
+  }
+
+  return resolveTranslationPattern(page.meta.keywords, lang, languages)
+}
+
+/**
  * Extracts and computes metadata from page configuration
  *
  * Determines language (page.meta.lang > detectedLanguage > default),
@@ -134,6 +151,7 @@ export function extractPageMetadata(
   const direction = determineDirection(languages, lang)
   const title = determineTitle(page, lang, languages)
   const description = determineDescription(page, lang, languages)
+  const keywords = determineKeywords(page, lang, languages)
   const bodyStyle = buildBodyStyle(theme)
 
   return {
@@ -141,6 +159,7 @@ export function extractPageMetadata(
     direction,
     title,
     description,
+    keywords,
     bodyStyle,
   }
 }
