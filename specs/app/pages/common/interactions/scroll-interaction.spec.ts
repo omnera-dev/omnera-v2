@@ -516,7 +516,8 @@ test.describe('Scroll Interaction', () => {
       const section2 = page.locator('div').filter({ hasText: 'Section 2' })
       await section2.scrollIntoViewIfNeeded()
       await expect(section2).toHaveClass(/animate-fadeInUp/)
-      await expect(section2).toHaveCSS('animation-delay', '200ms')
+      // Note: Browsers may normalize 200ms to 0.2s, both are equivalent
+      await expect(section2).toHaveCSS('animation-delay', '0.2s')
 
       // Focus on workflow continuity, not exhaustive coverage
     }
