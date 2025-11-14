@@ -130,15 +130,68 @@ function buildAnimationProps(hasScrollAnimation: boolean): Record<string, unknow
 }
 
 /**
+ * Parse time string to milliseconds
+ *
+ * @param timeStr - Time string (e.g., "100ms", "0.5s")
+ * @returns Time in milliseconds
+ */
+function parseTimeToMs(timeStr: string): number {
+  if (timeStr.endsWith('ms')) {
+    return parseInt(timeStr.slice(0, -2), 10)
+  }
+  if (timeStr.endsWith('s')) {
+    return parseFloat(timeStr.slice(0, -1)) * 1000
+  }
+  return 0
+}
+
+/**
+ * Format milliseconds to time string
+ *
+ * @param ms - Time in milliseconds
+ * @returns Time string (e.g., "100ms", "0.5s")
+ */
+function formatMsToTime(ms: number): string {
+  return `${ms}ms`
+}
+
+/**
+ * Calculate total delay including stagger
+ *
+ * @param delay - Base delay
+ * @param stagger - Stagger delay per sibling
+ * @param childIndex - Current child index
+ * @returns Total delay string
+ */
+function calculateTotalDelay(
+  delay: string | undefined,
+  stagger: string | undefined,
+  childIndex: number | undefined
+): string | undefined {
+  if (!stagger || childIndex === undefined) {
+    return delay
+  }
+
+  const baseDelayMs = delay ? parseTimeToMs(delay) : 0
+  const staggerMs = parseTimeToMs(stagger)
+  const totalDelayMs = baseDelayMs + staggerMs * childIndex
+
+  return formatMsToTime(totalDelayMs)
+}
+
+/**
  * Build entrance interaction props (style for animations)
  */
 function buildEntranceInteractionProps(config: ElementPropsConfig): Record<string, unknown> {
   if (!config.interactions?.entrance) return {}
 
-  const { delay, duration } = config.interactions.entrance
+  const { delay, duration, stagger } = config.interactions.entrance
+
+  // Calculate total delay including stagger
+  const totalDelay = calculateTotalDelay(delay, stagger, config.childIndex)
 
   // Build animation styles immutably
-  const delayStyle = delay ? { animationDelay: delay } : {}
+  const delayStyle = totalDelay ? { animationDelay: totalDelay } : {}
   const durationStyle = duration ? { animationDuration: duration } : {}
   const animationStyles = { ...delayStyle, ...durationStyle }
 
