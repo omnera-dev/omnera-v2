@@ -71,13 +71,14 @@ export function buildHoverData(
   if (!hover) return undefined
 
   // Build hover rules list (immutable)
+  // Use !important to override inline styles from props.style
   const hoverRules = [
-    hover.transform && `transform: ${hover.transform}`,
-    hover.opacity !== undefined && `opacity: ${hover.opacity}`,
-    hover.backgroundColor && `background-color: ${hover.backgroundColor}`,
-    hover.color && `color: ${hover.color}`,
-    hover.borderColor && `border-color: ${hover.borderColor}`,
-    hover.shadow && `box-shadow: ${hover.shadow}`,
+    hover.transform && `transform: ${hover.transform} !important`,
+    hover.opacity !== undefined && `opacity: ${hover.opacity} !important`,
+    hover.backgroundColor && `background-color: ${hover.backgroundColor} !important`,
+    hover.color && `color: ${hover.color} !important`,
+    hover.borderColor && `border-color: ${hover.borderColor} !important`,
+    hover.shadow && `box-shadow: ${hover.shadow} !important`,
   ].filter((rule): rule is string => Boolean(rule))
 
   if (hoverRules.length === 0) return undefined
