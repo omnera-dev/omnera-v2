@@ -207,6 +207,7 @@ export function renderButton(
           openUrl?: string
           openInNewTab?: boolean
           scrollTo?: string
+          toggleElement?: string
         }
       }
     | undefined
@@ -224,6 +225,9 @@ export function renderButton(
           'data-click-open-in-new-tab': String(clickInteraction.openInNewTab),
         }),
         ...(clickInteraction.scrollTo && { 'data-click-scroll-to': clickInteraction.scrollTo }),
+        ...(clickInteraction.toggleElement && {
+          'data-click-toggle-element': clickInteraction.toggleElement,
+        }),
       }
     : props
 

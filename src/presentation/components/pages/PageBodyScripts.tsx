@@ -152,7 +152,7 @@ function renderConditionalScripts(config: {
 const CLICK_INTERACTION_SCRIPT = `
 (function() {
   document.addEventListener('click', function(event) {
-    const button = event.target.closest('[data-click-animation], [data-click-navigate], [data-click-open-url], [data-click-scroll-to]');
+    const button = event.target.closest('[data-click-animation], [data-click-navigate], [data-click-open-url], [data-click-scroll-to], [data-click-toggle-element]');
     if (!button) return;
 
     const animation = button.getAttribute('data-click-animation');
@@ -160,10 +160,25 @@ const CLICK_INTERACTION_SCRIPT = `
     const openUrl = button.getAttribute('data-click-open-url');
     const openInNewTab = button.getAttribute('data-click-open-in-new-tab') === 'true';
     const scrollTo = button.getAttribute('data-click-scroll-to');
+    const toggleElement = button.getAttribute('data-click-toggle-element');
 
     // Determine target action (navigate, openUrl, or scrollTo)
     const targetUrl = openUrl || navigate;
     const isExternalUrl = !!openUrl;
+
+    // Handle toggleElement action
+    if (toggleElement) {
+      const targetElement = document.querySelector(toggleElement);
+      if (targetElement) {
+        const currentDisplay = window.getComputedStyle(targetElement).display;
+        if (currentDisplay === 'none') {
+          targetElement.style.display = '';
+        } else {
+          targetElement.style.display = 'none';
+        }
+      }
+      return;
+    }
 
     // Handle scrollTo action
     if (scrollTo) {

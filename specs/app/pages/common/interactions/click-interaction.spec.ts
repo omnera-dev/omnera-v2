@@ -281,7 +281,7 @@ test.describe('Click Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-CLICK-008: should show the mobile menu if hidden, or hide it if shown',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
