@@ -327,7 +327,7 @@ test.describe('Component Interactions', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTIONS-REGRESSION-001: user can complete full interactions workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
