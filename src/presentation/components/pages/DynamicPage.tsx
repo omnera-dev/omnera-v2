@@ -28,6 +28,30 @@ type DynamicPageProps = {
 }
 
 /**
+ * Merges block metadata with page metadata
+ *
+ * @param page - Page configuration
+ * @param blocks - Available blocks
+ * @returns Page with merged metadata
+ */
+function mergeBlockMetaIntoPage(page: Page, blocks?: Blocks): Page {
+  const blockOpenGraph = extractBlockMetaFromSections(page.sections, blocks)
+
+  if (!blockOpenGraph || !page.meta) return page
+
+  return {
+    ...page,
+    meta: {
+      ...page.meta,
+      openGraph: {
+        ...page.meta.openGraph,
+        ...blockOpenGraph,
+      },
+    },
+  }
+}
+
+/**
  * Renders a page from configuration as a complete HTML document
  * Theme CSS is compiled globally at server startup via /assets/output.css
  * Theme is still passed for font URLs, animation flags, and debugging
@@ -42,21 +66,7 @@ export function DynamicPage({
   const metadata = extractPageMetadata(page, theme, languages, detectedLanguage)
   const langConfig = resolvePageLanguage(page, languages, detectedLanguage)
   const scripts = groupScriptsByPosition(page)
-
-  // Extract Open Graph meta from blocks and merge with page meta
-  const blockOpenGraph = extractBlockMetaFromSections(page.sections, blocks)
-  const mergedPage: Page = blockOpenGraph
-    ? {
-        ...page,
-        meta: {
-          ...page.meta,
-          openGraph: {
-            ...page.meta?.openGraph,
-            ...blockOpenGraph,
-          },
-        },
-      }
-    : page
+  const mergedPage = mergeBlockMetaIntoPage(page, blocks)
 
   return (
     <html

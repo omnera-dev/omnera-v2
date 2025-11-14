@@ -5,14 +5,14 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import type { Blocks } from '@/domain/models/app/blocks'
+import type { BlockMeta } from './structured-data-from-block'
 import type {
   BlockReference,
   SimpleBlockReference,
 } from '@/domain/models/app/block/common/block-reference'
+import type { Blocks } from '@/domain/models/app/blocks'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
 import type { Component } from '@/domain/models/app/page/sections'
-import type { BlockMeta } from './StructuredDataFromBlock'
 
 /**
  * Substitutes variables in a string value
@@ -27,11 +27,12 @@ function substituteVariables(
 ): string | undefined {
   if (!value || !vars) return value
 
-  let result = value
-  for (const [key, varValue] of Object.entries(vars)) {
-    result = result.replace(new RegExp(`\\$${key}`, 'g'), String(varValue))
-  }
-  return result
+  // Use reduce for functional approach instead of loop with mutation
+  return Object.entries(vars).reduce(
+    (result, [key, varValue]) =>
+      result.replace(new RegExp(`\\$${key}`, 'g'), String(varValue)),
+    value
+  )
 }
 
 /**
@@ -47,18 +48,23 @@ function extractOpenGraphFromBlockMeta(
 ): Partial<OpenGraph> | undefined {
   if (!meta) return undefined
 
-  const openGraph: Partial<OpenGraph> = {}
+  // Build immutably without mutation
+  const withImage = meta.image
+    ? { image: substituteVariables(meta.image, vars) }
+    : {}
 
-  if (meta.image) {
-    openGraph.image = substituteVariables(meta.image, vars)
-  }
+  const withTitle = meta.title
+    ? { title: substituteVariables(meta.title, vars) }
+    : {}
 
-  if (meta.title) {
-    openGraph.title = substituteVariables(meta.title, vars)
-  }
+  const withDescription = meta.description
+    ? { description: substituteVariables(meta.description, vars) }
+    : {}
 
-  if (meta.description) {
-    openGraph.description = substituteVariables(meta.description, vars)
+  const openGraph = {
+    ...withImage,
+    ...withTitle,
+    ...withDescription,
   }
 
   return Object.keys(openGraph).length > 0 ? openGraph : undefined
@@ -80,27 +86,24 @@ export function extractBlockMetaFromSections(
 ): Partial<OpenGraph> | undefined {
   if (!sections || !blocks) return undefined
 
-  const openGraphParts: Partial<OpenGraph>[] = []
-
-  for (const section of sections) {
-    // Check if this is a block reference
-    if ('block' in section || '$ref' in section) {
+  // Use functional map/filter instead of loop with mutation
+  const openGraphParts = sections
+    .filter((section): section is SimpleBlockReference | BlockReference =>
+      'block' in section || '$ref' in section
+    )
+    .map((section) => {
       const blockName = 'block' in section ? section.block : section.$ref
       const vars = 'vars' in section ? section.vars : undefined
 
       // Find the block definition
       const block = blocks.find((b) => b.name === blockName)
-      if (!block?.props?.meta) continue
+      if (!block?.props?.meta) return undefined
 
       // Extract Open Graph meta from block meta
       const meta = block.props.meta as BlockMeta | undefined
-      const blockOpenGraph = extractOpenGraphFromBlockMeta(meta, vars)
-
-      if (blockOpenGraph) {
-        openGraphParts.push(blockOpenGraph)
-      }
-    }
-  }
+      return extractOpenGraphFromBlockMeta(meta, vars)
+    })
+    .filter((og): og is Partial<OpenGraph> => og !== undefined)
 
   if (openGraphParts.length === 0) return undefined
 
