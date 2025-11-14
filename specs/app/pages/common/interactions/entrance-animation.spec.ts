@@ -343,7 +343,7 @@ test.describe('Entrance Animation', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTIONS-ENTRANCE-ANIMATION-REGRESSION-001: user can complete full entrance animation workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
@@ -405,7 +405,8 @@ test.describe('Entrance Animation', () => {
       await expect(hero).toHaveClass(/animate-fadeIn/)
 
       // Verify staggered list animations
-      const features = page.locator('div').filter({ hasText: /Feature/ })
+      const featuresContainer = page.locator('div').filter({ hasText: 'Feature 1Feature 2Feature 3' })
+      const features = featuresContainer.locator('> div')
       // Note: Browsers may normalize 100ms to 0.1s and 200ms to 0.2s, both are equivalent
       await expect(features.nth(0)).toHaveCSS('animation-delay', '0.1s')
       await expect(features.nth(1)).toHaveCSS('animation-delay', '0.2s')
