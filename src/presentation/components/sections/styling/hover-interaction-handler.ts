@@ -29,6 +29,8 @@ function getAnimatableProperties(hover: HoverInteraction): ReadonlyArray<string>
  *
  * Generates transition property for smooth hover animations.
  * Applied to the base element to define which properties should animate.
+ * Uses explicit transition properties (transition-property, transition-duration, transition-timing-function)
+ * instead of shorthand to ensure proper CSS property testing.
  *
  * @param hover - Hover interaction configuration
  * @returns Transition style object or undefined
@@ -45,7 +47,9 @@ export function buildHoverTransitionStyles(
   if (transitionProps.length === 0) return undefined
 
   return {
-    transition: transitionProps.map((prop) => `${prop} ${duration} ${easing}`).join(', '),
+    'transition-property': transitionProps.join(', '),
+    'transition-duration': duration,
+    'transition-timing-function': easing,
   }
 }
 
