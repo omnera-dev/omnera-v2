@@ -251,7 +251,8 @@ test.describe('Page Sections', () => {
       const button = page.locator('button:has-text("Click me")')
       await expect(button).toBeVisible()
       await button.hover()
-      await expect(button).toHaveCSS('transform', /scale/)
+      // Note: Browsers convert scale(1.05) to matrix(1.05, 0, 0, 1.05, 0, 0)
+      await expect(button).toHaveCSS('transform', /matrix\(1\.05, 0, 0, 1\.05, 0, 0\)/)
     }
   )
 
