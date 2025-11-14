@@ -80,6 +80,9 @@ export function DynamicPage({
           directionStyles={langConfig.directionStyles}
           title={metadata.title}
           description={metadata.description}
+          keywords={metadata.keywords}
+          lang={langConfig.lang}
+          languages={languages}
           scripts={scripts}
         />
       </head>

@@ -215,7 +215,7 @@
   }
 
   /**
-   * Updates page metadata (title, HTML lang) for the current language
+   * Updates page metadata (title, HTML lang, description, keywords, og:site_name) for the current language
    * Reads metadata from data-page-meta attribute and applies localized values
    */
   function updatePageMetadata() {
@@ -236,14 +236,38 @@
     // Update HTML lang attribute
     document.documentElement.setAttribute('lang', currentLanguage)
 
-    // Update page title if i18n translations are available
+    // Update page metadata if i18n translations are available
     if (pageMeta.i18n && pageMeta.i18n[currentLanguage]) {
       const localizedMeta = pageMeta.i18n[currentLanguage]
+
+      // Update page title
       if (localizedMeta.title) {
         document.title = localizedMeta.title
       }
-      // Note: We don't update meta description dynamically as it's primarily for SEO
-      // and search engines read it from the initial server response
+
+      // Update meta description
+      if (localizedMeta.description) {
+        const descriptionMeta = document.querySelector('meta[name="description"]')
+        if (descriptionMeta) {
+          descriptionMeta.setAttribute('content', localizedMeta.description)
+        }
+      }
+
+      // Update meta keywords
+      if (localizedMeta.keywords) {
+        const keywordsMeta = document.querySelector('meta[name="keywords"]')
+        if (keywordsMeta) {
+          keywordsMeta.setAttribute('content', localizedMeta.keywords)
+        }
+      }
+
+      // Update og:site_name
+      if (localizedMeta['og:site_name']) {
+        const ogSiteNameMeta = document.querySelector('meta[property="og:site_name"]')
+        if (ogSiteNameMeta) {
+          ogSiteNameMeta.setAttribute('content', localizedMeta['og:site_name'])
+        }
+      }
     }
   }
 

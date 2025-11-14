@@ -862,7 +862,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-INTEGRATION-003: should generate localized meta tags and structured data per language',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
