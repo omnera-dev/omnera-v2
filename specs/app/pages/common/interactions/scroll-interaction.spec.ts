@@ -417,7 +417,7 @@ test.describe('Scroll Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-SCROLL-012: should apply all settings in sequence (wait delay, then animate with duration)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -455,8 +455,9 @@ test.describe('Scroll Interaction', () => {
 
       // THEN: it should apply all settings in sequence (wait delay, then animate with duration)
       await expect(element).toHaveClass(/animate-fadeInUp/)
-      await expect(element).toHaveCSS('animation-delay', '300ms')
-      await expect(element).toHaveCSS('animation-duration', '800ms')
+      // Note: Browsers may normalize 300ms to 0.3s and 800ms to 0.8s, both are equivalent
+      await expect(element).toHaveCSS('animation-delay', '0.3s')
+      await expect(element).toHaveCSS('animation-duration', '0.8s')
     }
   )
 
