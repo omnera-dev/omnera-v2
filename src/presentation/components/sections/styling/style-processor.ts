@@ -45,18 +45,6 @@ function buildEntranceAnimationClass(interactions: Interactions | undefined): st
 }
 
 /**
- * Build scroll animation class from interactions
- *
- * @param interactions - Component interactions
- * @returns Animation class or undefined
- */
-function buildScrollAnimationClass(interactions: Interactions | undefined): string | undefined {
-  if (!interactions?.scroll?.animation) return undefined
-
-  return `animate-${interactions.scroll.animation}`
-}
-
-/**
  * Configuration for building final className
  */
 type BuildClassNameConfig = {
@@ -79,7 +67,8 @@ export function buildFinalClassName(config: BuildClassNameConfig): string | unde
   const gridClass = type === 'grid' ? buildGridClasses(theme) : undefined
   const customClass = className as string | undefined
   const entranceClass = buildEntranceAnimationClass(interactions)
-  const scrollClass = buildScrollAnimationClass(interactions)
+  // Don't add scroll animation class to initial className - it will be added by scroll-animation.js
+  const scrollClass = undefined
 
   const classes = [typeClass, flexClass, gridClass, customClass, entranceClass, scrollClass]
     .filter(Boolean)

@@ -47,6 +47,17 @@
         element.style.animationDuration = duration
       }
 
+      // Check if element is initially in viewport
+      const rect = element.getBoundingClientRect()
+      const isInitiallyVisible =
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+
+      // Track if we should apply scroll animation (skip first intersection if initially visible)
+      let hasIntersected = isInitiallyVisible
+
       // Create observer for this element with its specific threshold
       const observer = new IntersectionObserver(
         (entries) => {
@@ -54,10 +65,24 @@
             const animationClass = `animate-${animationName}`
 
             if (entry.isIntersecting) {
-              // Element is now visible, add animation class
-              if (!element.classList.contains(animationClass)) {
-                element.classList.add(animationClass)
+              // If this is the first intersection and element was initially visible, skip
+              if (isInitiallyVisible && !hasIntersected) {
+                hasIntersected = true
+                return
               }
+
+              // Remove any existing animation classes (including entrance animations)
+              // This allows scroll animation to replace entrance animation
+              const existingAnimationClasses = Array.from(element.classList).filter((cls) =>
+                cls.startsWith('animate-')
+              )
+              existingAnimationClasses.forEach((cls) => {
+                element.classList.remove(cls)
+              })
+
+              // Add the scroll animation class
+              element.classList.add(animationClass)
+              hasIntersected = true
 
               // If once is true, stop observing
               if (once) {
@@ -65,7 +90,9 @@
               }
             } else if (!once) {
               // Element left viewport and once is false, remove animation class for re-trigger
-              element.classList.remove(animationClass)
+              if (element.classList.contains(animationClass)) {
+                element.classList.remove(animationClass)
+              }
             }
           })
         },
