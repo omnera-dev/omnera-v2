@@ -5,6 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
+import { calculateTotalDelay } from '../utils/time-parser'
 import type { ElementPropsConfig, TestIdConfig } from './props-builder-config'
 
 /**
@@ -127,56 +128,6 @@ function buildAnimationProps(hasScrollAnimation: boolean): Record<string, unknow
   return {
     'data-scroll-animation': 'scale-up',
   }
-}
-
-/**
- * Parse time string to milliseconds
- *
- * @param timeStr - Time string (e.g., "100ms", "0.5s")
- * @returns Time in milliseconds
- */
-function parseTimeToMs(timeStr: string): number {
-  if (timeStr.endsWith('ms')) {
-    return parseInt(timeStr.slice(0, -2), 10)
-  }
-  if (timeStr.endsWith('s')) {
-    return parseFloat(timeStr.slice(0, -1)) * 1000
-  }
-  return 0
-}
-
-/**
- * Format milliseconds to time string
- *
- * @param ms - Time in milliseconds
- * @returns Time string (e.g., "100ms", "0.5s")
- */
-function formatMsToTime(ms: number): string {
-  return `${ms}ms`
-}
-
-/**
- * Calculate total delay including stagger
- *
- * @param delay - Base delay
- * @param stagger - Stagger delay per sibling
- * @param childIndex - Current child index
- * @returns Total delay string
- */
-function calculateTotalDelay(
-  delay: string | undefined,
-  stagger: string | undefined,
-  childIndex: number | undefined
-): string | undefined {
-  if (!stagger || childIndex === undefined) {
-    return delay
-  }
-
-  const baseDelayMs = delay ? parseTimeToMs(delay) : 0
-  const staggerMs = parseTimeToMs(stagger)
-  const totalDelayMs = baseDelayMs + staggerMs * childIndex
-
-  return formatMsToTime(totalDelayMs)
 }
 
 /**
