@@ -245,7 +245,6 @@ const CLICK_INTERACTION_SCRIPT = `
 })();
 `.trim()
 
-
 /**
  * Renders scripts for body end position
  */

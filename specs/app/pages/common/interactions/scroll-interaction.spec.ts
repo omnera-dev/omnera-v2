@@ -297,7 +297,7 @@ test.describe('Scroll Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-SCROLL-009: should complete the animation in 1 second',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -327,7 +327,8 @@ test.describe('Scroll Interaction', () => {
       await element.scrollIntoViewIfNeeded()
 
       // THEN: it should complete the animation in 1 second
-      await expect(element).toHaveCSS('animation-duration', '1000ms')
+      // Note: Browsers may normalize 1000ms to 1s, both are equivalent
+      await expect(element).toHaveCSS('animation-duration', '1s')
     }
   )
 
