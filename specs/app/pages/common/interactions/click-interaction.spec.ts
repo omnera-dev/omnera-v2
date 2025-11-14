@@ -441,7 +441,7 @@ test.describe('Click Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-CLICK-012: should not play any animation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
