@@ -83,10 +83,10 @@ function buildElementPropsFromConfig(config: ElementPropsConfig): Record<string,
   }
 
   // Remove style from individual prop objects
-  const { style: _, ...corePropsWithoutStyle } = coreProps
-  const { style: __, ...entrancePropsWithoutStyle } = entranceProps
-  const { style: ___, ...scrollPropsWithoutStyle } = scrollProps
-  const { style: ____, ...emptyStylePropsWithoutStyle } = emptyStyleProps
+  const { style: _coreStyle, ...corePropsWithoutStyle } = coreProps
+  const { style: _entranceStyle, ...entrancePropsWithoutStyle } = entranceProps
+  const { style: _scrollStyle, ...scrollPropsWithoutStyle } = scrollProps
+  const { style: _emptyStyle, ...emptyStylePropsWithoutStyle } = emptyStyleProps
 
   return {
     ...config.substitutedProps,
