@@ -6,6 +6,7 @@
  */
 
 import { Button } from '@/presentation/components/ui/button'
+import { buildColorStyles } from '@/presentation/utils/styles'
 import type { Navigation as NavigationProps } from '@/domain/models/app/page/layout/navigation'
 import type { ReactElement } from 'react'
 
@@ -21,9 +22,16 @@ export function Navigation({
   logo,
   links,
   cta,
+  backgroundColor,
+  textColor,
 }: Readonly<NavigationProps>): Readonly<ReactElement> {
+  const navStyle = buildColorStyles(backgroundColor, textColor)
+
   return (
-    <nav data-testid="navigation">
+    <nav
+      data-testid="navigation"
+      style={navStyle}
+    >
       <a
         href="/"
         data-testid="nav-logo-link"
