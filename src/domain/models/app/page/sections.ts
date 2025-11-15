@@ -151,7 +151,8 @@ export const ComponentSchema: Schema.Schema<any, any, never> = Schema.Struct({
       Schema.String,
       Schema.Record({ key: Schema.String, value: Schema.Unknown })
     ).annotations({
-      description: 'Text content for text components, or structured content object (e.g., { button: { text, animation } })',
+      description:
+        'Text content for text components, or structured content object (e.g., { button: { text, animation } })',
     })
   ),
   interactions: Schema.optional(InteractionsSchema),

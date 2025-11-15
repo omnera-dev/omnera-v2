@@ -33,18 +33,14 @@ function LanguageSwitcherButton({
       data-testid="language-switcher-button"
       type="button"
     >
-      <span
-        data-testid="language-flag"
-        className={shouldShowFlag(defaultLanguage?.flag) ? '' : 'hidden'}
-      >
-        {shouldShowFlag(defaultLanguage?.flag) && `${defaultLanguage!.flag} `}
-      </span>
+      {shouldShowFlag(defaultLanguage?.flag) && (
+        <span data-testid="language-flag">{defaultLanguage!.flag} </span>
+      )}
       <span
         data-testid="language-code"
-        className="hidden"
-      >
-        {defaultCode}
-      </span>
+        aria-hidden="true"
+        style={{ display: 'none' }}
+      ></span>
       <span
         data-testid="current-language"
         data-code={defaultCode}
@@ -135,16 +131,12 @@ export function LanguageSwitcher({
       {/* Dropdown menu - vanilla JS will handle show/hide */}
       <div
         data-language-dropdown
-        className="absolute top-full left-0 z-10 hidden"
-      >
-        {languages.supported.map((lang) => (
-          <LanguageOption
-            key={lang.code}
-            lang={lang}
-            showFlags={showFlags}
-          />
-        ))}
-      </div>
+        className="absolute top-full left-0 z-10"
+        aria-hidden="true"
+        style={{ display: 'none' }}
+        data-supported-languages={JSON.stringify(languages.supported)}
+        data-show-flags={showFlags}
+      ></div>
     </div>
   )
 }
