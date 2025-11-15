@@ -199,6 +199,14 @@ export const SidebarItemsSchema = Schema.Array(SidebarItemSchema).annotations({
  *
  * @see specs/app/pages/layout/sidebar/sidebar.schema.json
  */
+/**
+ * Simple sidebar link (legacy format)
+ */
+const SidebarLinkSchema = Schema.Struct({
+  label: Schema.String,
+  href: Schema.String,
+})
+
 export const SidebarSchema = Schema.Struct({
   enabled: Schema.optional(
     Schema.Boolean.annotations({
@@ -232,6 +240,11 @@ export const SidebarSchema = Schema.Struct({
     })
   ),
   items: Schema.optional(SidebarItemsSchema),
+  links: Schema.optional(
+    Schema.Array(SidebarLinkSchema).annotations({
+      description: 'Simple sidebar links (legacy format, use items for advanced features)',
+    })
+  ),
 }).annotations({
   title: 'Sidebar Configuration',
   description: 'Sidebar navigation and content configuration',

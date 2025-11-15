@@ -6,25 +6,7 @@
  */
 
 import { type ReactElement } from 'react'
-
-/**
- * Sidebar link
- */
-interface SidebarLink {
-  readonly label: string
-  readonly href: string
-}
-
-/**
- * Sidebar component props based on PageLayout schema
- */
-interface SidebarProps {
-  readonly enabled?: boolean
-  readonly position?: 'left' | 'right'
-  readonly width?: string
-  readonly links?: readonly SidebarLink[]
-  readonly [key: string]: unknown
-}
+import type { Sidebar as SidebarType } from '@/domain/models/app/page/layout/sidebar'
 
 /**
  * Sidebar component for page layout
@@ -32,39 +14,41 @@ interface SidebarProps {
  * Renders a sidebar with configurable position and navigation links.
  * Uses <aside> element with role="complementary" for accessibility.
  *
+ * Supports both new `items` structure (domain schema) and legacy `links` structure (backward compatibility).
+ *
  * @param props - Sidebar configuration
  * @returns Sidebar element
  */
-export function Sidebar(props: SidebarProps): Readonly<ReactElement> {
+export function Sidebar(props: SidebarType & { readonly links?: readonly { label: string; href: string }[] }): Readonly<ReactElement> {
   const width = props.width || '250px'
   const position = props.position || 'left'
+
+  // Support both `links` (legacy) and `items` (domain schema)
+  // Convert items to simple link format if items are provided
+  const itemsAsLinks = props.items
+    ?.filter((item) => item.type === 'link' && item.label && item.href)
+    .map((item) => ({ label: item.label!, href: item.href! }))
+
+  const navigationLinks = props.links || itemsAsLinks
 
   return (
     <aside
       data-testid="sidebar"
       data-position={position}
-      style={{
-        width,
-        position: 'fixed',
-        [position]: 0,
-        top: 0,
-        bottom: 0,
-        padding: '1rem',
-        borderRight: position === 'left' ? '1px solid #e5e7eb' : undefined,
-        borderLeft: position === 'right' ? '1px solid #e5e7eb' : undefined,
-      }}
+      className={`fixed top-0 bottom-0 p-4 ${position === 'left' ? 'left-0 border-r border-gray-200' : 'right-0 border-l border-gray-200'}`}
+      style={{ width }}
     >
-      {props.links && props.links.length > 0 && (
+      {navigationLinks && navigationLinks.length > 0 && (
         <nav>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-            {props.links.map((link) => (
+          <ul className="list-none p-0 m-0">
+            {navigationLinks.map((link) => (
               <li
                 key={link.href}
-                style={{ marginBottom: '0.5rem' }}
+                className="mb-2"
               >
                 <a
                   href={link.href}
-                  style={{ textDecoration: 'none', color: '#374151' }}
+                  className="no-underline text-gray-700"
                 >
                   {link.label}
                 </a>
