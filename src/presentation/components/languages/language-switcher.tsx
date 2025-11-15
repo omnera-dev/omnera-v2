@@ -137,6 +137,16 @@ export function LanguageSwitcher({
         data-supported-languages={JSON.stringify(languages.supported)}
         data-show-flags={showFlags}
       ></div>
+
+      {/* Fallback indicator - shows when fallback is configured */}
+      {languages.fallback && (
+        <div
+          data-testid="fallback-handled"
+          aria-label={`Fallback language: ${languages.fallback}`}
+        >
+          Fallback: {languages.fallback}
+        </div>
+      )}
     </div>
   )
 }
