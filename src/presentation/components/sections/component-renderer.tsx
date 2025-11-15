@@ -118,9 +118,7 @@ function buildI18nContentAttribute(
       : i18nContentData
 
   // Only return attribute if there are translations
-  return Object.keys(contentWithDefault).length > 0
-    ? JSON.stringify(contentWithDefault)
-    : undefined
+  return Object.keys(contentWithDefault).length > 0 ? JSON.stringify(contentWithDefault) : undefined
 }
 
 /**
@@ -135,11 +133,17 @@ function buildI18nContentAttribute(
  * @returns Resolved content string
  */
 function resolveComponentContent(
-  content: string | undefined,
+  content: string | Record<string, unknown> | undefined,
   i18n: Record<string, unknown> | undefined,
   currentLang: string | undefined,
   languages: Languages | undefined
 ): string | undefined {
+  // If content is an object (structured content like { button: {...} }), return undefined
+  // The component renderer will handle structured content directly
+  if (content && typeof content === 'object') {
+    return undefined
+  }
+
   if (i18n && currentLang) {
     const langData = i18n[currentLang]
     if (
@@ -265,7 +269,7 @@ function RenderDirectComponent({
     type,
     elementProps: finalElementProps,
     elementPropsWithSpacing: finalElementPropsWithSpacing,
-    content: resolvedContent,
+    content: resolvedContent !== undefined ? resolvedContent : content,
     renderedChildren,
     theme: props.theme,
     languages: props.languages,

@@ -8,35 +8,9 @@
 import { Hero } from '@/presentation/components/layout/hero'
 import { ResponsiveNavigation } from '@/presentation/components/layout/responsive-navigation'
 import * as Renderers from '../renderers/element-renderers'
+import { convertBadgeProps, parseHTMLContent } from './component-registry-helpers'
 import type { ComponentRenderer } from './component-dispatch-config'
 import type { Component } from '@/domain/models/app/page/sections'
-
-/**
- * Standard HTML attributes for badge components
- */
-const STANDARD_HTML_ATTRS = new Set([
-  'className',
-  'style',
-  'id',
-  'role',
-  'data-testid',
-  'data-block',
-  'data-type',
-  'data-translation-key',
-  'data-translations',
-])
-
-/**
- * Convert custom props to data-* attributes for badge components
- */
-function convertBadgeProps(elementProps: Record<string, unknown>): Record<string, unknown> {
-  return Object.entries(elementProps).reduce<Record<string, unknown>>((acc, [key, value]) => {
-    if (STANDARD_HTML_ATTRS.has(key) || key.startsWith('data-') || key.startsWith('aria-')) {
-      return { ...acc, [key]: value }
-    }
-    return { ...acc, [`data-${key}`]: value }
-  }, {})
-}
 
 /**
  * Shared renderer for hero and hero-section component types
@@ -46,15 +20,27 @@ const renderHeroSection: ComponentRenderer = ({
   theme,
   content,
   renderedChildren,
-}) => (
-  <Hero
-    theme={theme}
-    content={content as { button?: { text: string; animation?: string } } | undefined}
-    data-testid={elementProps['data-testid'] as string | undefined}
-  >
-    {renderedChildren}
-  </Hero>
-)
+}) => {
+  // If content is an HTML string, parse it as children
+  const children =
+    typeof content === 'string' && content.trim().startsWith('<')
+      ? parseHTMLContent(content)
+      : renderedChildren
+
+  return (
+    <Hero
+      theme={theme}
+      content={
+        typeof content === 'object'
+          ? (content as { button?: { text: string; animation?: string } } | undefined)
+          : undefined
+      }
+      data-testid={elementProps['data-testid'] as string | undefined}
+    >
+      {children}
+    </Hero>
+  )
+}
 
 /**
  * Component registry mapping component types to their renderer functions

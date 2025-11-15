@@ -119,6 +119,15 @@ export function TwitterCardMeta({
  * Each structured data type (organization, breadcrumb, article, etc.) is rendered
  * as a separate <script type="application/ld+json"> tag for proper Schema.org validation
  *
+ * SECURITY: Safe use of dangerouslySetInnerHTML
+ * - Content: Schema.org structured data (JSON.stringify)
+ * - Source: Validated Page schema (page.meta.schema or page.meta.structuredData)
+ * - Risk: None - JSON data cannot execute as code
+ * - Validation: Schema validation ensures correct structure
+ * - Purpose: Generate rich search results (SEO)
+ * - XSS Protection: type="application/ld+json" prevents script execution
+ * - Format: Safe serialization via JSON.stringify
+ *
  * @param page - Page configuration
  * @returns React fragment with script tags or undefined
  */

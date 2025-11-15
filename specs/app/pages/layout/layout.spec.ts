@@ -58,7 +58,7 @@ test.describe('Page Layout', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-LAYOUT-002: should support minimal layout with navigation only',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -89,7 +89,7 @@ test.describe('Page Layout', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-LAYOUT-003: should provide header and footer structure',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -129,7 +129,7 @@ test.describe('Page Layout', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-LAYOUT-004: should support sidebar-based layouts',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

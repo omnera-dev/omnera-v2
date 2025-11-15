@@ -8,6 +8,41 @@
 import type { Languages } from '@/domain/models/app/languages'
 
 /**
+ * Normalize language code to match translation keys
+ *
+ * Tries exact match first, then falls back to base language code (e.g., 'fr-FR' → 'fr')
+ *
+ * @param lang - Language code (e.g., 'fr-FR', 'en-US', 'fr')
+ * @param translations - Available translations object
+ * @returns Matching translation key or original language code
+ *
+ * @example
+ * ```typescript
+ * normalizeLanguageCode('fr-FR', { fr: {...}, en: {...} }) // 'fr'
+ * normalizeLanguageCode('fr', { fr: {...}, en: {...} })    // 'fr'
+ * normalizeLanguageCode('en-US', { 'en-US': {...} })       // 'en-US'
+ * ```
+ */
+function normalizeLanguageCode(
+  lang: string,
+  translations: Record<string, Record<string, string>>
+): string {
+  // Try exact match first
+  if (translations[lang]) {
+    return lang
+  }
+
+  // Try base language code (e.g., 'fr-FR' → 'fr')
+  const baseLang = lang.split('-')[0]
+  if (baseLang && translations[baseLang]) {
+    return baseLang
+  }
+
+  // No match found - return original
+  return lang
+}
+
+/**
  * Resolve translation key with fallback support
  *
  * Implements the $t:key pattern for centralized translations.
@@ -38,16 +73,20 @@ export function resolveTranslation(
 
   const { translations, fallback } = languages
 
+  // Normalize language code to match translation keys (e.g., 'fr-FR' → 'fr')
+  const normalizedLang = normalizeLanguageCode(currentLang, translations)
+
   // Try current language first
-  const currentTranslations = translations[currentLang]
+  const currentTranslations = translations[normalizedLang]
   if (currentTranslations?.[key]) {
     return currentTranslations[key]
   }
 
   // Try fallback language (defaults to default language)
   const fallbackLang = fallback || languages.default
-  if (fallbackLang !== currentLang) {
-    const fallbackTranslations = translations[fallbackLang]
+  if (fallbackLang !== normalizedLang) {
+    const normalizedFallback = normalizeLanguageCode(fallbackLang, translations)
+    const fallbackTranslations = translations[normalizedFallback]
     if (fallbackTranslations?.[key]) {
       return fallbackTranslations[key]
     }

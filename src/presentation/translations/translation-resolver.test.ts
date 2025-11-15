@@ -56,4 +56,73 @@ describe('resolveTranslationPattern - Fallback Behavior', () => {
     const result = resolveTranslationPattern('$t:common.cancel', 'fr-FR', languages)
     expect(result).toBe('Cancel')
   })
+
+  test('should normalize language code from full locale to base language (fr-FR → fr)', () => {
+    const languages = {
+      default: 'en',
+      fallback: 'en',
+      supported: [
+        { code: 'en', label: 'English', direction: 'ltr' as const },
+        { code: 'fr', label: 'Français', direction: 'ltr' as const },
+      ],
+      translations: {
+        en: {
+          'hero.title': 'Welcome',
+        },
+        fr: {
+          'hero.title': 'Bienvenue',
+        },
+      },
+    }
+
+    // When currentLang is 'fr-FR' but translations use 'fr'
+    const result = resolveTranslationPattern('$t:hero.title', 'fr-FR', languages)
+    expect(result).toBe('Bienvenue')
+  })
+
+  test('should normalize language code from full locale to base language (en-US → en)', () => {
+    const languages = {
+      default: 'en',
+      fallback: 'en',
+      supported: [
+        { code: 'en', label: 'English', direction: 'ltr' as const },
+        { code: 'fr', label: 'Français', direction: 'ltr' as const },
+      ],
+      translations: {
+        en: {
+          'hero.title': 'Welcome',
+        },
+        fr: {
+          'hero.title': 'Bienvenue',
+        },
+      },
+    }
+
+    // When currentLang is 'en-US' but translations use 'en'
+    const result = resolveTranslationPattern('$t:hero.title', 'en-US', languages)
+    expect(result).toBe('Welcome')
+  })
+
+  test('should prefer exact match over base language match', () => {
+    const languages = {
+      default: 'en-US',
+      fallback: 'en-US',
+      supported: [
+        { code: 'en-US', label: 'English (US)', direction: 'ltr' as const },
+        { code: 'en', label: 'English', direction: 'ltr' as const },
+      ],
+      translations: {
+        'en-US': {
+          'common.color': 'color',
+        },
+        en: {
+          'common.color': 'colour',
+        },
+      },
+    }
+
+    // When both 'en-US' and 'en' exist, prefer exact match
+    const result = resolveTranslationPattern('$t:common.color', 'en-US', languages)
+    expect(result).toBe('color')
+  })
 })

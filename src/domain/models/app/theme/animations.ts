@@ -90,7 +90,8 @@ export const AnimationValueSchema = Schema.Union(
 const DurationTokensSchema = Schema.Record({
   key: Schema.String.pipe(
     Schema.pattern(/^[a-zA-Z][a-zA-Z0-9]*$/, {
-      message: () => 'Duration key must start with a letter and contain only alphanumeric characters',
+      message: () =>
+        'Duration key must start with a letter and contain only alphanumeric characters',
     })
   ),
   value: DurationSchema,
@@ -141,7 +142,8 @@ const EasingTokensSchema = Schema.Record({
 const KeyframesTokensSchema = Schema.Record({
   key: Schema.String.pipe(
     Schema.pattern(/^[a-zA-Z][a-zA-Z0-9]*$/, {
-      message: () => 'Keyframe key must start with a letter and contain only alphanumeric characters',
+      message: () =>
+        'Keyframe key must start with a letter and contain only alphanumeric characters',
     })
   ),
   value: Schema.Record({ key: Schema.String, value: Schema.Unknown }),

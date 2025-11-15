@@ -96,8 +96,12 @@ function buildElementPropsFromConfig(config: ElementPropsConfig): Record<string,
   const { style: _scrollStyle, ...scrollPropsWithoutStyle } = scrollProps
   const { style: _emptyStyle, ...emptyStylePropsWithoutStyle } = emptyStyleProps
 
+  // Remove animation prop from substitutedProps (already applied to style)
+  const { animation: _animation, ...substitutedPropsWithoutAnimation } =
+    config.substitutedProps || {}
+
   return {
-    ...config.substitutedProps,
+    ...substitutedPropsWithoutAnimation,
     ...corePropsWithoutStyle,
     ...blockProps,
     ...translationProps,
@@ -111,14 +115,24 @@ function buildElementPropsFromConfig(config: ElementPropsConfig): Record<string,
 
 /**
  * Build core props (className, style, data-testid)
+ * Handles animation prop by extracting it from substitutedProps and merging into style
  */
 function buildCoreProps(
   config: ElementPropsConfig,
   testId: string | undefined
 ): Record<string, unknown> {
+  // Extract animation prop if present (after theme token substitution)
+  const animationProp = config.substitutedProps?.animation
+  const hasAnimationProp = typeof animationProp === 'string'
+
+  // Merge animation into style object if present
+  const styleWithAnimation = hasAnimationProp
+    ? { ...config.styleWithShadow, animation: animationProp }
+    : config.styleWithShadow
+
   return {
     className: config.finalClassName,
-    ...(config.styleWithShadow && { style: config.styleWithShadow }),
+    ...(styleWithAnimation && { style: styleWithAnimation }),
     ...(testId && { 'data-testid': testId }),
   }
 }

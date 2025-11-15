@@ -1,0 +1,54 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Business Source License 1.1
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+import { type Hono } from 'hono'
+import { cors } from 'hono/cors'
+import { auth } from '@/infrastructure/auth/better-auth/auth'
+
+/**
+ * Setup CORS middleware for Better Auth endpoints
+ *
+ * Configures CORS to allow:
+ * - All localhost origins for development/testing
+ * - Credentials for cookie-based authentication
+ * - Common headers and methods
+ *
+ * @param honoApp - Hono application instance
+ * @returns Hono app with CORS middleware configured
+ */
+export function setupAuthMiddleware(honoApp: Readonly<Hono>): Readonly<Hono> {
+  return honoApp.use(
+    '/api/auth/*',
+    cors({
+      origin: (origin) => {
+        // Allow all localhost origins for development and testing
+        if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
+          return origin
+        }
+        // In production, this should be configured with specific allowed origins
+        return origin
+      },
+      allowHeaders: ['Content-Type', 'Authorization'],
+      allowMethods: ['POST', 'GET', 'OPTIONS'],
+      exposeHeaders: ['Content-Length'],
+      maxAge: 600,
+      credentials: true, // Required for cookie-based authentication
+    })
+  )
+}
+
+/**
+ * Setup Better Auth routes
+ *
+ * Mounts Better Auth handler at /api/auth/*
+ *
+ * @param honoApp - Hono application instance
+ * @returns Hono app with auth routes configured
+ */
+export function setupAuthRoutes(honoApp: Readonly<Hono>): Readonly<Hono> {
+  return honoApp.on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw))
+}

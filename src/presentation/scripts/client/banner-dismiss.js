@@ -19,7 +19,7 @@
 ;(function () {
   'use strict'
 
-  const STORAGE_KEY = 'banner-dismissed'
+  const STORAGE_KEY = 'sovrium_banner-dismissed'
 
   // Check if banner was previously dismissed
   const isDismissed = localStorage.getItem(STORAGE_KEY) === 'true'

@@ -65,6 +65,10 @@ test.describe('Language Switcher Block', () => {
       // THEN: it should render a dropdown menu with all supported languages
       const switcher = page.locator('[data-testid="language-switcher"]')
       await expect(switcher).toBeVisible()
+
+      // Click button to open dropdown (SSR + vanilla JS architecture)
+      await page.locator('[data-testid="language-switcher-button"]').click()
+
       await expect(page.locator('[data-testid="language-option-en-US"]')).toBeVisible()
       await expect(page.locator('[data-testid="language-option-fr-FR"]')).toBeVisible()
       await expect(page.locator('[data-testid="language-option-es-ES"]')).toBeVisible()
@@ -121,7 +125,7 @@ test.describe('Language Switcher Block', () => {
   )
 
   // APP-BLOCKS-LANGUAGE-SWITCHER-003: Minimal configuration
-  test.fixme(
+  test(
     'APP-BLOCKS-LANGUAGE-SWITCHER-003: should use default variant (dropdown) and no flags',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -171,7 +175,7 @@ test.describe('Language Switcher Block', () => {
   // ONE comprehensive test - validates end-to-end workflow efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-BLOCKS-LANGUAGE-SWITCHER-REGRESSION-001: user can complete full language-switcher workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
@@ -214,11 +218,12 @@ test.describe('Language Switcher Block', () => {
       const htmlLang = page.locator('html')
       await expect(htmlLang).toHaveAttribute('lang', 'en-US')
 
-      // Step 2: Click language switcher
+      // Step 2: Click language switcher to open dropdown
       const switcher = page.locator('[data-testid="language-switcher"]')
       await expect(switcher).toBeVisible()
+      await switcher.click()
 
-      // Step 3: Select French
+      // Step 3: Select French from dropdown
       await page.locator('[data-testid="language-option-fr-FR"]').click()
 
       // Step 4: Verify language changed to French

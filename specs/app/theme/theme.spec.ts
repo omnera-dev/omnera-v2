@@ -722,12 +722,16 @@ test.describe('Theme Configuration', () => {
             sections: [
               {
                 type: 'hero',
-                content: {
-                  button: {
-                    text: 'Get Started',
-                    animation: 'colorPulse 2s $easing.smooth infinite',
+                children: [
+                  {
+                    type: 'button',
+                    content: 'Get Started',
+                    props: {
+                      'data-testid': 'animated-cta',
+                      animation: 'colorPulse 2s $easing.smooth infinite',
+                    },
                   },
-                },
+                ],
               },
             ],
           },

@@ -405,7 +405,9 @@ test.describe('Entrance Animation', () => {
       await expect(hero).toHaveClass(/animate-fadeIn/)
 
       // Verify staggered list animations
-      const featuresContainer = page.locator('div').filter({ hasText: 'Feature 1Feature 2Feature 3' })
+      const featuresContainer = page
+        .locator('div')
+        .filter({ hasText: 'Feature 1Feature 2Feature 3' })
       const features = featuresContainer.locator('> div')
       // Note: Browsers may normalize 100ms to 0.1s and 200ms to 0.2s, both are equivalent
       await expect(features.nth(0)).toHaveCSS('animation-delay', '0.1s')

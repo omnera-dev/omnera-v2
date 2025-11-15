@@ -24,8 +24,18 @@ export interface ElementProps {
  * If content starts with '<', it's treated as HTML and rendered via dangerouslySetInnerHTML.
  * Otherwise, content is rendered as plain text.
  *
- * Note: HTML content is rendered without sanitization since it comes from trusted
+ * SECURITY NOTE - Trusted Schema Content:
+ * HTML content is rendered without sanitization since it comes from trusted
  * schema configuration. For user-generated content, use renderCustomHTML instead.
+ *
+ * SECURITY: Safe use of dangerouslySetInnerHTML
+ * - Content: Schema-defined HTML from page configuration
+ * - Source: Validated Page schema (section.content property)
+ * - Risk: Low - content is from server configuration, not user input
+ * - Validation: Content validated at build/runtime via schema
+ * - Purpose: Render rich HTML content in structural elements
+ * - XSS Protection: Use renderCustomHTML with DOMPurify for user-generated content
+ * - Condition: Only used when content starts with '<' character
  *
  * For section elements, automatically adds role="region" for accessibility best practices,
  * ensuring sections are properly identified in the accessibility tree.
@@ -319,6 +329,15 @@ export function renderIcon(
  * SECURITY: This function sanitizes HTML to prevent XSS attacks.
  * DOMPurify removes malicious scripts, event handlers, and dangerous attributes.
  * Critical for user-generated content or external HTML sources.
+ *
+ * SECURITY: Safe use of dangerouslySetInnerHTML (after sanitization)
+ * - Content: User-provided or external HTML (props.html)
+ * - Source: Potentially untrusted - user input or external sources
+ * - Risk: None (after sanitization) - XSS prevented by DOMPurify
+ * - Validation: DOMPurify removes all malicious content
+ * - Purpose: Render custom HTML blocks safely
+ * - XSS Protection: DOMPurify sanitization removes scripts, event handlers, dangerous tags
+ * - Best Practice: This is the ONLY way to render user-generated HTML safely
  */
 export function renderCustomHTML(props: ElementProps): ReactElement {
   const sanitizedHTML = DOMPurify.sanitize((props.html as string | undefined) || '')

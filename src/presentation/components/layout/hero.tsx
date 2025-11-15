@@ -122,7 +122,8 @@ function extractHeroTheme(theme?: Theme): HeroThemeTokens {
     breakpoints: extractBreakpoints(theme),
     colors: extractColors(theme),
     spacing: {
-      section: theme?.spacing?.section ?? DEFAULT_THEME.spacing.section,
+      // Use explicit theme.spacing.section if provided, otherwise use mobile-first default
+      section: theme?.spacing?.section ?? '2rem',
     },
     borderRadius: {
       lg: theme?.borderRadius?.lg ?? DEFAULT_THEME.borderRadius.lg,
@@ -185,20 +186,54 @@ function generateHeroMediaQueries(
   return `
     @media (min-width: ${breakpoints.sm}px) {
       section[data-testid="${testId}"] {
-        padding: 2rem;
+        padding: 3rem;
       }
     }
     @media (min-width: ${breakpoints.md}px) {
       section[data-testid="${testId}"] {
-        padding: 3rem;
+        padding: 4rem;
       }
     }
     @media (min-width: ${breakpoints.lg}px) {
       section[data-testid="${testId}"] {
-        padding: 4rem;
+        padding: 5rem;
       }
     }
   `
+}
+
+/**
+ * Resolve easing token from theme
+ */
+function resolveEasingToken(tokenName: string, theme?: Theme): string | undefined {
+  if (!theme?.animations) return undefined
+  const animations = theme.animations as Record<string, unknown>
+  const easingTokens = animations.easing as Record<string, unknown> | undefined
+  if (!easingTokens || typeof easingTokens !== 'object') return undefined
+  const easingValue = easingTokens[tokenName]
+  return easingValue ? String(easingValue) : undefined
+}
+
+/**
+ * Resolve color token from theme
+ */
+function resolveColorToken(tokenName: string, theme?: Theme): string | undefined {
+  if (!theme?.colors) return undefined
+  const colorValue = theme.colors[tokenName]
+  return colorValue ? String(colorValue) : undefined
+}
+
+/**
+ * Resolve single token reference
+ */
+function resolveSingleToken(category: string, tokenName: string, theme?: Theme): string {
+  if (category === 'easing') {
+    return resolveEasingToken(tokenName, theme) ?? `$${category}.${tokenName}`
+  }
+  if (category === 'colors') {
+    return resolveColorToken(tokenName, theme) ?? `$${category}.${tokenName}`
+  }
+  return `$${category}.${tokenName}`
 }
 
 /**
@@ -206,23 +241,9 @@ function generateHeroMediaQueries(
  * Supports: $easing.smooth, $colors.primary, etc.
  */
 function resolveAnimationTokens(animation: string, theme?: Theme): string {
-  return animation.replace(/\$(\w+)\.(\w+)/g, (_match, category, tokenName) => {
-    if (category === 'easing' && theme?.animations) {
-      const animations = theme.animations as Record<string, unknown>
-      const easingTokens = animations.easing as Record<string, unknown> | undefined
-      if (easingTokens && typeof easingTokens === 'object') {
-        const easingValue = easingTokens[tokenName]
-        if (easingValue) return String(easingValue)
-      }
-    }
-
-    if (category === 'colors' && theme?.colors) {
-      const colorValue = theme.colors[tokenName]
-      if (colorValue) return String(colorValue)
-    }
-
-    return `$${category}.${tokenName}` // Return original if not found
-  })
+  return animation.replace(/\$(\w+)\.(\w+)/g, (_match, category, tokenName) =>
+    resolveSingleToken(category, tokenName, theme)
+  )
 }
 
 /**
@@ -233,6 +254,80 @@ interface HeroContent {
     readonly text: string
     readonly animation?: string
   }
+}
+
+/**
+ * Base section styles for Hero component
+ */
+const heroSectionBaseStyle = {
+  minHeight: '200px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+} as const
+
+/**
+ * Check if theme has fadeInUp animation configured
+ */
+function hasFadeInUpAnimation(theme?: Theme): boolean {
+  if (!theme?.animations) return false
+  const animations = theme.animations as Record<string, unknown>
+  return Boolean(animations.fadeInUp)
+}
+
+/**
+ * Build section style with theme tokens
+ */
+function buildHeroSectionStyle(themeTokens: HeroThemeTokens): Record<string, string> {
+  return {
+    ...heroSectionBaseStyle,
+    backgroundColor: themeTokens.colors.background,
+    padding: themeTokens.spacing.section,
+  }
+}
+
+/**
+ * Render Hero section with custom animated button
+ */
+function HeroWithButton({
+  themeTokens,
+  buttonContent,
+  testId,
+  theme,
+}: Readonly<{
+  readonly themeTokens: HeroThemeTokens
+  readonly buttonContent: NonNullable<HeroContent['button']>
+  readonly testId?: string
+  readonly theme?: Theme
+}>): ReactElement {
+  const resolvedAnimation = buttonContent.animation
+    ? resolveAnimationTokens(buttonContent.animation, theme)
+    : undefined
+
+  return (
+    <section
+      data-testid={testId}
+      style={buildHeroSectionStyle(themeTokens)}
+    >
+      <button
+        data-testid="animated-cta"
+        style={{
+          backgroundColor: themeTokens.colors.primary,
+          color: '#ffffff',
+          fontFamily: themeTokens.fonts.body.family,
+          fontSize: '1rem',
+          padding: '0.75rem 1.5rem',
+          borderRadius: themeTokens.borderRadius.lg,
+          border: 'none',
+          cursor: 'pointer',
+          animation: resolvedAnimation,
+        }}
+      >
+        {buttonContent.text}
+      </button>
+      <style>{generateHeroMediaQueries(themeTokens.breakpoints, testId)}</style>
+    </section>
+  )
 }
 
 /**
@@ -269,60 +364,28 @@ export function Hero({
 }>): Readonly<ReactElement> {
   const themeTokens = extractHeroTheme(theme)
 
-  // Render custom button if content.button is provided
   if (content?.button) {
-    const resolvedAnimation = content.button.animation
-      ? resolveAnimationTokens(content.button.animation, theme)
-      : undefined
-
     return (
-      <section
-        data-testid={props['data-testid']}
-        style={{
-          backgroundColor: themeTokens.colors.background,
-          padding: themeTokens.spacing.section,
-          minHeight: '200px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <button
-          data-testid="animated-cta"
-          style={{
-            backgroundColor: themeTokens.colors.primary,
-            color: '#ffffff',
-            fontFamily: themeTokens.fonts.body.family,
-            fontSize: '1rem',
-            padding: '0.75rem 1.5rem',
-            borderRadius: themeTokens.borderRadius.lg,
-            border: 'none',
-            cursor: 'pointer',
-            animation: resolvedAnimation,
-          }}
-        >
-          {content.button.text}
-        </button>
-        <style>{generateHeroMediaQueries(themeTokens.breakpoints, props['data-testid'])}</style>
-      </section>
+      <HeroWithButton
+        themeTokens={themeTokens}
+        buttonContent={content.button}
+        testId={props['data-testid']}
+        theme={theme}
+      />
     )
   }
 
   const hasChildren =
     children && (Array.isArray(children) ? children.length > 0 : Boolean(children))
   const renderedContent = hasChildren ? children : <HeroDefaultContent themeTokens={themeTokens} />
+  const shouldAnimateFadeInUp = hasFadeInUpAnimation(theme)
+  const sectionClassName = shouldAnimateFadeInUp ? 'animate-fadeInUp' : undefined
 
   return (
     <section
       data-testid={props['data-testid']}
-      style={{
-        backgroundColor: themeTokens.colors.background,
-        padding: themeTokens.spacing.section,
-        minHeight: '200px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
+      style={buildHeroSectionStyle(themeTokens)}
+      className={sectionClassName}
     >
       {renderedContent}
       <style>{generateHeroMediaQueries(themeTokens.breakpoints, props['data-testid'])}</style>

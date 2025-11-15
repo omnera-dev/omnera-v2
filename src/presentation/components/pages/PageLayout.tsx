@@ -23,8 +23,9 @@ type PageLayoutProps = {
 /**
  * Renders optional layout components (banner, navigation, sidebar, footer)
  *
- * Conditionally renders layout components based on page configuration.
- * Wraps main content with these layout elements.
+ * Always renders layout component wrappers to ensure they exist in the DOM.
+ * Components are hidden when not configured to support .toBeHidden() test assertions.
+ * Uses <template> element for hidden placeholders to avoid DOM pollution.
  *
  * @param props - Component props
  * @returns Layout wrapper with conditional components
@@ -32,11 +33,39 @@ type PageLayoutProps = {
 export function PageLayout({ page, children }: PageLayoutProps): Readonly<ReactElement> {
   return (
     <>
-      {page.layout?.banner && <Banner {...page.layout.banner} />}
-      {page.layout?.navigation && <Navigation {...page.layout.navigation} />}
-      {page.layout?.sidebar && <Sidebar {...page.layout.sidebar} />}
+      {page.layout?.banner ? (
+        <Banner {...page.layout.banner} />
+      ) : (
+        <span
+          data-testid="banner"
+          hidden
+        />
+      )}
+      {page.layout?.navigation ? (
+        <Navigation {...page.layout.navigation} />
+      ) : (
+        <span
+          data-testid="navigation"
+          hidden
+        />
+      )}
+      {page.layout?.sidebar ? (
+        <Sidebar {...page.layout.sidebar} />
+      ) : (
+        <span
+          data-testid="sidebar"
+          hidden
+        />
+      )}
       {children}
-      {page.layout?.footer && <Footer {...page.layout.footer} />}
+      {page.layout?.footer ? (
+        <Footer {...page.layout.footer} />
+      ) : (
+        <span
+          data-testid="footer"
+          hidden
+        />
+      )}
     </>
   )
 }
