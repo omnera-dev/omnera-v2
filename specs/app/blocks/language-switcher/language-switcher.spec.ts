@@ -222,6 +222,9 @@ test.describe('Language Switcher Block', () => {
       const switcher = page.locator('[data-testid="language-switcher"]')
       await expect(switcher).toBeVisible()
 
+      // Click button to open dropdown (SSR + vanilla JS architecture)
+      await page.locator('[data-testid="language-switcher-button"]').click()
+
       // Step 3: Select French
       await page.locator('[data-testid="language-option-fr-FR"]').click()
 

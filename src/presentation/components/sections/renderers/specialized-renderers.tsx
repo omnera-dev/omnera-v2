@@ -50,7 +50,9 @@ export function renderLanguageSwitcher(props: ElementProps, languages?: Language
 
   // Extract props
   const variant = (props.variant as string | undefined) || 'dropdown'
-  const showFlags = (props.showFlags as boolean | undefined) ?? false
+  // Auto-enable showFlags if any language has a flag property
+  const hasFlags = languages.supported.some((lang) => lang.flag)
+  const showFlags = (props.showFlags as boolean | undefined) ?? hasFlags
 
   // Languages already validated at server startup (start-server.ts)
   return (
