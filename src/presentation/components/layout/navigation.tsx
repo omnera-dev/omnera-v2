@@ -6,28 +6,9 @@
  */
 
 import { Button } from '@/presentation/components/ui/button'
+import { buildColorStyles } from '@/presentation/utils/styles'
 import type { Navigation as NavigationProps } from '@/domain/models/app/page/layout/navigation'
 import type { ReactElement } from 'react'
-
-/**
- * Build navigation inline styles from props
- */
-function buildNavigationStyle(
-  backgroundColor: string | undefined,
-  textColor: string | undefined
-): React.CSSProperties | undefined {
-  const hasBackgroundColor = backgroundColor !== undefined
-  const hasTextColor = textColor !== undefined
-
-  if (!hasBackgroundColor && !hasTextColor) {
-    return undefined
-  }
-
-  return {
-    ...(hasBackgroundColor && { backgroundColor }),
-    ...(hasTextColor && { color: textColor }),
-  }
-}
 
 /**
  * Navigation Component
@@ -44,7 +25,7 @@ export function Navigation({
   backgroundColor,
   textColor,
 }: Readonly<NavigationProps>): Readonly<ReactElement> {
-  const navStyle = buildNavigationStyle(backgroundColor, textColor)
+  const navStyle = buildColorStyles(backgroundColor, textColor)
 
   return (
     <nav

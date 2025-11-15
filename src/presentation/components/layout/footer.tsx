@@ -13,24 +13,9 @@ import { FooterLegal } from '@/presentation/components/layout/footer/footer-lega
 import { FooterLogo } from '@/presentation/components/layout/footer/footer-logo'
 import { FooterNewsletter } from '@/presentation/components/layout/footer/footer-newsletter'
 import { FooterSocial } from '@/presentation/components/layout/footer/footer-social'
+import { buildColorStyles } from '@/presentation/utils/styles'
 import type { Footer as FooterProps } from '@/domain/models/app/page/layout/footer'
 import type { ReactElement } from 'react'
-
-/**
- * Build footer inline styles from props
- */
-function buildFooterStyle(
-  backgroundColor: string | undefined,
-  textColor: string | undefined
-): React.CSSProperties {
-  const baseStyle: React.CSSProperties = { display: 'block', minHeight: '1px' }
-
-  return {
-    ...baseStyle,
-    ...(backgroundColor && { backgroundColor }),
-    ...(textColor && { color: textColor }),
-  }
-}
 
 /**
  * Footer Component
@@ -57,7 +42,12 @@ export function Footer({
     return undefined
   }
 
-  const footerStyle = buildFooterStyle(backgroundColor, textColor)
+  const colorStyles = buildColorStyles(backgroundColor, textColor)
+  const footerStyle: React.CSSProperties = {
+    display: 'block',
+    minHeight: '1px',
+    ...colorStyles,
+  }
 
   return (
     <footer
