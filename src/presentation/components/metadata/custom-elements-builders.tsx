@@ -33,26 +33,43 @@ export function buildLinkElement(element: CustomElements[number], key: string): 
 }
 
 /**
+ * Process boolean HTML attributes for script elements
+ * Converts string 'true'/'false' to boolean/undefined
+ */
+function processBooleanAttributes(
+  attrs: Record<string, unknown> | undefined
+): Record<string, unknown> {
+  if (!attrs) return {}
+
+  const booleanAttrs = ['async', 'defer', 'noModule'] as const
+
+  // First, copy all non-boolean attributes
+  const result = Object.entries(attrs).reduce<Record<string, unknown>>((acc, [key, value]) => {
+    if (!booleanAttrs.includes(key as (typeof booleanAttrs)[number])) {
+      return { ...acc, [key]: value }
+    }
+    return acc
+  }, {})
+
+  // Then process boolean attributes
+  return booleanAttrs.reduce<Record<string, unknown>>((acc, attr) => {
+    if (!(attr in attrs)) return acc
+
+    const value = attrs[attr]
+    if (value === 'true') {
+      return { ...acc, [attr]: true }
+    }
+    // Remove false/empty values (omit from result)
+    return acc
+  }, result)
+}
+
+/**
  * Build script element
  * Handles boolean attributes (async, defer) - converts string 'true'/'false' to boolean
  */
 export function buildScriptElement(element: CustomElements[number], key: string): ReactElement {
-  // Process attributes to handle boolean HTML attributes correctly
-  const processedAttrs = element.attrs ? { ...element.attrs } : {}
-
-  // Convert boolean attribute strings to actual booleans
-  // HTML boolean attributes: async, defer, noModule, etc.
-  const booleanAttrs = ['async', 'defer', 'noModule'] as const
-  for (const attr of booleanAttrs) {
-    if (attr in processedAttrs) {
-      const value = processedAttrs[attr]
-      if (value === 'true') {
-        processedAttrs[attr] = true as any
-      } else if (value === 'false' || value === '') {
-        delete processedAttrs[attr]
-      }
-    }
-  }
+  const processedAttrs = processBooleanAttributes(element.attrs)
 
   if (element.content) {
     return (
