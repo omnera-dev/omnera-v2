@@ -154,34 +154,45 @@ function generateThemeBreakpoints(breakpoints?: BreakpointsConfig): string {
 }
 
 /**
+ * Resolve color token reference
+ */
+function resolveColorToken(tokenName: string, theme?: Theme): string | undefined {
+  if (!theme?.colors || !(tokenName in theme.colors)) return undefined
+  const colorValue = theme.colors[tokenName]
+  return colorValue ? String(colorValue) : undefined
+}
+
+/**
+ * Resolve easing token reference
+ */
+function resolveEasingToken(tokenName: string, theme?: Theme): string | undefined {
+  if (!theme?.animations) return undefined
+  const animations = theme.animations as Record<string, unknown>
+  const easingTokens = animations.easing as Record<string, unknown> | undefined
+  if (!easingTokens || typeof easingTokens !== 'object' || !(tokenName in easingTokens))
+    return undefined
+  const easingValue = easingTokens[tokenName]
+  return easingValue ? String(easingValue) : undefined
+}
+
+/**
  * Resolve token references in a value
  * Supports: $colors.primary, $easing.smooth, etc.
  */
 function resolveTokenReference(value: unknown, theme?: Theme): string {
   if (typeof value !== 'string') return String(value)
 
-  // Check for token reference pattern: $category.tokenName
   const tokenMatch = value.match(/^\$(\w+)\.(\w+)$/)
   if (!tokenMatch) return value
 
   const [, category, tokenName] = tokenMatch
+  if (!category || !tokenName) return value
 
-  // Resolve theme token reference
-  if (category === 'colors' && theme?.colors) {
-    const colorValue = theme.colors[tokenName]
-    return colorValue ? String(colorValue) : value
-  }
-
-  if (category === 'easing' && theme?.animations) {
-    const animations = theme.animations as Record<string, unknown>
-    const easingTokens = animations.easing as Record<string, unknown> | undefined
-    if (easingTokens && typeof easingTokens === 'object') {
-      const easingValue = easingTokens[tokenName]
-      return easingValue ? String(easingValue) : value
-    }
-  }
-
-  return value
+  return (
+    (category === 'colors' ? resolveColorToken(tokenName, theme) : undefined) ??
+    (category === 'easing' ? resolveEasingToken(tokenName, theme) : undefined) ??
+    value
+  )
 }
 
 /**
@@ -233,37 +244,35 @@ function generateAnimationClass(
 function generateAnimationStyles(animations?: AnimationsConfig, theme?: Theme): string {
   if (!animations || Object.keys(animations).length === 0) return ''
 
-  const animationCSS: string[] = []
-
   // Extract nested design tokens if present
   const keyframesTokens = animations.keyframes as Record<string, Record<string, unknown>> | undefined
 
-  // Generate keyframes from nested design tokens
-  if (keyframesTokens && typeof keyframesTokens === 'object') {
-    Object.entries(keyframesTokens).forEach(([name, keyframes]) => {
-      if (keyframes && typeof keyframes === 'object') {
-        animationCSS.push(generateKeyframes(name, keyframes, theme))
-      }
-    })
-  }
+  // Generate keyframes from nested design tokens (immutable)
+  const nestedKeyframesCSS =
+    keyframesTokens && typeof keyframesTokens === 'object'
+      ? Object.entries(keyframesTokens).flatMap(([name, keyframes]) =>
+          keyframes && typeof keyframes === 'object'
+            ? [generateKeyframes(name, keyframes, theme)]
+            : []
+        )
+      : []
 
-  // Process legacy flat animations (backwards compatibility)
-  Object.entries(animations).forEach(([name, config]) => {
+  // Process legacy flat animations (backwards compatibility, immutable)
+  const legacyAnimationsCSS = Object.entries(animations).flatMap(([name, config]) => {
     // Skip nested design token properties
-    if (name === 'duration' || name === 'easing' || name === 'keyframes') return
+    if (name === 'duration' || name === 'easing' || name === 'keyframes') return []
 
-    if (typeof config === 'boolean' && !config) return
-    if (typeof config === 'string') return
+    if (typeof config === 'boolean' && !config) return []
+    if (typeof config === 'string') return []
 
     if (typeof config === 'object' && config !== undefined) {
       const animConfig = config as AnimationConfigObject
-      if (!animConfig.keyframes) return
+      if (!animConfig.keyframes) return []
 
       const keyframesCSS = generateKeyframes(name, animConfig.keyframes, theme)
 
       if (animConfig.enabled === false) {
-        animationCSS.push(keyframesCSS)
-        return
+        return [keyframesCSS]
       }
 
       const animationClass = generateAnimationClass(
@@ -273,9 +282,14 @@ function generateAnimationStyles(animations?: AnimationsConfig, theme?: Theme): 
         animConfig.delay
       )
 
-      animationCSS.push(keyframesCSS, animationClass)
+      return [keyframesCSS, animationClass]
     }
+
+    return []
   })
+
+  // Combine all CSS (immutable)
+  const animationCSS: readonly string[] = [...nestedKeyframesCSS, ...legacyAnimationsCSS]
 
   return animationCSS.join('\n')
 }
