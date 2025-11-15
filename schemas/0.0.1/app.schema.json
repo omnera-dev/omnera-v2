@@ -90,19 +90,11 @@
           "id": { "$ref": "#/$defs/PageId" },
           "name": {
             "type": "string",
-            "description": "Internal identifier name for database tables, columns, and programmatic references",
-            "title": "Name",
+            "description": "Human-readable name for the page",
+            "title": "Page Name",
             "minLength": 1,
-            "maxLength": 63,
-            "examples": [
-              "user",
-              "product",
-              "order_item",
-              "customer_email",
-              "shipping_address",
-              "created_at"
-            ],
-            "pattern": "^[a-z][a-z0-9_]*$"
+            "examples": ["Home", "About Us", "Home Page", "Pricing", "Contact"],
+            "maxLength": 63
           },
           "path": {
             "type": "string",
@@ -120,7 +112,7 @@
           },
           "meta": {
             "type": "object",
-            "required": ["title", "description"],
+            "required": ["title"],
             "properties": {
               "lang": {
                 "type": "string",
@@ -189,6 +181,8 @@
                     "color": {
                       "type": "string",
                       "description": "Color for mask-icon (Safari pinned tab)",
+                      "title": "Hex Color",
+                      "examples": ["#007BFF", "#28A745", "#DC3545", "#5BBAD5"],
                       "pattern": "^#[0-9A-Fa-f]{6}$"
                     }
                   },
@@ -233,11 +227,13 @@
                   },
                   "url": {
                     "type": "string",
-                    "description": "Canonical URL for this page"
+                    "description": "Canonical URL for this page",
+                    "pattern": "^https?:\\/\\/"
                   },
                   "image": {
                     "type": "string",
-                    "description": "Image URL for social sharing (recommended: 1200x630px)"
+                    "description": "Image URL for social sharing (recommended: 1200x630px)",
+                    "pattern": "^https?:\\/\\/"
                   },
                   "imageAlt": {
                     "type": "string",
@@ -260,11 +256,13 @@
                   },
                   "video": {
                     "type": "string",
-                    "description": "Video URL if sharing video content"
+                    "description": "Video URL if sharing video content",
+                    "pattern": "^https?:\\/\\/"
                   },
                   "audio": {
                     "type": "string",
-                    "description": "Audio URL if sharing audio content"
+                    "description": "Audio URL if sharing audio content",
+                    "pattern": "^https?:\\/\\/"
                   }
                 },
                 "additionalProperties": false,
@@ -1592,6 +1590,43 @@
               "structuredData": {
                 "$id": "/schemas/unknown",
                 "title": "unknown"
+              },
+              "og:site_name": {
+                "type": "string",
+                "description": "OpenGraph site name (shorthand for openGraph.siteName)"
+              },
+              "i18n": {
+                "type": "object",
+                "required": [],
+                "properties": {},
+                "patternProperties": {
+                  "": {
+                    "type": "object",
+                    "required": [],
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "description": "Translated page title (max 60 characters)",
+                        "title": "maxLength(60)",
+                        "maxLength": 60
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Translated page description (max 160 characters)",
+                        "title": "maxLength(160)",
+                        "maxLength": 160
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "propertyNames": {
+                  "type": "string",
+                  "description": "Page language code (ISO 639-1 with optional country)",
+                  "examples": ["en-US", "fr-FR", "es-ES", "de-DE"],
+                  "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+                },
+                "description": "Localized metadata translations per language"
               }
             },
             "additionalProperties": false,
@@ -1635,12 +1670,16 @@
                   },
                   "backgroundColor": {
                     "type": "string",
-                    "description": "Hex color code (#RRGGBB)",
+                    "description": "Hex color code in #RRGGBB format",
+                    "title": "Hex Color",
+                    "examples": ["#007BFF", "#28A745", "#DC3545", "#5BBAD5"],
                     "pattern": "^#[0-9A-Fa-f]{6}$"
                   },
                   "textColor": {
                     "type": "string",
-                    "description": "Hex color code (#RRGGBB)",
+                    "description": "Hex color code in #RRGGBB format",
+                    "title": "Hex Color",
+                    "examples": ["#007BFF", "#28A745", "#DC3545", "#5BBAD5"],
                     "pattern": "^#[0-9A-Fa-f]{6}$"
                   },
                   "dismissible": {
@@ -1995,6 +2034,10 @@
                       "additionalProperties": false,
                       "description": "Footer link"
                     }
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "Contact email address"
                   }
                 },
                 "additionalProperties": false,
@@ -2064,6 +2107,19 @@
                       "description": "Sidebar item"
                     },
                     "description": "Sidebar items array"
+                  },
+                  "links": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["label", "href"],
+                      "properties": {
+                        "label": { "type": "string" },
+                        "href": { "type": "string" }
+                      },
+                      "additionalProperties": false
+                    },
+                    "description": "Simple sidebar links (legacy format, use items for advanced features)"
                   }
                 },
                 "additionalProperties": false,
@@ -2120,6 +2176,7 @@
                         "sidebar",
                         "toast",
                         "hero",
+                        "hero-section",
                         "fab",
                         "spinner",
                         "list",
@@ -2135,7 +2192,8 @@
                         "main",
                         "article",
                         "aside",
-                        "nav"
+                        "nav",
+                        "responsive-grid"
                       ],
                       "description": "Component type for page building"
                     },
@@ -2187,8 +2245,19 @@
                     },
                     "children": { "$ref": "#/$defs/Children" },
                     "content": {
-                      "type": "string",
-                      "description": "Text content for text components"
+                      "anyOf": [
+                        { "type": "string" },
+                        {
+                          "type": "object",
+                          "required": [],
+                          "properties": {},
+                          "additionalProperties": {
+                            "$id": "/schemas/unknown",
+                            "title": "unknown"
+                          }
+                        }
+                      ],
+                      "description": "Text content for text components, or structured content object (e.g., { button: { text, animation } })"
                     },
                     "interactions": {
                       "type": "object",
@@ -2750,6 +2819,76 @@
                       "additionalProperties": false,
                       "description": "Breakpoint-specific component overrides for responsive design",
                       "title": "Responsive Variants"
+                    },
+                    "i18n": {
+                      "type": "object",
+                      "required": [],
+                      "properties": {},
+                      "patternProperties": {
+                        "": {
+                          "type": "object",
+                          "required": [],
+                          "properties": {
+                            "content": {
+                              "type": "string",
+                              "description": "Translated content text"
+                            },
+                            "props": {
+                              "type": "object",
+                              "required": [],
+                              "properties": {},
+                              "patternProperties": {
+                                "": {
+                                  "anyOf": [
+                                    { "type": "string" },
+                                    { "type": "number" },
+                                    { "type": "boolean" },
+                                    {
+                                      "type": "object",
+                                      "required": [],
+                                      "properties": {},
+                                      "additionalProperties": {
+                                        "$id": "/schemas/unknown",
+                                        "title": "unknown"
+                                      }
+                                    },
+                                    {
+                                      "type": "array",
+                                      "items": {
+                                        "$id": "/schemas/unknown",
+                                        "title": "unknown"
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "propertyNames": {
+                                "type": "string",
+                                "description": "Valid JavaScript property name (camelCase) or HTML data-*/aria-* attribute (kebab-case)",
+                                "title": "Block Prop Key",
+                                "examples": [
+                                  "className",
+                                  "size",
+                                  "enabled",
+                                  "maxWidth",
+                                  "data-testid",
+                                  "aria-label"
+                                ],
+                                "pattern": "^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$"
+                              },
+                              "description": "Properties for block templates, supporting variable references",
+                              "title": "Block Props"
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      },
+                      "propertyNames": {
+                        "type": "string",
+                        "description": "a string matching the pattern ^[a-z]{2}(-[A-Z]{2})?$",
+                        "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+                      },
+                      "description": "Localized translations per language for this component"
                     }
                   },
                   "additionalProperties": false,
@@ -3163,6 +3302,7 @@
                 "sidebar",
                 "toast",
                 "hero",
+                "hero-section",
                 "fab",
                 "spinner",
                 "list",
@@ -3178,7 +3318,8 @@
                 "main",
                 "article",
                 "aside",
-                "nav"
+                "nav",
+                "responsive-grid"
               ],
               "description": "Component type for page building"
             },
@@ -3227,8 +3368,19 @@
             },
             "children": { "$ref": "#/$defs/Children" },
             "content": {
-              "type": "string",
-              "description": "Text content for text components"
+              "anyOf": [
+                { "type": "string" },
+                {
+                  "type": "object",
+                  "required": [],
+                  "properties": {},
+                  "additionalProperties": {
+                    "$id": "/schemas/unknown",
+                    "title": "unknown"
+                  }
+                }
+              ],
+              "description": "Text content for text components, or structured content object (e.g., { button: { text, animation } })"
             },
             "interactions": {
               "type": "object",
@@ -3790,6 +3942,76 @@
               "additionalProperties": false,
               "description": "Breakpoint-specific component overrides for responsive design",
               "title": "Responsive Variants"
+            },
+            "i18n": {
+              "type": "object",
+              "required": [],
+              "properties": {},
+              "patternProperties": {
+                "": {
+                  "type": "object",
+                  "required": [],
+                  "properties": {
+                    "content": {
+                      "type": "string",
+                      "description": "Translated content text"
+                    },
+                    "props": {
+                      "type": "object",
+                      "required": [],
+                      "properties": {},
+                      "patternProperties": {
+                        "": {
+                          "anyOf": [
+                            { "type": "string" },
+                            { "type": "number" },
+                            { "type": "boolean" },
+                            {
+                              "type": "object",
+                              "required": [],
+                              "properties": {},
+                              "additionalProperties": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "propertyNames": {
+                        "type": "string",
+                        "description": "Valid JavaScript property name (camelCase) or HTML data-*/aria-* attribute (kebab-case)",
+                        "title": "Block Prop Key",
+                        "examples": [
+                          "className",
+                          "size",
+                          "enabled",
+                          "maxWidth",
+                          "data-testid",
+                          "aria-label"
+                        ],
+                        "pattern": "^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$"
+                      },
+                      "description": "Properties for block templates, supporting variable references",
+                      "title": "Block Props"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "propertyNames": {
+                "type": "string",
+                "description": "a string matching the pattern ^[a-z]{2}(-[A-Z]{2})?$",
+                "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+              },
+              "description": "Localized translations per language for this component"
             }
           },
           "additionalProperties": false,
@@ -6485,19 +6707,85 @@
           "patternProperties": {
             "": {
               "anyOf": [
-                { "type": "boolean" },
-                { "type": "string" },
+                {
+                  "anyOf": [
+                    { "type": "boolean" },
+                    { "type": "string" },
+                    {
+                      "type": "object",
+                      "required": [],
+                      "properties": {
+                        "enabled": { "type": "boolean" },
+                        "duration": {
+                          "type": "string",
+                          "description": "a string matching the pattern ^[0-9]+(\\.[0-9]+)?(ms|s)$",
+                          "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
+                        },
+                        "easing": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "enum": ["linear", "ease", "ease-in", "ease-out", "ease-in-out"]
+                            },
+                            {
+                              "type": "string",
+                              "description": "a string matching the pattern ^cubic-bezier\\(\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*\\)$",
+                              "pattern": "^cubic-bezier\\(\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*\\)$"
+                            },
+                            {
+                              "type": "string",
+                              "description": "a string matching the pattern ^steps\\(\\s*\\d+\\s*,\\s*(start|end|jump-start|jump-end|jump-none|jump-both)\\s*\\)$",
+                              "pattern": "^steps\\(\\s*\\d+\\s*,\\s*(start|end|jump-start|jump-end|jump-none|jump-both)\\s*\\)$"
+                            }
+                          ],
+                          "description": "Transition timing function"
+                        },
+                        "delay": {
+                          "type": "string",
+                          "description": "a string matching the pattern ^[0-9]+(\\.[0-9]+)?(ms|s)$",
+                          "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
+                        },
+                        "keyframes": {
+                          "type": "object",
+                          "required": [],
+                          "properties": {},
+                          "additionalProperties": {
+                            "$id": "/schemas/unknown",
+                            "title": "unknown"
+                          }
+                        }
+                      },
+                      "additionalProperties": false,
+                      "description": "Detailed animation configuration",
+                      "title": "Animation Configuration Object"
+                    }
+                  ],
+                  "description": "Animation configuration (boolean, string, or object)",
+                  "title": "Animation Value"
+                },
                 {
                   "type": "object",
                   "required": [],
-                  "properties": {
-                    "enabled": { "type": "boolean" },
-                    "duration": {
+                  "properties": {},
+                  "patternProperties": {
+                    "": {
                       "type": "string",
                       "description": "a string matching the pattern ^[0-9]+(\\.[0-9]+)?(ms|s)$",
                       "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
-                    },
-                    "easing": {
+                    }
+                  },
+                  "propertyNames": {
+                    "type": "string",
+                    "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                  }
+                },
+                {
+                  "type": "object",
+                  "required": [],
+                  "properties": {},
+                  "patternProperties": {
+                    "": {
                       "anyOf": [
                         {
                           "type": "string",
@@ -6515,13 +6803,20 @@
                         }
                       ],
                       "description": "Transition timing function"
-                    },
-                    "delay": {
-                      "type": "string",
-                      "description": "a string matching the pattern ^[0-9]+(\\.[0-9]+)?(ms|s)$",
-                      "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
-                    },
-                    "keyframes": {
+                    }
+                  },
+                  "propertyNames": {
+                    "type": "string",
+                    "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                  }
+                },
+                {
+                  "type": "object",
+                  "required": [],
+                  "properties": {},
+                  "patternProperties": {
+                    "": {
                       "type": "object",
                       "required": [],
                       "properties": {},
@@ -6531,20 +6826,20 @@
                       }
                     }
                   },
-                  "additionalProperties": false,
-                  "description": "Detailed animation configuration",
-                  "title": "Animation Configuration Object"
+                  "propertyNames": {
+                    "type": "string",
+                    "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                  }
                 }
-              ],
-              "description": "Animation configuration (boolean, string, or object)",
-              "title": "Animation Value"
+              ]
             }
           },
           "propertyNames": {
             "type": "string",
             "description": "Animation name (alphanumeric)",
             "title": "Animation Key",
-            "examples": ["fadeIn", "slideUp", "modalOpen"],
+            "examples": ["fadeIn", "slideUp", "modalOpen", "duration", "easing", "keyframes"],
             "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
           },
           "description": "Animation and transition design tokens",

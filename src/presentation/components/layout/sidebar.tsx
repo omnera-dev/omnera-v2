@@ -19,7 +19,9 @@ import type { Sidebar as SidebarType } from '@/domain/models/app/page/layout/sid
  * @param props - Sidebar configuration
  * @returns Sidebar element
  */
-export function Sidebar(props: SidebarType & { readonly links?: readonly { label: string; href: string }[] }): Readonly<ReactElement> {
+export function Sidebar(
+  props: SidebarType & { readonly links?: readonly { label: string; href: string }[] }
+): Readonly<ReactElement> {
   const width = props.width || '250px'
   const position = props.position || 'left'
 
@@ -40,7 +42,7 @@ export function Sidebar(props: SidebarType & { readonly links?: readonly { label
     >
       {navigationLinks && navigationLinks.length > 0 && (
         <nav>
-          <ul className="list-none p-0 m-0">
+          <ul className="m-0 list-none p-0">
             {navigationLinks.map((link) => (
               <li
                 key={link.href}
@@ -48,7 +50,7 @@ export function Sidebar(props: SidebarType & { readonly links?: readonly { label
               >
                 <a
                   href={link.href}
-                  className="no-underline text-gray-700"
+                  className="text-gray-700 no-underline"
                 >
                   {link.label}
                 </a>

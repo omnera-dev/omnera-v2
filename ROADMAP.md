@@ -1,33 +1,33 @@
 # Sovrium Development Roadmap
 
-> **Last Generated**: 2025-11-11
+> **Last Generated**: 2025-11-15
 
 ## Overall Progress
 
-███████████████░░░░░░░░░░░░░░░ 51%
+████████████████░░░░░░░░░░░░░░ 53%
 
-**Combined Progress**: 51% Complete
+**Combined Progress**: 53% Complete
 
 ### Individual Metrics
 
-**📋 App Schema Progress**: 70% (866/1236 properties, 866 current)
+**📋 App Schema Progress**: 70% (874/1240 properties, 874 current)
 █████████████████████░░░░░░░░░ 70%
 
 **🌐 API Schema Progress**: 63% (12/19 endpoints, 29 current)
 ███████████████████░░░░░░░░░░░ 63%
 
-**🧪 Test Implementation**: 19% (357/1892 specs passing)
-██████░░░░░░░░░░░░░░░░░░░░░░░░ 19%
+**🧪 Test Implementation**: 27% (510/1892 specs passing)
+████████░░░░░░░░░░░░░░░░░░░░░░ 27%
 
 ---
 
 ## 1. App Schema Progress
 
-📋 **Goal**: 1236 properties
-📦 **Current**: 866 properties
+📋 **Goal**: 1240 properties
+📦 **Current**: 874 properties
 📊 **Completion**: 70%
 
-**Next Steps**: Implement missing properties (370 remaining)
+**Next Steps**: Implement missing properties (366 remaining)
 
 👉 **[View Detailed App Roadmap](specs/app/ROADMAP.md)**
 
@@ -48,8 +48,8 @@
 ## 3. Test Implementation Status
 
 🧪 **Total Specs**: 1892
-✅ **DONE**: 357 (19%)
-🚧 **WIP**: 383 (20%)
+✅ **DONE**: 510 (27%)
+🚧 **WIP**: 230 (12%)
 ⏳ **TODO**: 1152 (61%)
 
 **Next Steps**: Convert TODO specs to WIP, then to DONE
