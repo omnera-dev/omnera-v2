@@ -376,7 +376,7 @@ test.describe('Language Configuration', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-LANGUAGE-CONFIG-REGRESSION-001: user can complete full language-config workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
@@ -410,6 +410,9 @@ test.describe('Language Configuration', () => {
           {
             name: 'language-switcher',
             type: 'language-switcher',
+            props: {
+              showFlags: true,
+            },
           },
         ],
         pages: [

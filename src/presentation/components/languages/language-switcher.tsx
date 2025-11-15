@@ -30,7 +30,7 @@ function LanguageSwitcherButton({
 }): ReactElement {
   return (
     <button
-      data-testid="language-switcher-button"
+      data-testid="language-switcher"
       type="button"
     >
       {shouldShowFlag(defaultLanguage?.flag) && (
@@ -87,7 +87,6 @@ export function LanguageSwitcher({
   return (
     <div
       className="relative"
-      data-testid="language-switcher"
       data-variant={variant}
     >
       <LanguageSwitcherButton
