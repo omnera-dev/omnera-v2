@@ -170,8 +170,10 @@ test.describe('Inline Scripts', () => {
       await page.goto('/')
 
       // THEN: it should wrap code in async IIFE (async function)
-      const script = await page.locator('script').filter({ hasText: 'await fetch' }).textContent()
-      expect(script).toContain('async')
+      const scripts = await page.locator('script:not([src])').all()
+      const scriptContents = await Promise.all(scripts.map((s) => s.innerHTML()))
+      const asyncScript = scriptContents.find((content) => content.includes('await fetch'))
+      expect(asyncScript).toContain('(async () => {')
     }
   )
 
