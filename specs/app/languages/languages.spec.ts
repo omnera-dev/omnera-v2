@@ -357,7 +357,7 @@ test.describe('Languages Configuration', () => {
       await page.locator('[data-testid="language-option-fr-FR"]').click()
 
       // THEN: it should remember the choice in localStorage for future visits
-      const storedLanguage = await page.evaluate(() => localStorage.getItem('language'))
+      const storedLanguage = await page.evaluate(() => localStorage.getItem('sovrium_language'))
       expect(storedLanguage).toBe('fr-FR')
 
       // Reload and verify persistence
@@ -573,7 +573,7 @@ test.describe('Languages Configuration', () => {
         // Persistence: Change to Spanish and verify it's stored
         await page.locator('[data-testid="language-switcher"]').click()
         await page.locator('[data-testid="language-option-es-ES"]').click()
-        const storedLanguage = await page.evaluate(() => localStorage.getItem('language'))
+        const storedLanguage = await page.evaluate(() => localStorage.getItem('sovrium_language'))
         expect(storedLanguage).toBe('es-ES')
 
         // Reload to verify persistence works

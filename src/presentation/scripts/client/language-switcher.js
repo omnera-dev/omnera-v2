@@ -39,15 +39,8 @@
    * Detect browser language from navigator.language
    * Supports exact match (e.g., 'fr-FR') and base language match (e.g., 'fr' from 'fr-FR')
    *
-   * This is a duplicate of the detection logic in language-detection.ts utility.
-   * Duplication is necessary because:
-   * - This script runs in the browser as a plain JS file (no ES modules)
-   * - Browser scripts can't import TypeScript utilities directly
-   * - Bundling would add complexity for this simple use case
-   *
-   * NOTE: If detection algorithm changes, update BOTH files:
-   * - src/presentation/utils/language-detection.ts (shared utility)
-   * - src/presentation/scripts/client/language-switcher.js (this file)
+   * This function implements client-side language detection logic.
+   * It runs in the browser as plain JS (no ES modules or bundling).
    */
   function detectBrowserLanguage(browserLang, supportedLanguages) {
     // Try exact match first (e.g., 'fr-FR' === 'fr-FR')
