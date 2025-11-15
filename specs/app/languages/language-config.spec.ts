@@ -410,6 +410,9 @@ test.describe('Language Configuration', () => {
           {
             name: 'language-switcher',
             type: 'language-switcher',
+            props: {
+              showFlags: true,
+            },
           },
         ],
         pages: [
