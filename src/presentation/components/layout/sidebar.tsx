@@ -35,28 +35,20 @@ export function Sidebar(props: SidebarType & { readonly links?: readonly { label
     <aside
       data-testid="sidebar"
       data-position={position}
-      style={{
-        width,
-        position: 'fixed',
-        [position]: 0,
-        top: 0,
-        bottom: 0,
-        padding: '1rem',
-        borderRight: position === 'left' ? '1px solid #e5e7eb' : undefined,
-        borderLeft: position === 'right' ? '1px solid #e5e7eb' : undefined,
-      }}
+      className={`fixed top-0 bottom-0 p-4 ${position === 'left' ? 'left-0 border-r border-gray-200' : 'right-0 border-l border-gray-200'}`}
+      style={{ width }}
     >
       {navigationLinks && navigationLinks.length > 0 && (
         <nav>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          <ul className="list-none p-0 m-0">
             {navigationLinks.map((link) => (
               <li
                 key={link.href}
-                style={{ marginBottom: '0.5rem' }}
+                className="mb-2"
               >
                 <a
                   href={link.href}
-                  style={{ textDecoration: 'none', color: '#374151' }}
+                  className="no-underline text-gray-700"
                 >
                   {link.label}
                 </a>
