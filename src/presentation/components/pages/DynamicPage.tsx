@@ -53,6 +53,62 @@ function mergeBlockMetaIntoPage(page: Page, blocks?: Blocks): Page {
   }
 }
 
+type PageBodyProps = {
+  readonly page: Page
+  readonly blocks?: Blocks
+  readonly theme?: Theme
+  readonly languages?: Languages
+  readonly metadata: ReturnType<typeof extractPageMetadata>
+  readonly langConfig: ReturnType<typeof resolvePageLanguage>
+  readonly scripts: ReturnType<typeof groupScriptsByPosition>
+  readonly defaultLayout?: Layout
+}
+
+function PageBody({
+  page,
+  blocks,
+  theme,
+  languages,
+  metadata,
+  langConfig,
+  scripts,
+  defaultLayout,
+}: PageBodyProps): Readonly<ReactElement> {
+  return (
+    <body {...(metadata.bodyStyle && { style: metadata.bodyStyle })}>
+      <PageBodyScripts
+        page={page}
+        theme={theme}
+        languages={languages}
+        direction={langConfig.direction}
+        scripts={scripts}
+        position="start"
+      />
+      <PageLayout
+        page={page}
+        defaultLayout={defaultLayout}
+      >
+        <PageMain
+          page={page}
+          sections={page.sections}
+          theme={theme}
+          blocks={blocks}
+          languages={languages}
+          currentLang={langConfig.lang}
+        />
+      </PageLayout>
+      <PageBodyScripts
+        page={page}
+        theme={theme}
+        languages={languages}
+        direction={langConfig.direction}
+        scripts={scripts}
+        position="end"
+      />
+    </body>
+  )
+}
+
 /**
  * Renders a page from configuration as a complete HTML document
  * Theme CSS is compiled globally at server startup via /assets/output.css
@@ -69,7 +125,7 @@ export function DynamicPage({
   const metadata = extractPageMetadata(page, theme, languages, detectedLanguage)
   const langConfig = resolvePageLanguage(page, languages, detectedLanguage)
   const scripts = groupScriptsByPosition(page)
-  const mergedPage = mergeBlockMetaIntoPage(page, blocks)
+  const pageWithMeta = mergeBlockMetaIntoPage(page, blocks)
 
   return (
     <html
@@ -78,7 +134,7 @@ export function DynamicPage({
     >
       <head>
         <PageHead
-          page={mergedPage}
+          page={pageWithMeta}
           theme={theme}
           directionStyles={langConfig.directionStyles}
           title={metadata.title}
@@ -89,37 +145,16 @@ export function DynamicPage({
           scripts={scripts}
         />
       </head>
-      <body {...(metadata.bodyStyle && { style: metadata.bodyStyle })}>
-        <PageBodyScripts
-          page={page}
-          theme={theme}
-          languages={languages}
-          direction={langConfig.direction}
-          scripts={scripts}
-          position="start"
-        />
-        <PageLayout
-          page={page}
-          defaultLayout={defaultLayout}
-        >
-          <PageMain
-            page={page}
-            sections={page.sections}
-            theme={theme}
-            blocks={blocks}
-            languages={languages}
-            currentLang={langConfig.lang}
-          />
-        </PageLayout>
-        <PageBodyScripts
-          page={page}
-          theme={theme}
-          languages={languages}
-          direction={langConfig.direction}
-          scripts={scripts}
-          position="end"
-        />
-      </body>
+      <PageBody
+        page={page}
+        blocks={blocks}
+        theme={theme}
+        languages={languages}
+        metadata={metadata}
+        langConfig={langConfig}
+        scripts={scripts}
+        defaultLayout={defaultLayout}
+      />
     </html>
   )
 }

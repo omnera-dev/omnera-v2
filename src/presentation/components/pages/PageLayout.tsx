@@ -6,11 +6,11 @@
  */
 
 import { type ReactElement, type ReactNode } from 'react'
+import { mergeLayouts } from '@/domain/models/app/page/layout-merge'
 import { Banner } from '@/presentation/components/layout/banner'
 import { Footer } from '@/presentation/components/layout/footer'
 import { Navigation } from '@/presentation/components/layout/navigation'
 import { Sidebar } from '@/presentation/components/layout/sidebar'
-import { mergeLayouts } from '@/domain/models/app/page/layout-merge'
 import type { Layout } from '@/domain/models/app/page/layout'
 import type { Page } from '@/domain/models/app/pages'
 

@@ -74,12 +74,12 @@ export function mergeLayouts(
   }
 
   // Check if page layout overlaps with default layout
-  const components: Array<keyof Layout> = ['banner', 'navigation', 'footer', 'sidebar']
-  const defaultComponents = components.filter((c) => defaultLayout[c] !== undefined)
+  const components: ReadonlyArray<keyof Layout> = ['banner', 'navigation', 'footer', 'sidebar']
+  const defaultComponents = new Set(components.filter((c) => defaultLayout[c] !== undefined))
   const pageComponents = components.filter((c) => pageLayout[c] !== undefined)
 
   // Check if any page component exists in default (overlap)
-  const hasOverlap = pageComponents.some((c) => defaultComponents.includes(c))
+  const hasOverlap = pageComponents.some((c) => defaultComponents.has(c))
 
   if (hasOverlap) {
     // REPLACE mode: Page overrides default - use ONLY page components
