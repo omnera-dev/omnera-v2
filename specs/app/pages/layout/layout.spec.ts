@@ -172,7 +172,7 @@ test.describe('Page Layout', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-LAYOUT-005: should display top banner above navigation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -190,7 +190,7 @@ test.describe('Page Layout', () => {
                 text: '🎉 Limited time offer - 50% off all plans!',
                 backgroundColor: '#FF6B6B',
                 textColor: '#FFFFFF',
-                link: '/pricing',
+                link: { href: '/pricing', label: 'View Pricing' },
                 dismissible: true,
               },
               navigation: { logo: '/logo.svg' },
