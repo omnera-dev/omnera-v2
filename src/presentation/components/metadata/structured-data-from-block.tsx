@@ -95,6 +95,15 @@ function generateStructuredData(meta: BlockMeta): Record<string, unknown> {
 /**
  * Renders structured data script from block meta
  *
+ * SECURITY: Safe use of dangerouslySetInnerHTML
+ * - Content: Schema.org JSON-LD from block metadata (JSON.stringify)
+ * - Source: Validated block meta configuration (block.meta.structuredData)
+ * - Risk: None - JSON data cannot execute as code
+ * - Validation: Schema validation ensures correct structure
+ * - Purpose: Generate rich search results from block content (SEO)
+ * - XSS Protection: type="application/ld+json" prevents script execution
+ * - Format: Safe serialization via JSON.stringify with formatting
+ *
  * @param props - Component props
  * @param props.meta - Block meta configuration
  * @returns Script element with JSON-LD structured data, or null if no structured data

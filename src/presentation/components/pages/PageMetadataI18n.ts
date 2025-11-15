@@ -36,11 +36,7 @@ function resolveMetaI18n(
     }),
     ...(meta.openGraph?.siteName &&
       typeof ogSiteName !== 'string' && {
-        'og:site_name': resolveTranslationPattern(
-          meta.openGraph.siteName,
-          langCode,
-          languages
-        ),
+        'og:site_name': resolveTranslationPattern(meta.openGraph.siteName, langCode, languages),
       }),
   }
 }

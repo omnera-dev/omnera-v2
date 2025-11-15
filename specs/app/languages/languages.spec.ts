@@ -78,8 +78,8 @@ test.describe('Languages Configuration', () => {
       await page.goto('/')
 
       // THEN: it should use English as the only available language
-      await expect(page.locator('[data-testid="language-switcher"]')).toHaveText('English')
-      await expect(page.locator('[data-testid="available-languages"]')).toHaveCount(1)
+      await expect(page.locator('[data-testid="current-language"]')).toHaveText('English')
+      await expect(page.locator('[data-testid="language-option"]')).toHaveCount(1)
     }
   )
 

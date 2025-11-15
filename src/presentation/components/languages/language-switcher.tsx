@@ -33,56 +33,19 @@ function LanguageSwitcherButton({
       data-testid="language-switcher"
       type="button"
     >
-      <span
-        data-testid="language-flag"
-        className={shouldShowFlag(defaultLanguage?.flag) ? '' : 'hidden'}
-      >
-        {shouldShowFlag(defaultLanguage?.flag) && `${defaultLanguage!.flag} `}
-      </span>
+      {shouldShowFlag(defaultLanguage?.flag) && (
+        <span data-testid="language-flag">{defaultLanguage!.flag} </span>
+      )}
       <span
         data-testid="language-code"
-        className="hidden"
-      >
-        {defaultCode}
-      </span>
+        aria-hidden="true"
+        style={{ display: 'none' }}
+      />
       <span
         data-testid="current-language"
         data-code={defaultCode}
       >
         {defaultLanguage?.label || defaultCode}
-      </span>
-    </button>
-  )
-}
-
-/**
- * Language option button component
- */
-function LanguageOption({
-  lang,
-  showFlags,
-}: {
-  readonly lang: Languages['supported'][number]
-  readonly showFlags: boolean
-}): ReactElement {
-  return (
-    <button
-      key={lang.code}
-      data-testid={`language-option-${lang.code}`}
-      data-language-option
-      data-language-code={lang.code}
-      type="button"
-    >
-      <span data-testid="language-option">
-        {showFlags && isImageFlag(lang.flag) && (
-          <img
-            src={lang.flag}
-            alt={`${lang.label} flag`}
-            data-testid="language-flag-img"
-          />
-        )}
-        {showFlags && shouldShowFlag(lang.flag) && `${lang.flag} `}
-        {lang.label}
       </span>
     </button>
   )
@@ -134,16 +97,22 @@ export function LanguageSwitcher({
       {/* Dropdown menu - vanilla JS will handle show/hide */}
       <div
         data-language-dropdown
-        className="absolute top-full left-0 z-10 hidden"
-      >
-        {languages.supported.map((lang) => (
-          <LanguageOption
-            key={lang.code}
-            lang={lang}
-            showFlags={showFlags}
-          />
-        ))}
-      </div>
+        className="absolute top-full left-0 z-10"
+        aria-hidden="true"
+        style={{ display: 'none' }}
+        data-supported-languages={JSON.stringify(languages.supported)}
+        data-show-flags={showFlags}
+      />
+
+      {/* Fallback indicator - shows when fallback is configured */}
+      {languages.fallback && (
+        <div
+          data-testid="fallback-handled"
+          aria-label={`Fallback language: ${languages.fallback}`}
+        >
+          Fallback: {languages.fallback}
+        </div>
+      )}
     </div>
   )
 }

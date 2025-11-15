@@ -35,10 +35,24 @@ export const auth = betterAuth({
       url: string
       token: string
     }>) => {
-      // TODO (Phase 2): Implement email service integration for production
-      // Current: Console logging for development and E2E test verification
-      // Future: Integrate with email service (e.g., Resend, SendGrid, AWS SES)
-      // Track: https://github.com/omnera-dev/sovrium/issues/[TBD]
+      /**
+       * TODO (Phase 2): Email Service Integration
+       *
+       * Current Implementation:
+       * - Console logging for development and E2E test verification
+       * - Allows tests to verify email functionality without SMTP
+       *
+       * Future Implementation (Phase 2):
+       * - Integrate email service provider (Resend, SendGrid, or AWS SES)
+       * - Add email templates for password reset
+       * - Implement retry logic and error handling
+       * - Add rate limiting for email sending
+       *
+       * Security Considerations:
+       * - Token expires after configured period (Better Auth default)
+       * - One-time use token (invalidated after use)
+       * - HTTPS-only URLs in production
+       */
       console.log(`[TEST] Password reset for ${user.email}: ${url}?token=${token}`)
     },
     // Email verification configuration
@@ -51,10 +65,24 @@ export const auth = betterAuth({
       url: string
       token: string
     }>) => {
-      // TODO (Phase 2): Implement email service integration for production
-      // Current: Console logging for development and E2E test verification
-      // Future: Integrate with email service (e.g., Resend, SendGrid, AWS SES)
-      // Track: https://github.com/omnera-dev/sovrium/issues/[TBD]
+      /**
+       * TODO (Phase 2): Email Service Integration
+       *
+       * Current Implementation:
+       * - Console logging for development and E2E test verification
+       * - Allows tests to verify email functionality without SMTP
+       *
+       * Future Implementation (Phase 2):
+       * - Integrate email service provider (Resend, SendGrid, or AWS SES)
+       * - Add email templates for email verification
+       * - Implement retry logic and error handling
+       * - Add rate limiting for email sending
+       *
+       * Security Considerations:
+       * - Token expires after configured period (Better Auth default)
+       * - One-time use token (invalidated after use)
+       * - HTTPS-only URLs in production
+       */
       console.log(`[TEST] Email verification for ${user.email}: ${url}?token=${token}`)
     },
   },

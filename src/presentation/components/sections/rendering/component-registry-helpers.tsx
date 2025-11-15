@@ -34,6 +34,15 @@ export function convertBadgeProps(elementProps: Record<string, unknown>): Record
 
 /**
  * Parse HTML content string into React elements
+ *
+ * SECURITY: Safe use of dangerouslySetInnerHTML
+ * - Content: HTML string from component/block configuration
+ * - Source: Validated schema (component content property)
+ * - Risk: Low - content is from server configuration, not user input
+ * - Validation: Schema validation ensures string type
+ * - Purpose: Render HTML content in badge/component elements
+ * - XSS Protection: Content comes from trusted configuration
+ * - NOTE: For user-generated HTML, use DOMPurify sanitization instead
  */
 export function parseHTMLContent(htmlString: string) {
   return <div dangerouslySetInnerHTML={{ __html: htmlString }} />

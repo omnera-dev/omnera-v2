@@ -40,6 +40,10 @@ export function resolveBlock(
 ): { readonly component: Component; readonly name: string } | undefined {
   const block = blocks?.find((b) => b.name === blockName)
   if (!block) {
+    // DEVELOPMENT WARNING: Keep console.warn for development debugging
+    // This warning alerts developers when a referenced block doesn't exist
+    // Helps identify typos or missing block definitions during development
+    // Safe to keep - provides helpful feedback for configuration errors
     console.warn(`Block not found: ${blockName}`)
     return undefined
   }

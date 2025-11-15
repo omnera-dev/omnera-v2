@@ -334,11 +334,12 @@
     const currentLang = languagesConfig.supported.find((lang) => lang.code === currentLanguage)
     const label = currentLang?.label || currentLanguage
 
-    if (currentLanguageEl) {
+    // Only update if text content differs from current value to avoid duplication
+    if (currentLanguageEl && currentLanguageEl.textContent !== label) {
       currentLanguageEl.textContent = label
     }
 
-    if (languageCodeEl) {
+    if (languageCodeEl && languageCodeEl.textContent !== currentLanguage) {
       languageCodeEl.textContent = currentLanguage
     }
 
@@ -363,12 +364,21 @@
 
   /**
    * Toggles the language dropdown visibility
-   * Updates isOpen state and dropdown CSS classes
+   * Updates isOpen state, display style, and aria-hidden attribute
    */
-  function toggleDropdown() {
+  function toggleDropdown(event) {
+    if (event) {
+      event.stopPropagation()
+    }
     isOpen = !isOpen
     if (dropdown) {
-      dropdown.classList.toggle('hidden', !isOpen)
+      if (isOpen) {
+        dropdown.style.display = 'block'
+        dropdown.setAttribute('aria-hidden', 'false')
+      } else {
+        dropdown.style.display = 'none'
+        dropdown.setAttribute('aria-hidden', 'true')
+      }
     }
   }
 
@@ -414,8 +424,74 @@
     isOpen = false
     updateUI()
     if (dropdown) {
-      dropdown.classList.add('hidden')
+      dropdown.style.display = 'none'
+      dropdown.setAttribute('aria-hidden', 'true')
     }
+  }
+
+  /**
+   * Populates dropdown with language options
+   */
+  function populateDropdown() {
+    if (!dropdown) {
+      return
+    }
+
+    const supportedLanguagesJson = dropdown.getAttribute('data-supported-languages')
+    const showFlags = dropdown.getAttribute('data-show-flags') === 'true'
+
+    if (!supportedLanguagesJson) {
+      return
+    }
+
+    let supportedLanguages
+    try {
+      supportedLanguages = JSON.parse(supportedLanguagesJson)
+    } catch (error) {
+      console.error('Failed to parse supported languages', error)
+      return
+    }
+
+    // Create language option buttons
+    supportedLanguages.forEach((lang) => {
+      const button = document.createElement('button')
+      button.setAttribute('data-testid', `language-option-${lang.code}`)
+      button.setAttribute('data-language-option', 'true')
+      button.setAttribute('data-language-code', lang.code)
+      button.setAttribute('type', 'button')
+
+      const span = document.createElement('span')
+      span.setAttribute('data-testid', 'language-option')
+
+      // Add flag if enabled and available
+      if (showFlags && lang.flag) {
+        if (lang.flag.startsWith('/')) {
+          // Image flag
+          const img = document.createElement('img')
+          img.src = lang.flag
+          img.alt = `${lang.label} flag`
+          img.setAttribute('data-testid', 'language-flag-img')
+          span.appendChild(img)
+        } else {
+          // Emoji flag
+          span.textContent = `${lang.flag} ${lang.label}`
+        }
+      } else {
+        span.textContent = lang.label
+      }
+
+      button.appendChild(span)
+      dropdown.appendChild(button)
+
+      // Attach click listener
+      button.addEventListener('click', function (event) {
+        event.stopPropagation()
+        const code = this.getAttribute('data-language-code')
+        if (code) {
+          selectLanguage(code)
+        }
+      })
+    })
   }
 
   /**
@@ -429,22 +505,15 @@
     dropdown = document.querySelector('[data-language-dropdown]')
     switcherButton = document.querySelector('[data-testid="language-switcher"]')
 
+    // Populate dropdown with language options
+    populateDropdown()
+
     // Update UI to reflect detected/default language
     updateUI()
 
     if (switcherButton) {
       switcherButton.addEventListener('click', toggleDropdown)
     }
-
-    const languageOptions = document.querySelectorAll('[data-language-option]')
-    languageOptions.forEach((option) => {
-      option.addEventListener('click', function () {
-        const code = this.getAttribute('data-language-code')
-        if (code) {
-          selectLanguage(code)
-        }
-      })
-    })
   }
 
   // Initialize when DOM is ready

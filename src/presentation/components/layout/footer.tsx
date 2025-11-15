@@ -5,161 +5,16 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
+import { FooterColumns } from '@/presentation/components/layout/footer/footer-columns'
+import { FooterCopyright } from '@/presentation/components/layout/footer/footer-copyright'
+import { FooterDescription } from '@/presentation/components/layout/footer/footer-description'
+import { FooterEmail } from '@/presentation/components/layout/footer/footer-email'
+import { FooterLegal } from '@/presentation/components/layout/footer/footer-legal'
+import { FooterLogo } from '@/presentation/components/layout/footer/footer-logo'
+import { FooterNewsletter } from '@/presentation/components/layout/footer/footer-newsletter'
 import { FooterSocial } from '@/presentation/components/layout/footer/footer-social'
-import type {
-  Footer as FooterProps,
-  FooterColumn,
-  FooterLink,
-  Newsletter,
-} from '@/domain/models/app/page/layout/footer'
+import type { Footer as FooterProps } from '@/domain/models/app/page/layout/footer'
 import type { ReactElement } from 'react'
-
-/**
- * Generates external link attributes for security
- */
-function getExternalLinkProps(target?: string) {
-  return target === '_blank'
-    ? { rel: 'noopener noreferrer' as const, 'data-testid': 'footer-link-external' as const }
-    : { rel: undefined, 'data-testid': undefined }
-}
-
-/**
- * Renders a single footer column with links
- */
-function FooterColumn({ column, index }: { column: FooterColumn; index: number }) {
-  return (
-    <div
-      key={index}
-      data-testid={`footer-column-${index}`}
-    >
-      <h3 data-testid="column-title">{column.title}</h3>
-      <ul data-testid="column-links">
-        {column.links.map((link, linkIndex) => (
-          <FooterColumnLink
-            key={linkIndex}
-            link={link}
-          />
-        ))}
-      </ul>
-    </div>
-  )
-}
-
-/**
- * Renders a link within a footer column
- */
-function FooterColumnLink({ link }: { link: FooterLink }) {
-  const { rel, 'data-testid': testId } = getExternalLinkProps(link.target)
-  return (
-    <li>
-      <a
-        href={link.href}
-        target={link.target}
-        rel={rel}
-        data-testid={testId}
-      >
-        {link.label}
-      </a>
-    </li>
-  )
-}
-
-/**
- * Renders newsletter subscription section
- */
-function FooterNewsletterSection({ newsletter }: { newsletter: Newsletter }) {
-  if (!newsletter.enabled) {
-    return undefined
-  }
-
-  return (
-    <div data-testid="footer-newsletter">
-      {newsletter.title && <h3 data-testid="newsletter-title">{newsletter.title}</h3>}
-      {newsletter.description && (
-        <p data-testid="newsletter-description">{newsletter.description}</p>
-      )}
-      <form>
-        <input
-          type="email"
-          data-testid="newsletter-input"
-          placeholder={newsletter.placeholder || 'Enter your email'}
-          aria-label="Email address"
-        />
-        <button
-          type="submit"
-          data-testid="newsletter-button"
-        >
-          {newsletter.buttonText || 'Subscribe'}
-        </button>
-      </form>
-    </div>
-  )
-}
-
-/**
- * Renders legal links section
- */
-function FooterLegalLinks({ legal }: { legal: readonly FooterLink[] }) {
-  if (legal.length === 0) {
-    return undefined
-  }
-
-  return (
-    <div data-testid="footer-legal">
-      {legal.map((link, index) => {
-        const { rel } = getExternalLinkProps(link.target)
-        return (
-          <a
-            key={index}
-            href={link.href}
-            target={link.target}
-            rel={rel}
-          >
-            {link.label}
-          </a>
-        )
-      })}
-    </div>
-  )
-}
-
-/**
- * Renders footer logo
- */
-function FooterLogo({ logo }: { logo?: string }) {
-  if (!logo) {
-    return undefined
-  }
-
-  return (
-    <img
-      data-testid="footer-logo"
-      src={logo}
-      alt="Footer logo"
-    />
-  )
-}
-
-/**
- * Renders footer columns section
- */
-function FooterColumns({ columns }: { columns?: readonly FooterColumn[] }) {
-  if (!columns || columns.length === 0) {
-    return undefined
-  }
-
-  return (
-    <div>
-      {columns.map((column, index) => (
-        <FooterColumn
-          key={index}
-          column={column}
-          index={index}
-        />
-      ))}
-    </div>
-  )
-}
 
 /**
  * Footer Component
@@ -190,13 +45,13 @@ export function Footer({
       style={{ display: 'block', minHeight: '1px' }}
     >
       <FooterLogo logo={logo} />
-      {description && <div data-testid="footer-description">{description}</div>}
+      <FooterDescription description={description} />
       <FooterColumns columns={columns} />
-      {social && <FooterSocial social={social} />}
-      {newsletter && <FooterNewsletterSection newsletter={newsletter} />}
-      {copyright && <div data-testid="footer-copyright">{copyright}</div>}
-      {legal && <FooterLegalLinks legal={legal} />}
-      {email && <a href={`mailto:${email}`}>{email}</a>}
+      <FooterSocial social={social} />
+      <FooterNewsletter newsletter={newsletter} />
+      <FooterCopyright copyright={copyright} />
+      <FooterLegal legal={legal} />
+      <FooterEmail email={email} />
     </footer>
   )
 }

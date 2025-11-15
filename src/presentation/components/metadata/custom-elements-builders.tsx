@@ -67,6 +67,15 @@ function processBooleanAttributes(
 /**
  * Build script element
  * Handles boolean attributes (async, defer) - converts string 'true'/'false' to boolean
+ *
+ * SECURITY: Safe use of dangerouslySetInnerHTML
+ * - Content: Custom script code from page configuration
+ * - Source: Validated CustomElements schema (page.meta.customElements[].content)
+ * - Risk: Low - content is from server configuration, not user input
+ * - Validation: Schema validation ensures string type
+ * - Purpose: Render custom inline scripts for analytics, tracking, etc.
+ * - CSP: Inline script - consider using nonce for stricter CSP
+ * - Best Practice: Prefer external scripts with SRI when possible
  */
 export function buildScriptElement(element: CustomElements[number], key: string): ReactElement {
   const processedAttrs = processBooleanAttributes(element.attrs)
@@ -90,6 +99,15 @@ export function buildScriptElement(element: CustomElements[number], key: string)
 
 /**
  * Build style element
+ *
+ * SECURITY: Safe use of dangerouslySetInnerHTML
+ * - Content: Custom CSS code from page configuration
+ * - Source: Validated CustomElements schema (page.meta.customElements[].content)
+ * - Risk: Low - CSS cannot execute JavaScript
+ * - Validation: Schema validation ensures string type
+ * - Purpose: Render custom inline styles for page-specific styling
+ * - XSS Protection: CSS syntax prevents script execution
+ * - CSP: style-src 'unsafe-inline' required (consider nonce for stricter CSP)
  */
 export function buildStyleElement(element: CustomElements[number], key: string): ReactElement {
   return (
