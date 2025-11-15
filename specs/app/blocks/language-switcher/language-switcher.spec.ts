@@ -125,7 +125,7 @@ test.describe('Language Switcher Block', () => {
   )
 
   // APP-BLOCKS-LANGUAGE-SWITCHER-003: Minimal configuration
-  test.fixme(
+  test(
     'APP-BLOCKS-LANGUAGE-SWITCHER-003: should use default variant (dropdown) and no flags',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -175,7 +175,7 @@ test.describe('Language Switcher Block', () => {
   // ONE comprehensive test - validates end-to-end workflow efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-BLOCKS-LANGUAGE-SWITCHER-REGRESSION-001: user can complete full language-switcher workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {

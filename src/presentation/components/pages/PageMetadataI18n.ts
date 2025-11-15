@@ -11,17 +11,9 @@ import type { Meta } from '@/domain/models/app/page/meta'
 import type { Page } from '@/domain/models/app/pages'
 
 /**
- * Type for i18n metadata translations
+ * Resolves i18n metadata for a single language
  */
-type MetadataI18nTranslations = Record<
-  string,
-  { title?: string; description?: string; keywords?: string; 'og:site_name'?: string }
->
-
-/**
- * Generate translations for a single language
- */
-function generateLanguageTranslations(
+function resolveMetaI18n(
   meta: Meta,
   langCode: string,
   languages: Languages
@@ -44,33 +36,35 @@ function generateLanguageTranslations(
     }),
     ...(meta.openGraph?.siteName &&
       typeof ogSiteName !== 'string' && {
-        'og:site_name': resolveTranslationPattern(meta.openGraph.siteName, langCode, languages),
+        'og:site_name': resolveTranslationPattern(
+          meta.openGraph.siteName,
+          langCode,
+          languages
+        ),
       }),
   }
 }
 
 /**
- * Build i18n structure for all supported languages
+ * Merges existing i18n with generated i18n
  */
-function buildI18nStructure(meta: Meta, languages: Languages): MetadataI18nTranslations {
-  return languages.supported.reduce<MetadataI18nTranslations>((acc, lang) => {
-    return {
-      ...acc,
-      [lang.code]: generateLanguageTranslations(meta, lang.code, languages),
-    }
-  }, {})
-}
+function mergeI18n(
+  generatedI18n: Record<
+    string,
+    { title?: string; description?: string; keywords?: string; 'og:site_name'?: string }
+  >,
+  existingI18n:
+    | Record<
+        string,
+        { title?: string; description?: string; keywords?: string; 'og:site_name'?: string }
+      >
+    | undefined
+): typeof generatedI18n {
+  if (!existingI18n) {
+    return generatedI18n
+  }
 
-/**
- * Merge existing i18n with generated i18n (existing takes precedence)
- */
-function mergeI18nTranslations(
-  generatedI18n: MetadataI18nTranslations,
-  existingI18n: MetadataI18nTranslations | undefined
-): MetadataI18nTranslations {
-  if (!existingI18n) return generatedI18n
-
-  return Object.keys(generatedI18n).reduce<MetadataI18nTranslations>(
+  return Object.keys(generatedI18n).reduce(
     (acc, langCode) => ({
       ...acc,
       [langCode]: {
@@ -78,15 +72,18 @@ function mergeI18nTranslations(
         ...(existingI18n[langCode] || {}),
       },
     }),
-    {}
+    {} as typeof generatedI18n
   )
 }
 
 /**
- * Resolve translation tokens in base meta fields
+ * Resolves base meta fields with translation patterns
  */
-function resolveBaseMetaFields(meta: Meta, currentLang: string, languages: Languages): Meta {
-  return {
+function resolveBaseMeta(meta: Meta, currentLang: string, languages: Languages): Meta {
+  const metaRecord = meta as Record<string, unknown>
+  const ogSiteName = metaRecord['og:site_name']
+
+  const resolvedMeta = {
     ...meta,
     ...(meta.title && { title: resolveTranslationPattern(meta.title, currentLang, languages) }),
     ...(meta.description && {
@@ -96,25 +93,18 @@ function resolveBaseMetaFields(meta: Meta, currentLang: string, languages: Langu
       keywords: resolveTranslationPattern(meta.keywords, currentLang, languages),
     }),
   }
-}
 
-/**
- * Resolve og:site_name if present (either as direct property or in openGraph object)
- */
-function resolveOgSiteName(meta: Meta, currentLang: string, languages: Languages): Meta {
-  const metaRecord = meta as Record<string, unknown>
-  const ogSiteName = metaRecord['og:site_name']
-
+  // Resolve og:site_name if present (either as direct property or in openGraph object)
   if (typeof ogSiteName === 'string') {
     return {
-      ...meta,
+      ...resolvedMeta,
       'og:site_name': resolveTranslationPattern(ogSiteName, currentLang, languages),
     } as Meta
   }
 
   if (meta.openGraph?.siteName) {
     return {
-      ...meta,
+      ...resolvedMeta,
       openGraph: {
         ...meta.openGraph,
         siteName: resolveTranslationPattern(meta.openGraph.siteName, currentLang, languages),
@@ -122,7 +112,7 @@ function resolveOgSiteName(meta: Meta, currentLang: string, languages: Languages
     }
   }
 
-  return meta
+  return resolvedMeta
 }
 
 /**
@@ -151,21 +141,33 @@ export function buildPageMetadataI18n(
   const currentLang = meta.lang || languages.default
 
   // Build i18n structure for all supported languages
-  const generatedI18n = buildI18nStructure(meta, languages)
+  const generatedI18n = languages.supported.reduce(
+    (acc, lang) => ({
+      ...acc,
+      [lang.code]: resolveMetaI18n(meta, lang.code, languages),
+    }),
+    {} as Record<
+      string,
+      { title?: string; description?: string; keywords?: string; 'og:site_name'?: string }
+    >
+  )
 
   // Merge existing meta.i18n with generated i18n (existing takes precedence)
   const existingI18n = (meta as Record<string, unknown>).i18n as
-    | MetadataI18nTranslations
+    | Record<
+        string,
+        { title?: string; description?: string; keywords?: string; 'og:site_name'?: string }
+      >
     | undefined
-  const i18n = mergeI18nTranslations(generatedI18n, existingI18n)
+
+  const i18n = mergeI18n(generatedI18n, existingI18n)
 
   // Resolve all $t: tokens in base meta fields for current language
-  const resolvedMeta = resolveBaseMetaFields(meta, currentLang, languages)
-  const resolvedMetaWithOg = resolveOgSiteName(resolvedMeta, currentLang, languages)
+  const resolvedMeta = resolveBaseMeta(meta, currentLang, languages)
 
   // Return resolved meta with i18n structure
   return {
-    ...resolvedMetaWithOg,
+    ...resolvedMeta,
     i18n,
   }
 }
