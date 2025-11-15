@@ -37,7 +37,7 @@ export function buildPageMetadataI18n(
   const currentLang = meta.lang || languages.default
 
   // Build i18n structure for all supported languages using reduce
-  const i18n = languages.supported.reduce(
+  const generatedI18n = languages.supported.reduce(
     (acc, lang) => {
       const langCode = lang.code
       const metaRecord = meta as Record<string, unknown>
@@ -74,6 +74,24 @@ export function buildPageMetadataI18n(
       { title?: string; description?: string; keywords?: string; 'og:site_name'?: string }
     >
   )
+
+  // Merge existing meta.i18n with generated i18n (existing takes precedence)
+  const existingI18n = (meta as Record<string, unknown>).i18n as
+    | Record<string, { title?: string; description?: string; keywords?: string; 'og:site_name'?: string }>
+    | undefined
+
+  const i18n = existingI18n
+    ? Object.keys(generatedI18n).reduce(
+        (acc, langCode) => ({
+          ...acc,
+          [langCode]: {
+            ...generatedI18n[langCode],
+            ...(existingI18n[langCode] || {}),
+          },
+        }),
+        {} as typeof generatedI18n
+      )
+    : generatedI18n
 
   // Resolve all $t: tokens in base meta fields for current language
   // This ensures no translation tokens remain in the HTML output
