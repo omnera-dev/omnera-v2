@@ -4,6 +4,49 @@
   "title": "Animation Configuration",
   "description": "Animation and transition design tokens",
   "type": "object",
+  "properties": {
+    "duration": {
+      "type": "object",
+      "description": "Duration design tokens (e.g., fast, normal, slow)",
+      "patternProperties": {
+        "^[a-zA-Z][a-zA-Z0-9]*$": {
+          "type": "string",
+          "pattern": "^\\d+(\\.\\d+)?(ms|s)$",
+          "description": "Duration value (e.g., '200ms', '0.5s')"
+        }
+      },
+      "additionalProperties": false
+    },
+    "easing": {
+      "type": "object",
+      "description": "Easing function design tokens (e.g., smooth, bounce, elastic)",
+      "patternProperties": {
+        "^[a-zA-Z][a-zA-Z0-9]*$": {
+          "type": "string",
+          "description": "Easing function (e.g., 'ease-in-out', 'cubic-bezier(0.4, 0, 0.2, 1)')"
+        }
+      },
+      "additionalProperties": false
+    },
+    "keyframes": {
+      "type": "object",
+      "description": "Keyframe design tokens (animation definitions)",
+      "patternProperties": {
+        "^[a-zA-Z][a-zA-Z0-9]*$": {
+          "type": "object",
+          "description": "CSS keyframes definition with percentage keys",
+          "patternProperties": {
+            "^(from|to|\\d+%)$": {
+              "type": "object",
+              "description": "CSS properties at this keyframe step"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
   "patternProperties": {
     "^[a-zA-Z][a-zA-Z0-9]*$": {
       "oneOf": [

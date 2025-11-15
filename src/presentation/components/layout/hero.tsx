@@ -202,6 +202,40 @@ function generateHeroMediaQueries(
 }
 
 /**
+ * Resolve token references in animation string
+ * Supports: $easing.smooth, $colors.primary, etc.
+ */
+function resolveAnimationTokens(animation: string, theme?: Theme): string {
+  return animation.replace(/\$(\w+)\.(\w+)/g, (_match, category, tokenName) => {
+    if (category === 'easing' && theme?.animations) {
+      const animations = theme.animations as Record<string, unknown>
+      const easingTokens = animations.easing as Record<string, unknown> | undefined
+      if (easingTokens && typeof easingTokens === 'object') {
+        const easingValue = easingTokens[tokenName]
+        if (easingValue) return String(easingValue)
+      }
+    }
+
+    if (category === 'colors' && theme?.colors) {
+      const colorValue = theme.colors[tokenName]
+      if (colorValue) return String(colorValue)
+    }
+
+    return `$${category}.${tokenName}` // Return original if not found
+  })
+}
+
+/**
+ * Content structure for Hero section
+ */
+interface HeroContent {
+  readonly button?: {
+    readonly text: string
+    readonly animation?: string
+  }
+}
+
+/**
  * Hero Section Component
  *
  * Renders a hero section with full theme integration demonstrating cohesive UI.
@@ -217,24 +251,66 @@ function generateHeroMediaQueries(
  *
  * @param props - Component props
  * @param props.theme - Theme configuration with all design tokens
+ * @param props.content - Structured content (button, etc.)
  * @param props.children - Hero content (optional - defaults to themed heading + button)
  * @param props.data-testid - Test identifier
  * @returns Hero section element with cohesive theme integration
  */
 export function Hero({
   theme,
+  content,
   children,
   ...props
 }: Readonly<{
   readonly theme?: Theme
+  readonly content?: HeroContent
   readonly children?: ReactNode
   readonly 'data-testid'?: string
 }>): Readonly<ReactElement> {
   const themeTokens = extractHeroTheme(theme)
 
+  // Render custom button if content.button is provided
+  if (content?.button) {
+    const resolvedAnimation = content.button.animation
+      ? resolveAnimationTokens(content.button.animation, theme)
+      : undefined
+
+    return (
+      <section
+        data-testid={props['data-testid']}
+        style={{
+          backgroundColor: themeTokens.colors.background,
+          padding: themeTokens.spacing.section,
+          minHeight: '200px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <button
+          data-testid="animated-cta"
+          style={{
+            backgroundColor: themeTokens.colors.primary,
+            color: '#ffffff',
+            fontFamily: themeTokens.fonts.body.family,
+            fontSize: '1rem',
+            padding: '0.75rem 1.5rem',
+            borderRadius: themeTokens.borderRadius.lg,
+            border: 'none',
+            cursor: 'pointer',
+            animation: resolvedAnimation,
+          }}
+        >
+          {content.button.text}
+        </button>
+        <style>{generateHeroMediaQueries(themeTokens.breakpoints, props['data-testid'])}</style>
+      </section>
+    )
+  }
+
   const hasChildren =
     children && (Array.isArray(children) ? children.length > 0 : Boolean(children))
-  const content = hasChildren ? children : <HeroDefaultContent themeTokens={themeTokens} />
+  const renderedContent = hasChildren ? children : <HeroDefaultContent themeTokens={themeTokens} />
 
   return (
     <section
@@ -248,7 +324,7 @@ export function Hero({
         justifyContent: 'center',
       }}
     >
-      {content}
+      {renderedContent}
       <style>{generateHeroMediaQueries(themeTokens.breakpoints, props['data-testid'])}</style>
     </section>
   )

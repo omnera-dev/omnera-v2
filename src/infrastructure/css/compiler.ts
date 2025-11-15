@@ -154,15 +154,65 @@ function generateThemeBreakpoints(breakpoints?: BreakpointsConfig): string {
 }
 
 /**
- * Generate @keyframes CSS for a single animation
+ * Resolve color token reference
  */
-function generateKeyframes(name: string, keyframes: Record<string, unknown>): string {
+function resolveColorToken(tokenName: string, theme?: Theme): string | undefined {
+  if (!theme?.colors || !(tokenName in theme.colors)) return undefined
+  const colorValue = theme.colors[tokenName]
+  return colorValue ? String(colorValue) : undefined
+}
+
+/**
+ * Resolve easing token reference
+ */
+function resolveEasingToken(tokenName: string, theme?: Theme): string | undefined {
+  if (!theme?.animations) return undefined
+  const animations = theme.animations as Record<string, unknown>
+  const easingTokens = animations.easing as Record<string, unknown> | undefined
+  if (!easingTokens || typeof easingTokens !== 'object' || !(tokenName in easingTokens))
+    return undefined
+  const easingValue = easingTokens[tokenName]
+  return easingValue ? String(easingValue) : undefined
+}
+
+/**
+ * Resolve token references in a value
+ * Supports: $colors.primary, $easing.smooth, etc.
+ */
+function resolveTokenReference(value: unknown, theme?: Theme): string {
+  if (typeof value !== 'string') return String(value)
+
+  const tokenMatch = value.match(/^\$(\w+)\.(\w+)$/)
+  if (!tokenMatch) return value
+
+  const [, category, tokenName] = tokenMatch
+  if (!category || !tokenName) return value
+
+  return (
+    (category === 'colors' ? resolveColorToken(tokenName, theme) : undefined) ??
+    (category === 'easing' ? resolveEasingToken(tokenName, theme) : undefined) ??
+    value
+  )
+}
+
+/**
+ * Generate @keyframes CSS for a single animation
+ * Supports token references like $colors.primary
+ */
+function generateKeyframes(
+  name: string,
+  keyframes: Record<string, unknown>,
+  theme?: Theme
+): string {
   const keyframeSteps = Object.entries(keyframes)
     .map(([step, props]) => {
       const propsStr =
         typeof props === 'object' && props !== undefined
           ? Object.entries(props as Record<string, unknown>)
-              .map(([prop, val]) => `${prop}: ${val};`)
+              .map(([prop, val]) => {
+                const resolvedValue = resolveTokenReference(val, theme)
+                return `${prop}: ${resolvedValue};`
+              })
               .join(' ')
           : ''
       return `  ${step} { ${propsStr} }`
@@ -189,11 +239,29 @@ function generateAnimationClass(
 
 /**
  * Generate @keyframes and animation CSS from domain animations config
+ * Supports both nested design tokens and legacy flat animations
  */
-function generateAnimationStyles(animations?: AnimationsConfig): string {
+function generateAnimationStyles(animations?: AnimationsConfig, theme?: Theme): string {
   if (!animations || Object.keys(animations).length === 0) return ''
 
-  const animationCSS = Object.entries(animations).flatMap(([name, config]) => {
+  // Extract nested design tokens if present
+  const keyframesTokens = animations.keyframes as Record<string, Record<string, unknown>> | undefined
+
+  // Generate keyframes from nested design tokens (immutable)
+  const nestedKeyframesCSS =
+    keyframesTokens && typeof keyframesTokens === 'object'
+      ? Object.entries(keyframesTokens).flatMap(([name, keyframes]) =>
+          keyframes && typeof keyframes === 'object'
+            ? [generateKeyframes(name, keyframes, theme)]
+            : []
+        )
+      : []
+
+  // Process legacy flat animations (backwards compatibility, immutable)
+  const legacyAnimationsCSS = Object.entries(animations).flatMap(([name, config]) => {
+    // Skip nested design token properties
+    if (name === 'duration' || name === 'easing' || name === 'keyframes') return []
+
     if (typeof config === 'boolean' && !config) return []
     if (typeof config === 'string') return []
 
@@ -201,7 +269,7 @@ function generateAnimationStyles(animations?: AnimationsConfig): string {
       const animConfig = config as AnimationConfigObject
       if (!animConfig.keyframes) return []
 
-      const keyframesCSS = generateKeyframes(name, animConfig.keyframes)
+      const keyframesCSS = generateKeyframes(name, animConfig.keyframes, theme)
 
       if (animConfig.enabled === false) {
         return [keyframesCSS]
@@ -219,6 +287,9 @@ function generateAnimationStyles(animations?: AnimationsConfig): string {
 
     return []
   })
+
+  // Combine all CSS (immutable)
+  const animationCSS: readonly string[] = [...nestedKeyframesCSS, ...legacyAnimationsCSS]
 
   return animationCSS.join('\n')
 }
@@ -564,7 +635,7 @@ const FINAL_BASE_LAYER = ''
  */
 function buildSourceCSS(theme?: Theme): string {
   const themeCSS = generateThemeCSS(theme)
-  const animationCSS = generateAnimationStyles(theme?.animations)
+  const animationCSS = generateAnimationStyles(theme?.animations, theme)
   const baseLayerCSS = generateBaseLayer(theme)
   const componentsLayerCSS = generateComponentsLayer(theme)
   const utilitiesLayerCSS = generateUtilitiesLayer()

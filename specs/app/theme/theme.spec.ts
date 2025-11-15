@@ -665,7 +665,7 @@ test.describe('Theme Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-INTEGRATION-004: should create cohesive branded motion with theme-aware animations',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

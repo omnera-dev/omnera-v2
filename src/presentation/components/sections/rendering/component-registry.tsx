@@ -41,9 +41,15 @@ function convertBadgeProps(elementProps: Record<string, unknown>): Record<string
 /**
  * Shared renderer for hero and hero-section component types
  */
-const renderHeroSection: ComponentRenderer = ({ elementProps, theme, renderedChildren }) => (
+const renderHeroSection: ComponentRenderer = ({
+  elementProps,
+  theme,
+  content,
+  renderedChildren,
+}) => (
   <Hero
     theme={theme}
+    content={content as { button?: { text: string; animation?: string } } | undefined}
     data-testid={elementProps['data-testid'] as string | undefined}
   >
     {renderedChildren}
