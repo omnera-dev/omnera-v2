@@ -74,24 +74,103 @@ export const AnimationValueSchema = Schema.Union(
 )
 
 /**
- * Animation configuration (animation and transition design tokens)
+ * Duration design tokens schema
  *
- * Map of animation names to configuration values.
- * Supports multiple formats:
- * - Boolean for simple enable/disable
- * - String for CSS values or class names
- * - Object for detailed configuration
+ * Map of duration token names to CSS duration values.
  *
  * @example
  * ```typescript
+ * const durations = {
+ *   fast: '200ms',
+ *   normal: '300ms',
+ *   slow: '500ms',
+ * }
+ * ```
+ */
+const DurationTokensSchema = Schema.Record({
+  key: Schema.String.pipe(
+    Schema.pattern(/^[a-zA-Z][a-zA-Z0-9]*$/, {
+      message: () => 'Duration key must start with a letter and contain only alphanumeric characters',
+    })
+  ),
+  value: DurationSchema,
+})
+
+/**
+ * Easing function design tokens schema
+ *
+ * Map of easing token names to CSS easing functions.
+ *
+ * @example
+ * ```typescript
+ * const easings = {
+ *   smooth: 'cubic-bezier(0.4, 0, 0.2, 1)',
+ *   bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+ * }
+ * ```
+ */
+const EasingTokensSchema = Schema.Record({
+  key: Schema.String.pipe(
+    Schema.pattern(/^[a-zA-Z][a-zA-Z0-9]*$/, {
+      message: () => 'Easing key must start with a letter and contain only alphanumeric characters',
+    })
+  ),
+  value: EasingFunctionSchema,
+})
+
+/**
+ * Keyframes design tokens schema
+ *
+ * Map of keyframe animation names to CSS keyframe definitions.
+ *
+ * @example
+ * ```typescript
+ * const keyframes = {
+ *   fadeIn: {
+ *     from: { opacity: '0' },
+ *     to: { opacity: '1' },
+ *   },
+ *   colorPulse: {
+ *     '0%': { backgroundColor: '$colors.primary' },
+ *     '50%': { backgroundColor: '$colors.accent' },
+ *     '100%': { backgroundColor: '$colors.primary' },
+ *   },
+ * }
+ * ```
+ */
+const KeyframesTokensSchema = Schema.Record({
+  key: Schema.String.pipe(
+    Schema.pattern(/^[a-zA-Z][a-zA-Z0-9]*$/, {
+      message: () => 'Keyframe key must start with a letter and contain only alphanumeric characters',
+    })
+  ),
+  value: Schema.Record({ key: Schema.String, value: Schema.Unknown }),
+})
+
+/**
+ * Animation configuration (animation and transition design tokens)
+ *
+ * Supports two formats:
+ * 1. Nested design tokens (duration, easing, keyframes)
+ * 2. Legacy flat animation names
+ *
+ * @example
+ * ```typescript
+ * // Nested design tokens
+ * const animations = {
+ *   duration: { fast: '200ms', normal: '300ms', slow: '500ms' },
+ *   easing: { smooth: 'cubic-bezier(0.4, 0, 0.2, 1)', bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)' },
+ *   keyframes: {
+ *     fadeIn: { from: { opacity: '0' }, to: { opacity: '1' } },
+ *     colorPulse: { '0%': { backgroundColor: '$colors.primary' }, '50%': { backgroundColor: '$colors.accent' }, '100%': { backgroundColor: '$colors.primary' } },
+ *   },
+ * }
+ *
+ * // Legacy flat animations
  * const animations = {
  *   fadeIn: true,
  *   slideUp: 'animate-slide-up',
- *   modalOpen: {
- *     enabled: true,
- *     duration: '300ms',
- *     easing: 'ease-in-out',
- *   },
+ *   modalOpen: { enabled: true, duration: '300ms', easing: 'ease-in-out' },
  * }
  * ```
  *
@@ -106,10 +185,15 @@ export const AnimationsConfigSchema = Schema.Record({
     Schema.annotations({
       title: 'Animation Key',
       description: 'Animation name (alphanumeric)',
-      examples: ['fadeIn', 'slideUp', 'modalOpen'],
+      examples: ['fadeIn', 'slideUp', 'modalOpen', 'duration', 'easing', 'keyframes'],
     })
   ),
-  value: AnimationValueSchema,
+  value: Schema.Union(
+    AnimationValueSchema,
+    DurationTokensSchema,
+    EasingTokensSchema,
+    KeyframesTokensSchema
+  ),
 }).pipe(
   Schema.annotations({
     title: 'Animation Configuration',
