@@ -25,7 +25,7 @@ test.describe('Language Switcher Block', () => {
   // ============================================================================
 
   // APP-BLOCKS-LANGUAGE-SWITCHER-001: Dropdown variant
-  test.fixme(
+  test(
     'APP-BLOCKS-LANGUAGE-SWITCHER-001: should render a dropdown menu with all supported languages',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

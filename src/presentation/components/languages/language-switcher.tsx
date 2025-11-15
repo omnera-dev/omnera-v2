@@ -30,7 +30,7 @@ function LanguageSwitcherButton({
 }): ReactElement {
   return (
     <button
-      data-testid="language-switcher"
+      data-testid="language-switcher-button"
       type="button"
     >
       <span
@@ -52,7 +52,13 @@ function LanguageSwitcherButton({
 /**
  * Language option button component
  */
-function LanguageOption({ lang }: { readonly lang: Languages['supported'][number] }): ReactElement {
+function LanguageOption({
+  lang,
+  showFlags,
+}: {
+  readonly lang: Languages['supported'][number]
+  readonly showFlags: boolean
+}): ReactElement {
   return (
     <button
       key={lang.code}
@@ -62,14 +68,14 @@ function LanguageOption({ lang }: { readonly lang: Languages['supported'][number
       type="button"
     >
       <span data-testid="language-option">
-        {isImageFlag(lang.flag) && (
+        {showFlags && isImageFlag(lang.flag) && (
           <img
             src={lang.flag}
             alt={`${lang.label} flag`}
             data-testid="language-flag-img"
           />
         )}
-        {shouldShowFlag(lang.flag) && `${lang.flag} `}
+        {showFlags && shouldShowFlag(lang.flag) && `${lang.flag} `}
         {lang.label}
       </span>
     </button>
@@ -94,17 +100,27 @@ function LanguageOption({ lang }: { readonly lang: Languages['supported'][number
  *
  * @param props - Component props
  * @param props.languages - Languages configuration from AppSchema
+ * @param props.variant - Display variant (dropdown, inline, tabs) - defaults to dropdown
+ * @param props.showFlags - Whether to show flag emojis - defaults to false
  * @returns React element with language switcher HTML structure
  */
 export function LanguageSwitcher({
   languages,
+  variant = 'dropdown',
+  showFlags = false,
 }: {
   readonly languages: Languages
+  readonly variant?: string
+  readonly showFlags?: boolean
 }): Readonly<ReactElement> {
   const defaultLanguage = languages.supported.find((lang) => lang.code === languages.default)
 
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      data-testid="language-switcher"
+      data-variant={variant}
+    >
       <LanguageSwitcherButton
         defaultLanguage={defaultLanguage}
         defaultCode={languages.default}
@@ -132,12 +148,13 @@ export function LanguageSwitcher({
       {/* Dropdown menu - vanilla JS will handle show/hide */}
       <div
         data-language-dropdown
-        className="absolute top-full left-0 z-10 hidden"
+        className="absolute top-full left-0 z-10"
       >
         {languages.supported.map((lang) => (
           <LanguageOption
             key={lang.code}
             lang={lang}
+            showFlags={showFlags}
           />
         ))}
       </div>
