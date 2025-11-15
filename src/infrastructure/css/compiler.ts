@@ -9,16 +9,18 @@ import tailwindcss from '@tailwindcss/postcss'
 import { Effect, Ref } from 'effect'
 import postcss from 'postcss'
 import { generateClickAnimationCSS } from '@/infrastructure/css/click-animations'
+import {
+  generateThemeBorderRadius,
+  generateThemeBreakpoints,
+  generateThemeColors,
+  generateThemeFonts,
+  generateThemeShadows,
+  generateThemeSpacing,
+} from '@/infrastructure/css/theme-generators'
 import { CSSCompilationError } from '@/infrastructure/errors/css-compilation-error'
 import type { App } from '@/domain/models/app'
 import type { Theme } from '@/domain/models/app/theme'
 import type { AnimationsConfig, AnimationConfigObject } from '@/domain/models/app/theme/animations'
-import type { BorderRadiusConfig } from '@/domain/models/app/theme/border-radius'
-import type { BreakpointsConfig } from '@/domain/models/app/theme/breakpoints'
-import type { ColorsConfig } from '@/domain/models/app/theme/colors'
-import type { FontsConfig } from '@/domain/models/app/theme/fonts'
-import type { ShadowsConfig } from '@/domain/models/app/theme/shadows'
-import type { SpacingConfig } from '@/domain/models/app/theme/spacing'
 
 /**
  * Compiled CSS result with metadata
@@ -35,123 +37,6 @@ export interface CompiledCSS {
  * Uses functional state management to avoid mutations
  */
 const cssCache = Ref.unsafeMake<Map<string, CompiledCSS>>(new Map())
-
-/**
- * Generate Tailwind @theme colors from domain color config
- * Uses hex format directly - Tailwind v4 handles color format conversion
- */
-function generateThemeColors(colors?: ColorsConfig): string {
-  if (!colors || Object.keys(colors).length === 0) return ''
-
-  const colorEntries = Object.entries(colors).map(([name, value]) => {
-    return `    --color-${name}: ${value};`
-  })
-
-  return colorEntries.join('\n')
-}
-
-/**
- * Generate Tailwind @theme font families from domain font config
- */
-function generateThemeFonts(fonts?: FontsConfig): string {
-  if (!fonts || Object.keys(fonts).length === 0) return ''
-
-  const fontEntries = Object.entries(fonts).flatMap(([category, config]) => {
-    // Type assertion needed because Record values are unknown in TypeScript
-    const fontConfig = config as {
-      family: string
-      fallback?: string
-      style?: string
-      transform?: string
-      letterSpacing?: string
-    }
-    const fontStack = fontConfig.fallback
-      ? `${fontConfig.family}, ${fontConfig.fallback}`
-      : fontConfig.family
-
-    const baseEntry = `    --font-${category}: ${fontStack};`
-
-    // Build entries array immutably
-    const styleEntry =
-      fontConfig.style && fontConfig.style !== 'normal'
-        ? `    --font-${category}-style: ${fontConfig.style};`
-        : undefined
-
-    const transformEntry =
-      fontConfig.transform && fontConfig.transform !== 'none'
-        ? `    --font-${category}-transform: ${fontConfig.transform};`
-        : undefined
-
-    const letterSpacingEntry = fontConfig.letterSpacing
-      ? `    --font-${category}-letter-spacing: ${fontConfig.letterSpacing};`
-      : undefined
-
-    return [baseEntry, styleEntry, transformEntry, letterSpacingEntry].filter(
-      (entry): entry is string => entry !== undefined
-    )
-  })
-
-  return fontEntries.join('\n')
-}
-
-/**
- * Generate Tailwind @theme spacing from domain spacing config
- * Only includes raw CSS values (rem, px, em), not Tailwind classes
- */
-function generateThemeSpacing(spacing?: SpacingConfig): string {
-  if (!spacing || Object.keys(spacing).length === 0) return ''
-
-  const spacingEntries = Object.entries(spacing)
-    .filter(([_, value]) => {
-      // Only include raw CSS values (not Tailwind classes)
-      return /^[0-9.]+(?:rem|px|em|%)$/.test(value as string)
-    })
-    .map(([name, value]) => `    --spacing-${name}: ${value};`)
-
-  return spacingEntries.join('\n')
-}
-
-/**
- * Generate Tailwind @theme shadows from domain shadow config
- */
-function generateThemeShadows(shadows?: ShadowsConfig): string {
-  if (!shadows || Object.keys(shadows).length === 0) return ''
-
-  const shadowEntries = Object.entries(shadows).map(([name, value]) => {
-    // Preserve original shadow values as-is
-    // The .shadow-none utility class override handles the actual rendering
-    return `    --shadow-${name}: ${value};`
-  })
-
-  return shadowEntries.join('\n')
-}
-
-/**
- * Generate Tailwind @theme border radius from domain border radius config
- */
-function generateThemeBorderRadius(borderRadius?: BorderRadiusConfig): string {
-  if (!borderRadius || Object.keys(borderRadius).length === 0) return ''
-
-  const radiusEntries = Object.entries(borderRadius).map(([name, value]) => {
-    const key = name === 'DEFAULT' ? 'radius' : `radius-${name}`
-    return `    --${key}: ${value};`
-  })
-
-  return radiusEntries.join('\n')
-}
-
-/**
- * Generate Tailwind @theme breakpoints from domain breakpoints config
- */
-function generateThemeBreakpoints(breakpoints?: BreakpointsConfig): string {
-  if (!breakpoints || Object.keys(breakpoints).length === 0) return ''
-
-  const breakpointEntries = Object.entries(breakpoints).map(
-    ([name, value]) => `    --breakpoint-${name}: ${value};`
-  )
-
-  return breakpointEntries.join('\n')
-}
 
 /**
  * Resolve color token reference
@@ -238,6 +123,58 @@ function generateAnimationClass(
 }
 
 /**
+ * Check if animation name is a reserved design token property
+ */
+function isReservedAnimationProperty(name: string): boolean {
+  return name === 'duration' || name === 'easing' || name === 'keyframes'
+}
+
+/**
+ * Process animation config object
+ * Returns array of CSS strings (keyframes + optional animation class)
+ */
+function processAnimationConfigObject(
+  name: string,
+  animConfig: AnimationConfigObject,
+  theme?: Theme
+): readonly string[] {
+  if (!animConfig.keyframes) return []
+
+  const keyframesCSS = generateKeyframes(name, animConfig.keyframes, theme)
+
+  if (animConfig.enabled === false) {
+    return [keyframesCSS]
+  }
+
+  const animationClass = generateAnimationClass(
+    name,
+    animConfig.duration,
+    animConfig.easing,
+    animConfig.delay
+  )
+
+  return [keyframesCSS, animationClass]
+}
+
+/**
+ * Process a single legacy animation config entry
+ * Returns array of CSS strings (keyframes + optional animation class)
+ */
+function processLegacyAnimationEntry(
+  name: string,
+  config: unknown,
+  theme?: Theme
+): readonly string[] {
+  if (isReservedAnimationProperty(name)) return []
+  if (typeof config === 'boolean' && !config) return []
+  if (typeof config === 'string') return []
+  if (typeof config === 'object' && config !== undefined) {
+    return processAnimationConfigObject(name, config as AnimationConfigObject, theme)
+  }
+  return []
+}
+
+/**
  * Generate @keyframes and animation CSS from domain animations config
  * Supports both nested design tokens and legacy flat animations
  */
@@ -245,7 +182,9 @@ function generateAnimationStyles(animations?: AnimationsConfig, theme?: Theme): 
   if (!animations || Object.keys(animations).length === 0) return ''
 
   // Extract nested design tokens if present
-  const keyframesTokens = animations.keyframes as Record<string, Record<string, unknown>> | undefined
+  const keyframesTokens = animations.keyframes as
+    | Record<string, Record<string, unknown>>
+    | undefined
 
   // Generate keyframes from nested design tokens (immutable)
   const nestedKeyframesCSS =
@@ -258,35 +197,9 @@ function generateAnimationStyles(animations?: AnimationsConfig, theme?: Theme): 
       : []
 
   // Process legacy flat animations (backwards compatibility, immutable)
-  const legacyAnimationsCSS = Object.entries(animations).flatMap(([name, config]) => {
-    // Skip nested design token properties
-    if (name === 'duration' || name === 'easing' || name === 'keyframes') return []
-
-    if (typeof config === 'boolean' && !config) return []
-    if (typeof config === 'string') return []
-
-    if (typeof config === 'object' && config !== undefined) {
-      const animConfig = config as AnimationConfigObject
-      if (!animConfig.keyframes) return []
-
-      const keyframesCSS = generateKeyframes(name, animConfig.keyframes, theme)
-
-      if (animConfig.enabled === false) {
-        return [keyframesCSS]
-      }
-
-      const animationClass = generateAnimationClass(
-        name,
-        animConfig.duration,
-        animConfig.easing,
-        animConfig.delay
-      )
-
-      return [keyframesCSS, animationClass]
-    }
-
-    return []
-  })
+  const legacyAnimationsCSS = Object.entries(animations).flatMap(([name, config]) =>
+    processLegacyAnimationEntry(name, config, theme)
+  )
 
   // Combine all CSS (immutable)
   const animationCSS: readonly string[] = [...nestedKeyframesCSS, ...legacyAnimationsCSS]
