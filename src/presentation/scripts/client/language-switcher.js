@@ -68,6 +68,24 @@
   }
 
   /**
+   * Check if language is supported (exact match or base language match)
+   *
+   * @param {string} lang - Language code to check (e.g., 'fr-FR', 'en')
+   * @param {Array} supportedLanguages - Array of supported language objects
+   * @returns {boolean} - True if language is supported (exact or base match)
+   */
+  function isLanguageSupported(lang, supportedLanguages) {
+    // Try exact match first
+    if (supportedLanguages.some((l) => l.code === lang)) {
+      return true
+    }
+
+    // Try base language match (e.g., 'fr-FR' → 'fr')
+    const baseLang = lang.split('-')[0]
+    return supportedLanguages.some((l) => l.code === baseLang || l.code.split('-')[0] === baseLang)
+  }
+
+  /**
    * Detect initial language based on configuration
    * Priority order:
    * 1. Page language from <html lang> IF it differs from default (explicit page.meta.lang - highest priority)
@@ -83,9 +101,8 @@
     // 1. Check if page has explicit non-default language (page.meta.lang set explicitly)
     // If HTML lang differs from default, it means the page explicitly set a language
     if (pageLang && pageLang !== defaultLang) {
-      // Verify page language is in supported languages
-      const isSupported = languagesConfig.supported.some((lang) => lang.code === pageLang)
-      if (isSupported) {
+      // Verify page language is in supported languages (with normalization support)
+      if (isLanguageSupported(pageLang, languagesConfig.supported)) {
         return pageLang
       }
     }
@@ -97,9 +114,8 @@
       // Check localStorage for previously saved language
       const savedLanguage = localStorage.getItem('language')
       if (savedLanguage) {
-        // Verify saved language is in supported languages
-        const isSupported = languagesConfig.supported.some((lang) => lang.code === savedLanguage)
-        if (isSupported) {
+        // Verify saved language is in supported languages (with normalization support)
+        if (isLanguageSupported(savedLanguage, languagesConfig.supported)) {
           return savedLanguage
         }
       }
@@ -107,8 +123,7 @@
 
     // 3. Use HTML lang attribute if it matches default (server's default or Accept-Language detection)
     if (pageLang) {
-      const isSupported = languagesConfig.supported.some((lang) => lang.code === pageLang)
-      if (isSupported) {
+      if (isLanguageSupported(pageLang, languagesConfig.supported)) {
         return pageLang
       }
     }
@@ -135,6 +150,30 @@
   let currentLanguageEl, dropdown, switcherButton
 
   /**
+   * Normalizes language code to match translation keys
+   * Tries exact match first, then base language code (e.g., 'fr-FR' → 'fr')
+   *
+   * @param {string} lang - Language code (e.g., 'fr-FR', 'en-US', 'fr')
+   * @param {Object} translations - Available translations object
+   * @returns {string} - Matching translation key or original language code
+   */
+  function normalizeLanguageCode(lang, translations) {
+    // Try exact match first
+    if (translations[lang]) {
+      return lang
+    }
+
+    // Try base language code (e.g., 'fr-FR' → 'fr')
+    const baseLang = lang.split('-')[0]
+    if (baseLang && translations[baseLang]) {
+      return baseLang
+    }
+
+    // No match found - return original
+    return lang
+  }
+
+  /**
    * Updates all elements with translation keys
    * Reads pre-resolved translations from data-translations attribute and updates text
    *
@@ -152,17 +191,22 @@
         try {
           const translations = JSON.parse(translationsJson)
 
-          // Try current language first
-          let translation = translations[currentLanguage]
+          // Normalize current language to match translation keys (e.g., 'fr-FR' → 'fr')
+          const normalizedLang = normalizeLanguageCode(currentLanguage, translations)
+
+          // Try current language first (normalized)
+          let translation = translations[normalizedLang]
 
           // Try fallback language if missing
           if (!translation && languagesConfig.fallback) {
-            translation = translations[languagesConfig.fallback]
+            const normalizedFallback = normalizeLanguageCode(languagesConfig.fallback, translations)
+            translation = translations[normalizedFallback]
           }
 
           // Try default language if still missing
           if (!translation) {
-            translation = translations[languagesConfig.default]
+            const normalizedDefault = normalizeLanguageCode(languagesConfig.default, translations)
+            translation = translations[normalizedDefault]
           }
 
           // Use translation or key as final fallback
@@ -191,17 +235,22 @@
       try {
         const i18nData = JSON.parse(i18nJson)
 
-        // Try current language first
-        let content = i18nData[currentLanguage]
+        // Normalize current language to match i18n data keys (e.g., 'fr-FR' → 'fr')
+        const normalizedLang = normalizeLanguageCode(currentLanguage, i18nData)
+
+        // Try current language first (normalized)
+        let content = i18nData[normalizedLang]
 
         // Try fallback language if missing
         if (!content && languagesConfig.fallback) {
-          content = i18nData[languagesConfig.fallback]
+          const normalizedFallback = normalizeLanguageCode(languagesConfig.fallback, i18nData)
+          content = i18nData[normalizedFallback]
         }
 
         // Try default language if still missing
         if (!content) {
-          content = i18nData[languagesConfig.default]
+          const normalizedDefault = normalizeLanguageCode(languagesConfig.default, i18nData)
+          content = i18nData[normalizedDefault]
         }
 
         // Update element text content if translation found
