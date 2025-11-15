@@ -10,6 +10,8 @@ import { Banner } from '@/presentation/components/layout/banner'
 import { Footer } from '@/presentation/components/layout/footer'
 import { Navigation } from '@/presentation/components/layout/navigation'
 import { Sidebar } from '@/presentation/components/layout/sidebar'
+import { mergeLayouts } from '@/domain/models/app/page/layout-merge'
+import type { Layout } from '@/domain/models/app/page/layout'
 import type { Page } from '@/domain/models/app/pages'
 
 /**
@@ -17,6 +19,7 @@ import type { Page } from '@/domain/models/app/pages'
  */
 type PageLayoutProps = {
   readonly page: Page
+  readonly defaultLayout?: Layout
   readonly children: ReactNode
 }
 
@@ -27,30 +30,41 @@ type PageLayoutProps = {
  * Components are hidden when not configured to support .toBeHidden() test assertions.
  * Uses <template> element for hidden placeholders to avoid DOM pollution.
  *
+ * Merges page layout with default layout:
+ * - page.layout = undefined: Use defaultLayout
+ * - page.layout = null: No layout (all components hidden)
+ * - page.layout = object: Merge with defaultLayout (extends/overrides)
+ *
  * @param props - Component props
  * @returns Layout wrapper with conditional components
  */
-export function PageLayout({ page, children }: PageLayoutProps): Readonly<ReactElement> {
+export function PageLayout({
+  page,
+  defaultLayout,
+  children,
+}: PageLayoutProps): Readonly<ReactElement> {
+  const layout = mergeLayouts(defaultLayout, page.layout)
+
   return (
     <>
-      {page.layout?.banner ? (
-        <Banner {...page.layout.banner} />
+      {layout?.banner ? (
+        <Banner {...layout.banner} />
       ) : (
         <span
           data-testid="banner"
           hidden
         />
       )}
-      {page.layout?.navigation ? (
-        <Navigation {...page.layout.navigation} />
+      {layout?.navigation ? (
+        <Navigation {...layout.navigation} />
       ) : (
         <span
           data-testid="navigation"
           hidden
         />
       )}
-      {page.layout?.sidebar ? (
-        <Sidebar {...page.layout.sidebar} />
+      {layout?.sidebar ? (
+        <Sidebar {...layout.sidebar} />
       ) : (
         <span
           data-testid="sidebar"
@@ -58,8 +72,8 @@ export function PageLayout({ page, children }: PageLayoutProps): Readonly<ReactE
         />
       )}
       {children}
-      {page.layout?.footer ? (
-        <Footer {...page.layout.footer} />
+      {layout?.footer ? (
+        <Footer {...layout.footer} />
       ) : (
         <span
           data-testid="footer"

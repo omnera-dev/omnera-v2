@@ -213,8 +213,13 @@ export const PageSchema = Schema.Struct({
    * - Sidebar (collapsible, responsive)
    *
    * Layout components wrap the main content area
+   *
+   * Can be:
+   * - undefined: Use default layout from app.defaultLayout
+   * - null: Explicitly disable all layout (blank page)
+   * - object: Override or extend default layout
    */
-  layout: Schema.optional(LayoutSchema),
+  layout: Schema.optional(Schema.NullOr(LayoutSchema)),
 
   /**
    * Page sections containing content blocks

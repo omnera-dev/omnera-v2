@@ -16,6 +16,7 @@ import { extractPageMetadata } from '@/presentation/components/pages/PageMetadat
 import { groupScriptsByPosition } from '@/presentation/components/pages/PageScripts'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
+import type { Layout } from '@/domain/models/app/page/layout'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
 
@@ -25,6 +26,7 @@ type DynamicPageProps = {
   readonly theme?: Theme
   readonly languages?: Languages
   readonly detectedLanguage?: string
+  readonly defaultLayout?: Layout
 }
 
 /**
@@ -62,6 +64,7 @@ export function DynamicPage({
   theme,
   languages,
   detectedLanguage,
+  defaultLayout,
 }: DynamicPageProps): Readonly<ReactElement> {
   const metadata = extractPageMetadata(page, theme, languages, detectedLanguage)
   const langConfig = resolvePageLanguage(page, languages, detectedLanguage)
@@ -95,7 +98,10 @@ export function DynamicPage({
           scripts={scripts}
           position="start"
         />
-        <PageLayout page={page}>
+        <PageLayout
+          page={page}
+          defaultLayout={defaultLayout}
+        >
           <PageMain
             page={page}
             sections={page.sections}

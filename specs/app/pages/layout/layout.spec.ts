@@ -287,7 +287,7 @@ test.describe('Page Layout', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-LAYOUT-008: should override or extend default layout per page',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
