@@ -185,17 +185,17 @@ function generateHeroMediaQueries(
   return `
     @media (min-width: ${breakpoints.sm}px) {
       section[data-testid="${testId}"] {
-        padding: 2rem;
+        padding: 3rem;
       }
     }
     @media (min-width: ${breakpoints.md}px) {
       section[data-testid="${testId}"] {
-        padding: 3rem;
+        padding: 4rem;
       }
     }
     @media (min-width: ${breakpoints.lg}px) {
       section[data-testid="${testId}"] {
-        padding: 4rem;
+        padding: 5rem;
       }
     }
   `
@@ -281,7 +281,7 @@ function buildHeroSectionStyle(themeTokens: HeroThemeTokens): Record<string, str
   return {
     ...heroSectionBaseStyle,
     backgroundColor: themeTokens.colors.background,
-    padding: themeTokens.spacing.section,
+    padding: '2rem',
   }
 }
 
