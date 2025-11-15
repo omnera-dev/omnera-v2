@@ -67,10 +67,79 @@ export function substituteThemeTokens(value: unknown, theme?: Theme): unknown {
 }
 
 /**
+ * Resolve shorthand theme token reference
+ *
+ * Handles tokens in format: $category.key (e.g., $easing.smooth, $colors.primary)
+ * without the `theme.` prefix.
+ *
+ * @param category - Theme category (colors, easing, spacing, etc.)
+ * @param tokenName - Token key within category
+ * @param theme - Theme configuration
+ * @returns Resolved token value or original token string if not found
+ */
+function resolveShorthandToken(category: string, tokenName: string, theme?: Theme): string {
+  if (!theme) return `$${category}.${tokenName}`
+
+  const themeCategory = theme[category as keyof Theme]
+  if (!themeCategory || typeof themeCategory !== 'object') {
+    return `$${category}.${tokenName}`
+  }
+
+  // Handle nested animations category (easing, duration, keyframes)
+  if (category === 'easing' && theme.animations) {
+    const animations = theme.animations as Record<string, unknown>
+    const easingTokens = animations.easing as Record<string, unknown> | undefined
+    if (easingTokens && typeof easingTokens === 'object') {
+      const value = easingTokens[tokenName]
+      return value !== undefined ? String(value) : `$${category}.${tokenName}`
+    }
+  }
+
+  const value = (themeCategory as Record<string, unknown>)[tokenName]
+  return value !== undefined ? String(value) : `$${category}.${tokenName}`
+}
+
+/**
+ * Resolve shorthand theme tokens in string
+ *
+ * Replaces tokens in format: $category.key (e.g., $easing.smooth, $colors.primary)
+ * Supports multiple tokens in a single string.
+ *
+ * @param value - String that may contain shorthand theme tokens
+ * @param theme - Theme configuration
+ * @returns String with shorthand tokens replaced
+ *
+ * @example
+ * ```typescript
+ * const theme = {
+ *   colors: { primary: '#007bff' },
+ *   animations: { easing: { smooth: 'cubic-bezier(0.4, 0, 0.2, 1)' } }
+ * }
+ * resolveShorthandThemeTokens('colorPulse 2s $easing.smooth infinite', theme)
+ * // 'colorPulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite'
+ * ```
+ */
+function resolveShorthandThemeTokens(value: unknown, theme?: Theme): unknown {
+  if (typeof value !== 'string') {
+    return value
+  }
+
+  if (!theme || !value.includes('$')) {
+    return value
+  }
+
+  // Replace shorthand tokens: $category.key (without theme. prefix)
+  return value.replace(/\$(\w+)\.(\w+)/g, (_match, category, tokenName) =>
+    resolveShorthandToken(category, tokenName, theme)
+  )
+}
+
+/**
  * Substitutes theme tokens in props recursively
  *
  * Walks through props object and replaces all theme token strings with actual theme values.
  * Handles nested objects (e.g., style props) recursively.
+ * Supports both full syntax ($theme.colors.primary) and shorthand ($colors.primary, $easing.smooth).
  *
  * @param props - Component props that may contain theme tokens
  * @param theme - Theme configuration
@@ -101,7 +170,10 @@ export function substitutePropsThemeTokens(
   // Use functional Object.entries + reduce for immutable transformation
   return Object.entries(props).reduce<Record<string, unknown>>((acc, [key, value]) => {
     if (typeof value === 'string') {
-      return { ...acc, [key]: substituteThemeTokens(value, theme) }
+      // Apply both full syntax and shorthand token resolution
+      const fullSyntaxResolved = substituteThemeTokens(value, theme)
+      const shorthandResolved = resolveShorthandThemeTokens(fullSyntaxResolved, theme)
+      return { ...acc, [key]: shorthandResolved }
     } else if (value && typeof value === 'object' && !Array.isArray(value)) {
       // Recursively handle nested objects (like style props)
       return { ...acc, [key]: substitutePropsThemeTokens(value as Record<string, unknown>, theme) }
