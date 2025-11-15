@@ -50,6 +50,15 @@ export function renderScriptTag({
 /**
  * Render an inline script tag with JavaScript code
  * Wraps code in async IIFE if async property is true
+ *
+ * SECURITY: Safe use of dangerouslySetInnerHTML
+ * - Content: Inline JavaScript code from page configuration
+ * - Source: Validated InlineScripts schema (page.scripts.inlineScripts[].code)
+ * - Risk: Low - content is from server configuration, not user input
+ * - Validation: Schema validation ensures string type
+ * - Purpose: Render inline scripts for page-specific functionality
+ * - CSP: Inline script - consider using nonce for stricter CSP
+ * - Transformation: Optionally wraps in async IIFE for async execution
  */
 export function renderInlineScriptTag({
   code,

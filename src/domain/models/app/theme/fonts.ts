@@ -8,26 +8,7 @@
 import { Schema } from 'effect'
 
 /**
- * Font weight value (100-900 in increments of 100)
- *
- * Standard font weights as defined in CSS:
- * - 100: Thin
- * - 200: Extra Light
- * - 300: Light
- * - 400: Normal/Regular
- * - 500: Medium
- * - 600: Semi Bold
- * - 700: Bold
- * - 800: Extra Bold
- * - 900: Black
- *
- * @example
- * ```typescript
- * const regular = 400
- * const bold = 700
- * ```
- *
- * @see specs/app/theme/fonts/fonts.schema.json#/patternProperties/.../properties/weights
+ * Font weight (100-900 in increments of 100)
  */
 export const FontWeightSchema = Schema.Literal(100, 200, 300, 400, 500, 600, 700, 800, 900).pipe(
   Schema.annotations({
@@ -38,14 +19,6 @@ export const FontWeightSchema = Schema.Literal(100, 200, 300, 400, 500, 600, 700
 
 /**
  * Font style (normal, italic, oblique)
- *
- * @example
- * ```typescript
- * const normal = 'normal'  // Default, upright text
- * const italic = 'italic'  // Cursive or slanted design
- * ```
- *
- * @see specs/app/theme/fonts/fonts.schema.json#/patternProperties/.../properties/style
  */
 export const FontStyleSchema = Schema.Literal('normal', 'italic', 'oblique').pipe(
   Schema.annotations({
@@ -56,19 +29,6 @@ export const FontStyleSchema = Schema.Literal('normal', 'italic', 'oblique').pip
 
 /**
  * Text transformation (none, uppercase, lowercase, capitalize)
- *
- * Applied via CSS text-transform property:
- * - 'none': No transformation
- * - 'uppercase': ALL CAPS
- * - 'lowercase': all lowercase
- * - 'capitalize': First Letter Of Each Word
- *
- * @example
- * ```typescript
- * const transform = 'uppercase'  // "hello" → "HELLO"
- * ```
- *
- * @see specs/app/theme/fonts/fonts.schema.json#/patternProperties/.../properties/transform
  */
 export const FontTransformSchema = Schema.Literal(
   'none',
@@ -83,23 +43,7 @@ export const FontTransformSchema = Schema.Literal(
 )
 
 /**
- * Font category name (title, body, mono, etc.)
- *
- * Semantic font category keys for organizing typography:
- * - title: Display fonts for headings
- * - body: Body text fonts for readability
- * - mono: Monospace fonts for code
- *
- * Must be alphabetic characters only (a-zA-Z)
- *
- * @example
- * ```typescript
- * const key1 = 'title'
- * const key2 = 'body'
- * const key3 = 'mono'
- * ```
- *
- * @see specs/app/theme/fonts/fonts.schema.json#/patternProperties
+ * Font category name (alphabetic characters only: title, body, mono, etc.)
  */
 export const FontCategoryKeySchema = Schema.String.pipe(
   Schema.pattern(/^[a-zA-Z]+$/, {
@@ -113,48 +57,7 @@ export const FontCategoryKeySchema = Schema.String.pipe(
 )
 
 /**
- * Individual font configuration
- *
- * Defines a single font with:
- * - family: Primary font name (required)
- * - fallback: Fallback font stack (optional)
- * - weights: Available font weights (optional)
- * - style: Font style (optional, defaults to 'normal')
- * - size: Default font size (optional)
- * - lineHeight: Default line height (optional)
- * - letterSpacing: Letter spacing (optional)
- * - transform: Text transformation (optional)
- * - url: Font file URL (optional, for remote/Google Fonts)
- *
- * @example
- * ```typescript
- * // Minimal font (only family required)
- * const minimal = {
- *   family: 'Inter'
- * }
- *
- * // Complete body font configuration
- * const body = {
- *   family: 'Inter',
- *   fallback: 'system-ui, sans-serif',
- *   weights: [300, 400, 500, 600, 700],
- *   style: 'normal',
- *   size: '16px',
- *   lineHeight: '1.5',
- *   letterSpacing: '0',
- *   transform: 'none',
- *   url: 'https://fonts.googleapis.com/css2?family=Inter'
- * }
- *
- * // Display font with transformation
- * const title = {
- *   family: 'Bely Display',
- *   fallback: 'Georgia, serif',
- *   weights: [400, 700],
- *   transform: 'lowercase',
- *   letterSpacing: '0.05em'
- * }
- * ```
+ * Individual font configuration (family, fallback, weights, style, size, lineHeight, letterSpacing, transform, url)
  *
  * @see specs/app/theme/fonts/fonts.schema.json#/patternProperties/...
  */
@@ -238,49 +141,7 @@ export const FontConfigItemSchema = Schema.Struct({
 )
 
 /**
- * Font configuration (typography design tokens)
- *
- * Map of semantic font categories to font configurations.
- * Each key is a font category name (title, body, mono, etc.)
- * and each value is a font configuration object.
- *
- * This creates a semantic typography system where:
- * - title: Display fonts for headings
- * - body: Readable fonts for body text
- * - mono: Monospace fonts for code
- * - (custom categories as needed)
- *
- * Key behaviors:
- * - Only 'family' property is required per font
- * - Fallback fonts provide graceful degradation
- * - Multiple weights support font-weight variations
- * - Google Fonts and self-hosted fonts supported
- *
- * @example
- * ```typescript
- * // Multiple font categories
- * const fonts = {
- *   title: {
- *     family: 'Bely Display',
- *     fallback: 'Georgia, serif',
- *     weights: [400, 700],
- *     transform: 'lowercase',
- *     letterSpacing: '0.05em'
- *   },
- *   body: {
- *     family: 'Inter',
- *     fallback: 'system-ui, sans-serif',
- *     weights: [300, 400, 500, 600, 700],
- *     size: '16px',
- *     lineHeight: '1.5'
- *   },
- *   mono: {
- *     family: 'JetBrains Mono',
- *     fallback: 'monospace',
- *     weights: [400, 700]
- *   }
- * }
- * ```
+ * Font configuration (map of semantic font categories to font configurations)
  *
  * @see specs/app/theme/fonts/fonts.schema.json
  */
@@ -294,6 +155,7 @@ export const FontsConfigSchema = Schema.Record({
   })
 )
 
+// Type exports
 export type FontWeight = Schema.Schema.Type<typeof FontWeightSchema>
 export type FontStyle = Schema.Schema.Type<typeof FontStyleSchema>
 export type FontTransform = Schema.Schema.Type<typeof FontTransformSchema>

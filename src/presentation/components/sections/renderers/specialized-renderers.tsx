@@ -33,6 +33,9 @@ import type { ElementProps } from './element-renderers'
  */
 export function renderLanguageSwitcher(props: ElementProps, languages?: Languages): ReactElement {
   if (!languages) {
+    // DEVELOPMENT WARNING: Keep console.warn for development debugging
+    // This warning alerts developers when language-switcher block is used without languages config
+    // Safe to keep - helps identify configuration issues during development
     console.warn('language-switcher block requires languages configuration')
     return (
       <div
@@ -111,6 +114,15 @@ export function renderAlert(
  *
  * Parses HTML content to extract <li> elements and applies incremental
  * animation delays for a cascading appearance effect.
+ *
+ * SECURITY: Safe use of dangerouslySetInnerHTML (after sanitization)
+ * - Content: List item HTML from page configuration
+ * - Source: Validated Page schema (list content property)
+ * - Risk: None (after sanitization) - DOMPurify removes malicious content
+ * - Validation: DOMPurify sanitization before rendering
+ * - Purpose: Render animated list items with staggered appearance
+ * - XSS Protection: DOMPurify removes scripts, event handlers, dangerous tags
+ * - Process: Extract <li> tags, sanitize, apply animations
  *
  * @param props - Element props including data-testid
  * @param content - HTML string containing <li> elements
