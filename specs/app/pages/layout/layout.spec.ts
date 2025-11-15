@@ -129,7 +129,7 @@ test.describe('Page Layout', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-LAYOUT-004: should support sidebar-based layouts',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
