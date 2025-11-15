@@ -89,7 +89,7 @@ test.describe('Page Layout', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-LAYOUT-003: should provide header and footer structure',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
