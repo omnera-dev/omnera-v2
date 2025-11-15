@@ -22,6 +22,8 @@
               "grid",
               "card",
               "text",
+              "heading",
+              "paragraph",
               "h1",
               "h2",
               "h3",
@@ -32,6 +34,7 @@
               "image",
               "button",
               "link",
+              "a",
               "timeline",
               "accordion",
               "badge",
@@ -40,7 +43,31 @@
               "audio",
               "iframe",
               "form",
-              "input"
+              "input",
+              "div",
+              "span",
+              "modal",
+              "sidebar",
+              "toast",
+              "hero",
+              "hero-section",
+              "fab",
+              "spinner",
+              "list",
+              "list-item",
+              "dropdown",
+              "navigation",
+              "alert",
+              "p",
+              "code",
+              "pre",
+              "header",
+              "footer",
+              "main",
+              "article",
+              "aside",
+              "nav",
+              "responsive-grid"
             ]
           },
           "props": {
@@ -60,8 +87,16 @@
             }
           },
           "content": {
-            "type": "string",
-            "description": "Text content for text components"
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Text content for text components"
+              },
+              {
+                "type": "object",
+                "description": "Structured content object (e.g., { button: { text, animation } } for hero)"
+              }
+            ]
           },
           "interactions": {
             "$ref": "../common/interactions/interactions.schema.json",
