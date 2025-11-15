@@ -30,7 +30,7 @@ function LanguageSwitcherButton({
 }): ReactElement {
   return (
     <button
-      data-testid="language-switcher-button"
+      data-testid="language-switcher"
       type="button"
     >
       <span
@@ -124,7 +124,6 @@ export function LanguageSwitcher({
   return (
     <div
       className="relative"
-      data-testid="language-switcher"
       data-variant={variant}
     >
       <LanguageSwitcherButton
