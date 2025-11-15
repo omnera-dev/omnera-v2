@@ -5,8 +5,24 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
+import { resolveAnimationString } from '@/infrastructure/css/token-resolver'
 import type { Theme } from '@/domain/models/app/theme'
 import type { ReactElement, ReactNode } from 'react'
+
+/**
+ * Button configuration for Hero content
+ */
+interface HeroButton {
+  readonly text: string
+  readonly animation?: string
+}
+
+/**
+ * Hero content configuration
+ */
+interface HeroContent {
+  readonly button?: HeroButton
+}
 
 /**
  * Extracted theme tokens for Hero component
@@ -132,6 +148,38 @@ function extractHeroTheme(theme?: Theme): HeroThemeTokens {
 }
 
 /**
+ * Render animated button with theme tokens and resolved animation
+ */
+function renderButton(
+  button: HeroButton,
+  themeTokens: HeroThemeTokens,
+  theme?: Theme
+): ReactElement {
+  const animation = button.animation
+    ? resolveAnimationString(button.animation, theme)
+    : undefined
+
+  return (
+    <button
+      data-testid="animated-cta"
+      style={{
+        backgroundColor: themeTokens.colors.primary,
+        color: '#ffffff',
+        fontFamily: themeTokens.fonts.body.family,
+        fontSize: '1rem',
+        padding: '0.75rem 1.5rem',
+        borderRadius: themeTokens.borderRadius.lg,
+        border: 'none',
+        cursor: 'pointer',
+        animation,
+      }}
+    >
+      {button.text}
+    </button>
+  )
+}
+
+/**
  * Default content demonstrating cohesive theme integration
  */
 function HeroDefaultContent({
@@ -176,6 +224,28 @@ function HeroDefaultContent({
 }
 
 /**
+ * Render content from content configuration
+ */
+function renderContent(
+  content: HeroContent | undefined,
+  themeTokens: HeroThemeTokens,
+  theme?: Theme
+): ReactElement | null {
+  if (!content) return null
+
+  return (
+    <div
+      style={{
+        textAlign: 'center',
+        maxWidth: '800px',
+      }}
+    >
+      {content.button && renderButton(content.button, themeTokens, theme)}
+    </div>
+  )
+}
+
+/**
  * Generate responsive media query styles for Hero section
  */
 function generateHeroMediaQueries(
@@ -202,56 +272,16 @@ function generateHeroMediaQueries(
 }
 
 /**
- * Resolve token references in animation string
- * Supports: $easing.smooth, $colors.primary, etc.
- */
-function resolveAnimationTokens(animation: string, theme?: Theme): string {
-  return animation.replace(/\$(\w+)\.(\w+)/g, (_match, category, tokenName) => {
-    if (category === 'easing' && theme?.animations) {
-      const animations = theme.animations as Record<string, unknown>
-      const easingTokens = animations.easing as Record<string, unknown> | undefined
-      if (easingTokens && typeof easingTokens === 'object') {
-        const easingValue = easingTokens[tokenName]
-        if (easingValue) return String(easingValue)
-      }
-    }
-
-    if (category === 'colors' && theme?.colors) {
-      const colorValue = theme.colors[tokenName]
-      if (colorValue) return String(colorValue)
-    }
-
-    return `$${category}.${tokenName}` // Return original if not found
-  })
-}
-
-/**
- * Content structure for Hero section
- */
-interface HeroContent {
-  readonly button?: {
-    readonly text: string
-    readonly animation?: string
-  }
-}
-
-/**
  * Hero Section Component
  *
  * Renders a hero section with full theme integration demonstrating cohesive UI.
- * When no children are provided, renders default content (h1 heading + CTA button)
- * that showcases all theme tokens applied together:
- * - Background color (theme.colors.background)
- * - Heading with theme fonts (family, size, weight, color)
- * - Button with theme colors and border radius
- * - Section padding (theme.spacing.section)
- *
- * Uses theme.breakpoints to determine responsive behavior via CSS custom properties.
- * Applies progressive enhancement - padding increases as viewport grows.
+ * Supports content configuration or children:
+ * - content.button: Animated button with theme tokens
+ * - children: Custom content (fallback to default content if none provided)
  *
  * @param props - Component props
  * @param props.theme - Theme configuration with all design tokens
- * @param props.content - Structured content (button, etc.)
+ * @param props.content - Hero content configuration (button, etc.)
  * @param props.children - Hero content (optional - defaults to themed heading + button)
  * @param props.data-testid - Test identifier
  * @returns Hero section element with cohesive theme integration
@@ -269,48 +299,17 @@ export function Hero({
 }>): Readonly<ReactElement> {
   const themeTokens = extractHeroTheme(theme)
 
-  // Render custom button if content.button is provided
-  if (content?.button) {
-    const resolvedAnimation = content.button.animation
-      ? resolveAnimationTokens(content.button.animation, theme)
-      : undefined
-
-    return (
-      <section
-        data-testid={props['data-testid']}
-        style={{
-          backgroundColor: themeTokens.colors.background,
-          padding: themeTokens.spacing.section,
-          minHeight: '200px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <button
-          data-testid="animated-cta"
-          style={{
-            backgroundColor: themeTokens.colors.primary,
-            color: '#ffffff',
-            fontFamily: themeTokens.fonts.body.family,
-            fontSize: '1rem',
-            padding: '0.75rem 1.5rem',
-            borderRadius: themeTokens.borderRadius.lg,
-            border: 'none',
-            cursor: 'pointer',
-            animation: resolvedAnimation,
-          }}
-        >
-          {content.button.text}
-        </button>
-        <style>{generateHeroMediaQueries(themeTokens.breakpoints, props['data-testid'])}</style>
-      </section>
-    )
-  }
-
+  // Priority: children > content > default
   const hasChildren =
     children && (Array.isArray(children) ? children.length > 0 : Boolean(children))
-  const renderedContent = hasChildren ? children : <HeroDefaultContent themeTokens={themeTokens} />
+
+  const contentNode = content ? renderContent(content, themeTokens, theme) : null
+
+  const renderedContent = hasChildren
+    ? children
+    : contentNode
+      ? contentNode
+      : <HeroDefaultContent themeTokens={themeTokens} />
 
   return (
     <section

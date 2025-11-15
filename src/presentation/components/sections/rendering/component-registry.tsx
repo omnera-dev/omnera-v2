@@ -39,17 +39,22 @@ function convertBadgeProps(elementProps: Record<string, unknown>): Record<string
 }
 
 /**
+ * Extract hero content from mixed content type
+ */
+function extractHeroContent(
+  content: string | Record<string, unknown> | undefined
+): { button?: { text: string; animation?: string } } | undefined {
+  if (!content || typeof content === 'string') return undefined
+  return content as { button?: { text: string; animation?: string } }
+}
+
+/**
  * Shared renderer for hero and hero-section component types
  */
-const renderHeroSection: ComponentRenderer = ({
-  elementProps,
-  theme,
-  content,
-  renderedChildren,
-}) => (
+const renderHeroSection: ComponentRenderer = ({ elementProps, theme, renderedChildren, content }) => (
   <Hero
     theme={theme}
-    content={content as { button?: { text: string; animation?: string } } | undefined}
+    content={extractHeroContent(content)}
     data-testid={elementProps['data-testid'] as string | undefined}
   >
     {renderedChildren}

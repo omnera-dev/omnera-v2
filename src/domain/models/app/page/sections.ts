@@ -147,9 +147,14 @@ export const ComponentSchema: Schema.Schema<any, any, never> = Schema.Struct({
     )
   ),
   content: Schema.optional(
-    Schema.String.annotations({
-      description: 'Text content for text components',
-    })
+    Schema.Union(
+      Schema.String.annotations({
+        description: 'Text content for text components',
+      }),
+      Schema.Record({ key: Schema.String, value: Schema.Unknown }).annotations({
+        description: 'Structured content (e.g., button with animation)',
+      })
+    )
   ),
   interactions: Schema.optional(InteractionsSchema),
   responsive: Schema.optional(ResponsiveSchema),

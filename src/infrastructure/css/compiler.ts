@@ -10,6 +10,7 @@ import { Effect, Ref } from 'effect'
 import postcss from 'postcss'
 import { generateClickAnimationCSS } from '@/infrastructure/css/click-animations'
 import { CSSCompilationError } from '@/infrastructure/errors/css-compilation-error'
+import { resolveKeyframeProps } from '@/infrastructure/css/token-resolver'
 import type { App } from '@/domain/models/app'
 import type { Theme } from '@/domain/models/app/theme'
 import type { AnimationsConfig, AnimationConfigObject } from '@/domain/models/app/theme/animations'
@@ -154,48 +155,6 @@ function generateThemeBreakpoints(breakpoints?: BreakpointsConfig): string {
 }
 
 /**
- * Resolve color token reference
- */
-function resolveColorToken(tokenName: string, theme?: Theme): string | undefined {
-  if (!theme?.colors || !(tokenName in theme.colors)) return undefined
-  const colorValue = theme.colors[tokenName]
-  return colorValue ? String(colorValue) : undefined
-}
-
-/**
- * Resolve easing token reference
- */
-function resolveEasingToken(tokenName: string, theme?: Theme): string | undefined {
-  if (!theme?.animations) return undefined
-  const animations = theme.animations as Record<string, unknown>
-  const easingTokens = animations.easing as Record<string, unknown> | undefined
-  if (!easingTokens || typeof easingTokens !== 'object' || !(tokenName in easingTokens))
-    return undefined
-  const easingValue = easingTokens[tokenName]
-  return easingValue ? String(easingValue) : undefined
-}
-
-/**
- * Resolve token references in a value
- * Supports: $colors.primary, $easing.smooth, etc.
- */
-function resolveTokenReference(value: unknown, theme?: Theme): string {
-  if (typeof value !== 'string') return String(value)
-
-  const tokenMatch = value.match(/^\$(\w+)\.(\w+)$/)
-  if (!tokenMatch) return value
-
-  const [, category, tokenName] = tokenMatch
-  if (!category || !tokenName) return value
-
-  return (
-    (category === 'colors' ? resolveColorToken(tokenName, theme) : undefined) ??
-    (category === 'easing' ? resolveEasingToken(tokenName, theme) : undefined) ??
-    value
-  )
-}
-
-/**
  * Generate @keyframes CSS for a single animation
  * Supports token references like $colors.primary
  */
@@ -208,11 +167,8 @@ function generateKeyframes(
     .map(([step, props]) => {
       const propsStr =
         typeof props === 'object' && props !== undefined
-          ? Object.entries(props as Record<string, unknown>)
-              .map(([prop, val]) => {
-                const resolvedValue = resolveTokenReference(val, theme)
-                return `${prop}: ${resolvedValue};`
-              })
+          ? Object.entries(resolveKeyframeProps(props as Record<string, unknown>, theme))
+              .map(([prop, val]) => `${prop}: ${val};`)
               .join(' ')
           : ''
       return `  ${step} { ${propsStr} }`
@@ -238,30 +194,44 @@ function generateAnimationClass(
 }
 
 /**
+ * Check if animations config uses nested token structure
+ * Nested: { duration: {}, easing: {}, keyframes: {} }
+ * Legacy: { fadeIn: true, pulse: {...} }
+ */
+function isNestedAnimationConfig(animations: AnimationsConfig): boolean {
+  return 'keyframes' in animations && typeof animations.keyframes === 'object'
+}
+
+/**
+ * Generate @keyframes CSS from nested keyframes config
+ */
+function generateNestedKeyframes(
+  keyframes: Record<string, unknown>,
+  theme?: Theme
+): readonly string[] {
+  return Object.entries(keyframes).map(([name, keyframeSteps]) => {
+    if (typeof keyframeSteps === 'object' && keyframeSteps !== null) {
+      return generateKeyframes(name, keyframeSteps as Record<string, unknown>, theme)
+    }
+    return ''
+  })
+}
+
+/**
  * Generate @keyframes and animation CSS from domain animations config
  * Supports both nested design tokens and legacy flat animations
  */
 function generateAnimationStyles(animations?: AnimationsConfig, theme?: Theme): string {
   if (!animations || Object.keys(animations).length === 0) return ''
 
-  // Extract nested design tokens if present
-  const keyframesTokens = animations.keyframes as Record<string, Record<string, unknown>> | undefined
+  // Handle nested token structure (new)
+  if (isNestedAnimationConfig(animations)) {
+    const keyframes = animations.keyframes as Record<string, unknown>
+    return generateNestedKeyframes(keyframes, theme).filter(Boolean).join('\n')
+  }
 
-  // Generate keyframes from nested design tokens (immutable)
-  const nestedKeyframesCSS =
-    keyframesTokens && typeof keyframesTokens === 'object'
-      ? Object.entries(keyframesTokens).flatMap(([name, keyframes]) =>
-          keyframes && typeof keyframes === 'object'
-            ? [generateKeyframes(name, keyframes, theme)]
-            : []
-        )
-      : []
-
-  // Process legacy flat animations (backwards compatibility, immutable)
-  const legacyAnimationsCSS = Object.entries(animations).flatMap(([name, config]) => {
-    // Skip nested design token properties
-    if (name === 'duration' || name === 'easing' || name === 'keyframes') return []
-
+  // Handle legacy flat structure
+  const animationCSS = Object.entries(animations).flatMap(([name, config]) => {
     if (typeof config === 'boolean' && !config) return []
     if (typeof config === 'string') return []
 
@@ -287,9 +257,6 @@ function generateAnimationStyles(animations?: AnimationsConfig, theme?: Theme): 
 
     return []
   })
-
-  // Combine all CSS (immutable)
-  const animationCSS: readonly string[] = [...nestedKeyframesCSS, ...legacyAnimationsCSS]
 
   return animationCSS.join('\n')
 }
