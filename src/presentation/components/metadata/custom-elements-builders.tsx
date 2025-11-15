@@ -34,13 +34,31 @@ export function buildLinkElement(element: CustomElements[number], key: string): 
 
 /**
  * Build script element
+ * Handles boolean attributes (async, defer) - converts string 'true'/'false' to boolean
  */
 export function buildScriptElement(element: CustomElements[number], key: string): ReactElement {
+  // Process attributes to handle boolean HTML attributes correctly
+  const processedAttrs = element.attrs ? { ...element.attrs } : {}
+
+  // Convert boolean attribute strings to actual booleans
+  // HTML boolean attributes: async, defer, noModule, etc.
+  const booleanAttrs = ['async', 'defer', 'noModule'] as const
+  for (const attr of booleanAttrs) {
+    if (attr in processedAttrs) {
+      const value = processedAttrs[attr]
+      if (value === 'true') {
+        processedAttrs[attr] = true as any
+      } else if (value === 'false' || value === '') {
+        delete processedAttrs[attr]
+      }
+    }
+  }
+
   if (element.content) {
     return (
       <script
         key={key}
-        {...element.attrs}
+        {...processedAttrs}
         dangerouslySetInnerHTML={{ __html: element.content }}
       />
     )
@@ -48,7 +66,7 @@ export function buildScriptElement(element: CustomElements[number], key: string)
   return (
     <script
       key={key}
-      {...element.attrs}
+      {...processedAttrs}
     />
   )
 }
