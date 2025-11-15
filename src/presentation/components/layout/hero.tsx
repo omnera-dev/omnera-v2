@@ -266,6 +266,15 @@ const heroSectionBaseStyle = {
 } as const
 
 /**
+ * Check if theme has fadeInUp animation configured
+ */
+function hasFadeInUpAnimation(theme?: Theme): boolean {
+  if (!theme?.animations) return false
+  const animations = theme.animations as Record<string, unknown>
+  return Boolean(animations.fadeInUp)
+}
+
+/**
  * Build section style with theme tokens
  */
 function buildHeroSectionStyle(themeTokens: HeroThemeTokens): Record<string, string> {
@@ -368,11 +377,14 @@ export function Hero({
   const hasChildren =
     children && (Array.isArray(children) ? children.length > 0 : Boolean(children))
   const renderedContent = hasChildren ? children : <HeroDefaultContent themeTokens={themeTokens} />
+  const shouldAnimateFadeInUp = hasFadeInUpAnimation(theme)
+  const sectionClassName = shouldAnimateFadeInUp ? 'animate-fadeInUp' : undefined
 
   return (
     <section
       data-testid={props['data-testid']}
       style={buildHeroSectionStyle(themeTokens)}
+      className={sectionClassName}
     >
       {renderedContent}
       <style>{generateHeroMediaQueries(themeTokens.breakpoints, props['data-testid'])}</style>

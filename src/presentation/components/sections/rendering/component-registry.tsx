@@ -39,6 +39,13 @@ function convertBadgeProps(elementProps: Record<string, unknown>): Record<string
 }
 
 /**
+ * Parse HTML content string into React elements
+ */
+function parseHTMLContent(htmlString: string) {
+  return <div dangerouslySetInnerHTML={{ __html: htmlString }} />
+}
+
+/**
  * Shared renderer for hero and hero-section component types
  */
 const renderHeroSection: ComponentRenderer = ({
@@ -46,15 +53,23 @@ const renderHeroSection: ComponentRenderer = ({
   theme,
   content,
   renderedChildren,
-}) => (
-  <Hero
-    theme={theme}
-    content={content as { button?: { text: string; animation?: string } } | undefined}
-    data-testid={elementProps['data-testid'] as string | undefined}
-  >
-    {renderedChildren}
-  </Hero>
-)
+}) => {
+  // If content is an HTML string, parse it as children
+  const children =
+    typeof content === 'string' && content.trim().startsWith('<')
+      ? parseHTMLContent(content)
+      : renderedChildren
+
+  return (
+    <Hero
+      theme={theme}
+      content={typeof content === 'object' ? (content as { button?: { text: string; animation?: string } } | undefined) : undefined}
+      data-testid={elementProps['data-testid'] as string | undefined}
+    >
+      {children}
+    </Hero>
+  )
+}
 
 /**
  * Component registry mapping component types to their renderer functions
