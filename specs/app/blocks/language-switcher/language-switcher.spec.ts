@@ -121,7 +121,7 @@ test.describe('Language Switcher Block', () => {
   )
 
   // APP-BLOCKS-LANGUAGE-SWITCHER-003: Minimal configuration
-  test.fixme(
+  test(
     'APP-BLOCKS-LANGUAGE-SWITCHER-003: should use default variant (dropdown) and no flags',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
