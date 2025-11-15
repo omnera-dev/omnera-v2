@@ -58,7 +58,7 @@ test.describe('Page Layout', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-LAYOUT-002: should support minimal layout with navigation only',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
