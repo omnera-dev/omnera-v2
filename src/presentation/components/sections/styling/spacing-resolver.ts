@@ -6,8 +6,14 @@
  */
 
 import { isCssValue } from '@/presentation/styling/style-utils'
+import { getSectionColorStyle } from './color-resolver'
 import type { Component } from '@/domain/models/app/page/sections'
 import type { Theme } from '@/domain/models/app/theme'
+
+/**
+ * Component types that should receive section spacing
+ */
+const SECTION_TYPES = new Set(['section', 'header', 'footer', 'hero'])
 
 /**
  * Apply theme spacing to section elements when spacing.section is a CSS value
@@ -16,7 +22,7 @@ export function getSectionSpacingStyle(
   type: Component['type'],
   theme?: Theme
 ): Record<string, unknown> | undefined {
-  const sectionSpacing = type === 'section' && theme?.spacing?.section
+  const sectionSpacing = SECTION_TYPES.has(type) && theme?.spacing?.section
   return sectionSpacing && isCssValue(sectionSpacing) ? { padding: sectionSpacing } : undefined
 }
 
@@ -45,23 +51,34 @@ export function getFlexSpacingStyle(
 }
 
 /**
- * Apply all spacing styles in order: section → container → flex
+ * Apply all spacing and color styles in order: color → section → container → flex
  */
 export function applySpacingStyles(
   type: Component['type'],
   baseProps: Record<string, unknown>,
   theme?: Theme
 ): Record<string, unknown> {
-  const sectionSpacingStyle = getSectionSpacingStyle(type, theme)
-  const propsWithSection = sectionSpacingStyle
+  const colorStyle = getSectionColorStyle(type, theme)
+  const propsWithColor = colorStyle
     ? {
         ...baseProps,
         style: {
           ...(baseProps.style as Record<string, unknown> | undefined),
-          ...sectionSpacingStyle,
+          ...colorStyle,
         },
       }
     : baseProps
+
+  const sectionSpacingStyle = getSectionSpacingStyle(type, theme)
+  const propsWithSection = sectionSpacingStyle
+    ? {
+        ...propsWithColor,
+        style: {
+          ...(propsWithColor.style as Record<string, unknown> | undefined),
+          ...sectionSpacingStyle,
+        },
+      }
+    : propsWithColor
 
   const containerSpacingStyle = getContainerSpacingStyle(type, theme)
   const propsWithContainer = containerSpacingStyle

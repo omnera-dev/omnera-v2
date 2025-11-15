@@ -559,7 +559,7 @@ test.describe('Theme Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-INTEGRATION-002: should maintain visual consistency across entire page layout',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -586,7 +586,7 @@ test.describe('Theme Configuration', () => {
             sections: [
               { type: 'header' },
               { type: 'hero' },
-              { type: 'features' },
+              { type: 'section' },
               { type: 'footer' },
             ],
           },
@@ -598,16 +598,16 @@ test.describe('Theme Configuration', () => {
 
       // THEN: it should maintain visual consistency across entire page layout
       const header = page.locator('header')
-      await expect(header).toHaveCSS('background-color', /7, 123, 255/)
-      await expect(header).toHaveCSS('padding', /4rem/)
+      await expect(header).toHaveCSS('background-color', /0, 123, 255/)
+      await expect(header).toHaveCSS('padding', /64px/)
 
       const heroSection = page.locator('[data-testid="hero"]')
       await expect(heroSection).toHaveCSS('background-color', /248, 249, 250/)
-      await expect(heroSection).toHaveCSS('padding', /4rem/)
+      await expect(heroSection).toHaveCSS('padding', /64px/)
 
       const footer = page.locator('footer')
       await expect(footer).toHaveCSS('background-color', /108, 117, 125/)
-      await expect(footer).toHaveCSS('padding', /4rem/)
+      await expect(footer).toHaveCSS('padding', /64px/)
     }
   )
 
