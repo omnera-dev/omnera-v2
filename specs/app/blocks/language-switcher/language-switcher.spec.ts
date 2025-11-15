@@ -72,7 +72,7 @@ test.describe('Language Switcher Block', () => {
   )
 
   // APP-BLOCKS-LANGUAGE-SWITCHER-002: ShowFlags enabled
-  test.fixme(
+  test(
     'APP-BLOCKS-LANGUAGE-SWITCHER-002: should display flag emojis next to language labels',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
