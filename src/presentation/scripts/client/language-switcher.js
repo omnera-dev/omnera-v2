@@ -112,7 +112,7 @@
 
     if (persistSelection) {
       // Check localStorage for previously saved language
-      const savedLanguage = localStorage.getItem('language')
+      const savedLanguage = localStorage.getItem('sovrium_language')
       if (savedLanguage) {
         // Verify saved language is in supported languages (with normalization support)
         if (isLanguageSupported(savedLanguage, languagesConfig.supported)) {
@@ -376,7 +376,7 @@
     // Save to localStorage if persistence is enabled (defaults to true)
     const persistSelection = languagesConfig.persistSelection ?? true
     if (persistSelection) {
-      localStorage.setItem('language', code)
+      localStorage.setItem('sovrium_language', code)
     }
 
     // Check if current URL uses language subdirectory pattern (/:lang/*)
