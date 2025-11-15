@@ -10,6 +10,7 @@ import { BlocksSchema } from './blocks'
 import { DescriptionSchema } from './description'
 import { LanguagesSchema } from './languages'
 import { NameSchema } from './name'
+import { LayoutSchema } from './page/layout'
 import { PagesSchema } from './pages'
 import { TablesSchema } from './tables'
 import { ThemeSchema } from './theme'
@@ -104,6 +105,15 @@ export const AppSchema = Schema.Struct({
    * $vars for dynamic content.
    */
   blocks: Schema.optional(BlocksSchema),
+
+  /**
+   * Default layout configuration for all pages (optional).
+   *
+   * Defines the default layout that applies to all pages unless overridden at page level.
+   * Pages can override with layout: null (no layout), provide partial layouts (extends default),
+   * or completely replace the default layout.
+   */
+  defaultLayout: Schema.optional(LayoutSchema),
 
   /**
    * Marketing and content pages (optional).

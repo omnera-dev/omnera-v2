@@ -31,6 +31,7 @@ function renderPageByPath(app: App, path: string, detectedLanguage?: string): st
       theme={app.theme}
       languages={app.languages}
       detectedLanguage={detectedLanguage}
+      defaultLayout={app.defaultLayout}
     />
   )
 
