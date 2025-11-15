@@ -25,8 +25,8 @@ type DynamicPageProps = {
   readonly blocks?: Blocks
   readonly theme?: Theme
   readonly languages?: Languages
-  readonly detectedLanguage?: string
   readonly defaultLayout?: Layout
+  readonly detectedLanguage?: string
 }
 
 /**
@@ -119,8 +119,8 @@ export function DynamicPage({
   blocks,
   theme,
   languages,
-  detectedLanguage,
   defaultLayout,
+  detectedLanguage,
 }: DynamicPageProps): Readonly<ReactElement> {
   const metadata = extractPageMetadata(page, theme, languages, detectedLanguage)
   const langConfig = resolvePageLanguage(page, languages, detectedLanguage)
