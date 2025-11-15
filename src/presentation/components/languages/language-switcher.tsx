@@ -40,45 +40,12 @@ function LanguageSwitcherButton({
         data-testid="language-code"
         aria-hidden="true"
         style={{ display: 'none' }}
-      ></span>
+      />
       <span
         data-testid="current-language"
         data-code={defaultCode}
       >
         {defaultLanguage?.label || defaultCode}
-      </span>
-    </button>
-  )
-}
-
-/**
- * Language option button component
- */
-function LanguageOption({
-  lang,
-  showFlags,
-}: {
-  readonly lang: Languages['supported'][number]
-  readonly showFlags: boolean
-}): ReactElement {
-  return (
-    <button
-      key={lang.code}
-      data-testid={`language-option-${lang.code}`}
-      data-language-option
-      data-language-code={lang.code}
-      type="button"
-    >
-      <span data-testid="language-option">
-        {showFlags && isImageFlag(lang.flag) && (
-          <img
-            src={lang.flag}
-            alt={`${lang.label} flag`}
-            data-testid="language-flag-img"
-          />
-        )}
-        {showFlags && shouldShowFlag(lang.flag) && `${lang.flag} `}
-        {lang.label}
       </span>
     </button>
   )
@@ -136,7 +103,7 @@ export function LanguageSwitcher({
         style={{ display: 'none' }}
         data-supported-languages={JSON.stringify(languages.supported)}
         data-show-flags={showFlags}
-      ></div>
+      />
 
       {/* Fallback indicator - shows when fallback is configured */}
       {languages.fallback && (

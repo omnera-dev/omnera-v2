@@ -366,11 +366,14 @@
    * Toggles the language dropdown visibility
    * Updates isOpen state, display style, and aria-hidden attribute
    */
-  function toggleDropdown() {
+  function toggleDropdown(event) {
+    if (event) {
+      event.stopPropagation()
+    }
     isOpen = !isOpen
     if (dropdown) {
       if (isOpen) {
-        dropdown.style.display = ''
+        dropdown.style.display = 'block'
         dropdown.setAttribute('aria-hidden', 'false')
       } else {
         dropdown.style.display = 'none'
@@ -481,7 +484,8 @@
       dropdown.appendChild(button)
 
       // Attach click listener
-      button.addEventListener('click', function () {
+      button.addEventListener('click', function (event) {
+        event.stopPropagation()
         const code = this.getAttribute('data-language-code')
         if (code) {
           selectLanguage(code)
