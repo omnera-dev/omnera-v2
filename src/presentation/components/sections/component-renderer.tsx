@@ -118,9 +118,7 @@ function buildI18nContentAttribute(
       : i18nContentData
 
   // Only return attribute if there are translations
-  return Object.keys(contentWithDefault).length > 0
-    ? JSON.stringify(contentWithDefault)
-    : undefined
+  return Object.keys(contentWithDefault).length > 0 ? JSON.stringify(contentWithDefault) : undefined
 }
 
 /**

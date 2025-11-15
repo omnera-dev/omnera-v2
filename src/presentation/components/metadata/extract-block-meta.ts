@@ -29,8 +29,7 @@ function substituteVariables(
 
   // Use reduce for functional approach instead of loop with mutation
   return Object.entries(vars).reduce(
-    (result, [key, varValue]) =>
-      result.replace(new RegExp(`\\$${key}`, 'g'), String(varValue)),
+    (result, [key, varValue]) => result.replace(new RegExp(`\\$${key}`, 'g'), String(varValue)),
     value
   )
 }
@@ -49,13 +48,9 @@ function extractOpenGraphFromBlockMeta(
   if (!meta) return undefined
 
   // Build immutably without mutation
-  const withImage = meta.image
-    ? { image: substituteVariables(meta.image, vars) }
-    : {}
+  const withImage = meta.image ? { image: substituteVariables(meta.image, vars) } : {}
 
-  const withTitle = meta.title
-    ? { title: substituteVariables(meta.title, vars) }
-    : {}
+  const withTitle = meta.title ? { title: substituteVariables(meta.title, vars) } : {}
 
   const withDescription = meta.description
     ? { description: substituteVariables(meta.description, vars) }
@@ -88,8 +83,9 @@ export function extractBlockMetaFromSections(
 
   // Use functional map/filter instead of loop with mutation
   const openGraphParts = sections
-    .filter((section): section is SimpleBlockReference | BlockReference =>
-      'block' in section || '$ref' in section
+    .filter(
+      (section): section is SimpleBlockReference | BlockReference =>
+        'block' in section || '$ref' in section
     )
     .map((section) => {
       const blockName = 'block' in section ? section.block : section.$ref

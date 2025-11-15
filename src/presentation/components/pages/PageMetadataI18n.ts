@@ -17,9 +17,12 @@ import type { Page } from '@/domain/models/app/pages'
  * and constructs a complete i18n structure that the client can use
  * to update meta tags when switching languages.
  *
+ * CRITICAL: All $t: tokens in base meta fields are resolved to ensure
+ * no translation tokens appear in the serialized HTML output.
+ *
  * @param page - Page configuration
  * @param languages - Languages configuration
- * @returns Page meta with i18n structure populated
+ * @returns Page meta with i18n structure populated and all $t: tokens resolved
  */
 export function buildPageMetadataI18n(
   page: Page,
@@ -30,7 +33,8 @@ export function buildPageMetadataI18n(
   }
 
   // Store reference to meta to avoid undefined access in reduce
-  const {meta} = page
+  const { meta } = page
+  const currentLang = meta.lang || languages.default
 
   // Build i18n structure for all supported languages using reduce
   const i18n = languages.supported.reduce(
@@ -71,9 +75,38 @@ export function buildPageMetadataI18n(
     >
   )
 
-  // Return meta with i18n structure
-  return {
+  // Resolve all $t: tokens in base meta fields for current language
+  // This ensures no translation tokens remain in the HTML output
+  const resolvedMeta = {
     ...meta,
+    ...(meta.title && { title: resolveTranslationPattern(meta.title, currentLang, languages) }),
+    ...(meta.description && {
+      description: resolveTranslationPattern(meta.description, currentLang, languages),
+    }),
+    ...(meta.keywords && {
+      keywords: resolveTranslationPattern(meta.keywords, currentLang, languages),
+    }),
+  }
+
+  // Resolve og:site_name if present (either as direct property or in openGraph object)
+  const metaRecord = meta as Record<string, unknown>
+  const ogSiteName = metaRecord['og:site_name']
+  if (typeof ogSiteName === 'string') {
+    ;(resolvedMeta as Record<string, unknown>)['og:site_name'] = resolveTranslationPattern(
+      ogSiteName,
+      currentLang,
+      languages
+    )
+  } else if (meta.openGraph?.siteName) {
+    resolvedMeta.openGraph = {
+      ...meta.openGraph,
+      siteName: resolveTranslationPattern(meta.openGraph.siteName, currentLang, languages),
+    }
+  }
+
+  // Return resolved meta with i18n structure
+  return {
+    ...resolvedMeta,
     i18n,
   }
 }

@@ -69,7 +69,9 @@ function extractOpenGraphData(
 
   // Resolve translation patterns in extracted properties
   const resolvedSiteName =
-    typeof ogSiteName === 'string' ? resolveTranslationPattern(ogSiteName, lang, languages) : undefined
+    typeof ogSiteName === 'string'
+      ? resolveTranslationPattern(ogSiteName, lang, languages)
+      : undefined
 
   // Merge og:* properties into openGraph structure
   const merged = {
