@@ -126,25 +126,6 @@ export function LanguageSwitcher({
         defaultCode={languages.default}
       />
 
-      {/* Language code display - for test assertions */}
-      <span
-        data-testid="language-code"
-        className="hidden"
-      >
-        {languages.default}
-      </span>
-
-      {/* Available languages count (for test assertions) */}
-      {languages.supported.map((lang) => (
-        <div
-          key={lang.code}
-          data-testid="available-languages"
-          className="hidden"
-        >
-          {lang.label}
-        </div>
-      ))}
-
       {/* Dropdown menu - vanilla JS will handle show/hide */}
       <div
         data-language-dropdown
@@ -158,16 +139,6 @@ export function LanguageSwitcher({
           />
         ))}
       </div>
-
-      {/* Fallback indicator - shown when fallback is configured */}
-      {languages.fallback && (
-        <div
-          data-testid="fallback-handled"
-          style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden' }}
-        >
-          Fallback: {languages.fallback}
-        </div>
-      )}
     </div>
   )
 }
