@@ -40,6 +40,12 @@ function LanguageSwitcherButton({
         {shouldShowFlag(defaultLanguage?.flag) && `${defaultLanguage!.flag} `}
       </span>
       <span
+        data-testid="language-code"
+        className="hidden"
+      >
+        {defaultCode}
+      </span>
+      <span
         data-testid="current-language"
         data-code={defaultCode}
       >

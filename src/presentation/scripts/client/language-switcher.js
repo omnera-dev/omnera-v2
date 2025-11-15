@@ -68,21 +68,29 @@
   }
 
   /**
-   * Check if language is supported (exact match or base language match)
+   * Check if language is supported and return the matching supported code
    *
    * @param {string} lang - Language code to check (e.g., 'fr-FR', 'en')
    * @param {Array} supportedLanguages - Array of supported language objects
-   * @returns {boolean} - True if language is supported (exact or base match)
+   * @returns {string|undefined} - Matching supported language code or undefined if not supported
    */
-  function isLanguageSupported(lang, supportedLanguages) {
+  function findSupportedLanguage(lang, supportedLanguages) {
     // Try exact match first
-    if (supportedLanguages.some((l) => l.code === lang)) {
-      return true
+    const exactMatch = supportedLanguages.find((l) => l.code === lang)
+    if (exactMatch) {
+      return exactMatch.code
     }
 
     // Try base language match (e.g., 'fr-FR' → 'fr')
     const baseLang = lang.split('-')[0]
-    return supportedLanguages.some((l) => l.code === baseLang || l.code.split('-')[0] === baseLang)
+    const baseMatch = supportedLanguages.find(
+      (l) => l.code === baseLang || l.code.split('-')[0] === baseLang
+    )
+    if (baseMatch) {
+      return baseMatch.code
+    }
+
+    return undefined
   }
 
   /**
@@ -102,8 +110,9 @@
     // If HTML lang differs from default, it means the page explicitly set a language
     if (pageLang && pageLang !== defaultLang) {
       // Verify page language is in supported languages (with normalization support)
-      if (isLanguageSupported(pageLang, languagesConfig.supported)) {
-        return pageLang
+      const normalized = findSupportedLanguage(pageLang, languagesConfig.supported)
+      if (normalized) {
+        return normalized
       }
     }
 
@@ -115,16 +124,18 @@
       const savedLanguage = localStorage.getItem('language')
       if (savedLanguage) {
         // Verify saved language is in supported languages (with normalization support)
-        if (isLanguageSupported(savedLanguage, languagesConfig.supported)) {
-          return savedLanguage
+        const normalized = findSupportedLanguage(savedLanguage, languagesConfig.supported)
+        if (normalized) {
+          return normalized
         }
       }
     }
 
     // 3. Use HTML lang attribute if it matches default (server's default or Accept-Language detection)
     if (pageLang) {
-      if (isLanguageSupported(pageLang, languagesConfig.supported)) {
-        return pageLang
+      const normalized = findSupportedLanguage(pageLang, languagesConfig.supported)
+      if (normalized) {
+        return normalized
       }
     }
 
@@ -147,7 +158,7 @@
   let isOpen = false
 
   // Cache DOM elements to avoid repeated queries
-  let currentLanguageEl, dropdown, switcherButton
+  let currentLanguageEl, languageCodeEl, dropdown, switcherButton
 
   /**
    * Normalizes language code to match translation keys
@@ -334,6 +345,10 @@
       currentLanguageEl.textContent = label
     }
 
+    if (languageCodeEl) {
+      languageCodeEl.textContent = currentLanguage
+    }
+
     // Update HTML dir attribute based on language direction
     const direction = currentLang?.direction || 'ltr'
     document.documentElement.setAttribute('dir', direction)
@@ -417,6 +432,7 @@
   function init() {
     // Cache DOM elements once
     currentLanguageEl = document.querySelector('[data-testid="current-language"]')
+    languageCodeEl = document.querySelector('[data-testid="language-code"]')
     dropdown = document.querySelector('[data-language-dropdown]')
     switcherButton = document.querySelector('[data-testid="language-switcher"]')
 
