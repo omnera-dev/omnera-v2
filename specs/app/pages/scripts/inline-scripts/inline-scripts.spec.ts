@@ -139,11 +139,12 @@ test.describe('Inline Scripts', () => {
       await page.goto('/')
 
       // THEN: it should insert code at start of body
-      const bodyScript = await page
-        .locator('body script')
-        .filter({ hasText: 'body-start' })
-        .textContent()
-      expect(bodyScript).toContain("console.log('body-start');")
+      const bodyScripts = await page.locator('body script').all()
+      const bodyScriptContents = await Promise.all(bodyScripts.map((s) => s.innerHTML()))
+      const hasExpectedScript = bodyScriptContents.some((content) =>
+        content.includes("console.log('body-start');")
+      )
+      expect(hasExpectedScript).toBeTruthy()
     }
   )
 

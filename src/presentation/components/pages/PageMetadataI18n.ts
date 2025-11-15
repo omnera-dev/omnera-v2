@@ -77,7 +77,10 @@ export function buildPageMetadataI18n(
 
   // Merge existing meta.i18n with generated i18n (existing takes precedence)
   const existingI18n = (meta as Record<string, unknown>).i18n as
-    | Record<string, { title?: string; description?: string; keywords?: string; 'og:site_name'?: string }>
+    | Record<
+        string,
+        { title?: string; description?: string; keywords?: string; 'og:site_name'?: string }
+      >
     | undefined
 
   const i18n = existingI18n
