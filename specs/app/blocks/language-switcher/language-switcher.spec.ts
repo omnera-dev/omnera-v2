@@ -65,6 +65,10 @@ test.describe('Language Switcher Block', () => {
       // THEN: it should render a dropdown menu with all supported languages
       const switcher = page.locator('[data-testid="language-switcher"]')
       await expect(switcher).toBeVisible()
+
+      // Click button to open dropdown (SSR + vanilla JS architecture)
+      await page.locator('[data-testid="language-switcher-button"]').click()
+
       await expect(page.locator('[data-testid="language-option-en-US"]')).toBeVisible()
       await expect(page.locator('[data-testid="language-option-fr-FR"]')).toBeVisible()
       await expect(page.locator('[data-testid="language-option-es-ES"]')).toBeVisible()

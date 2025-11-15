@@ -129,7 +129,7 @@ export function LanguageSwitcher({
       {/* Dropdown menu - vanilla JS will handle show/hide */}
       <div
         data-language-dropdown
-        className="absolute top-full left-0 z-10"
+        className="absolute top-full left-0 z-10 hidden"
       >
         {languages.supported.map((lang) => (
           <LanguageOption
