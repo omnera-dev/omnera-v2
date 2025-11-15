@@ -26,10 +26,12 @@ import type { ElementProps } from './element-renderers'
  * Note: Languages are already validated at server startup via AppSchema validation.
  * No need to re-validate here since the data comes from the validated app config.
  *
- * Note: Props like variant, showFlags, and position are currently not used but may
- * be supported in future versions of the LanguageSwitcher component.
+ * Props:
+ * - variant: Display variant (dropdown, inline, tabs) - defaults to dropdown
+ * - showFlags: Whether to show flag emojis - defaults to false
+ * - position: Position on page (top-right, header, footer, sidebar)
  */
-export function renderLanguageSwitcher(_props: ElementProps, languages?: Languages): ReactElement {
+export function renderLanguageSwitcher(props: ElementProps, languages?: Languages): ReactElement {
   if (!languages) {
     console.warn('language-switcher block requires languages configuration')
     return (
@@ -46,8 +48,18 @@ export function renderLanguageSwitcher(_props: ElementProps, languages?: Languag
     )
   }
 
+  // Extract props
+  const variant = (props.variant as string | undefined) || 'dropdown'
+  const showFlags = (props.showFlags as boolean | undefined) ?? false
+
   // Languages already validated at server startup (start-server.ts)
-  return <LanguageSwitcher languages={languages} />
+  return (
+    <LanguageSwitcher
+      languages={languages}
+      variant={variant}
+      showFlags={showFlags}
+    />
+  )
 }
 
 /**
