@@ -122,7 +122,8 @@ function extractHeroTheme(theme?: Theme): HeroThemeTokens {
     breakpoints: extractBreakpoints(theme),
     colors: extractColors(theme),
     spacing: {
-      section: theme?.spacing?.section ?? DEFAULT_THEME.spacing.section,
+      // Use explicit theme.spacing.section if provided, otherwise use mobile-first default
+      section: theme?.spacing?.section ?? '2rem',
     },
     borderRadius: {
       lg: theme?.borderRadius?.lg ?? DEFAULT_THEME.borderRadius.lg,
@@ -281,7 +282,7 @@ function buildHeroSectionStyle(themeTokens: HeroThemeTokens): Record<string, str
   return {
     ...heroSectionBaseStyle,
     backgroundColor: themeTokens.colors.background,
-    padding: '2rem',
+    padding: themeTokens.spacing.section,
   }
 }
 
