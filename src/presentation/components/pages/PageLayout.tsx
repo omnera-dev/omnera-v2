@@ -43,7 +43,7 @@ export function PageLayout({
   defaultLayout,
   children,
 }: PageLayoutProps): Readonly<ReactElement> {
-  const effectiveLayout = mergeLayouts(page.layout, defaultLayout)
+  const effectiveLayout = mergeLayouts(defaultLayout, page.layout)
 
   return (
     <>
