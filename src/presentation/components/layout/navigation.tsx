@@ -84,6 +84,130 @@ function NavLinkItem({ link }: Readonly<{ link: NavLink }>): Readonly<ReactEleme
 }
 
 /**
+ * Configuration for navigation styling
+ */
+type NavStyleConfig = Readonly<{
+  backgroundColor?: string
+  textColor?: string
+  sticky?: boolean
+  transparent?: boolean
+  isScrolled: boolean
+}>
+
+/**
+ * Builds navigation style object
+ */
+function buildNavStyleObject(config: NavStyleConfig): Record<string, unknown> {
+  const baseStyle = buildColorStyles(config.backgroundColor, config.textColor)
+  return {
+    ...baseStyle,
+    ...(config.sticky && { position: 'sticky', top: 0, zIndex: 50 }),
+    ...(config.transparent && !config.isScrolled && { backgroundColor: 'transparent' }),
+    ...(config.transparent && config.isScrolled && { backgroundColor: 'white' }),
+  }
+}
+
+/**
+ * Builds navigation className string
+ */
+function buildNavClassName(config: NavStyleConfig): string {
+  return [
+    config.sticky && 'sticky top-0 z-50',
+    config.transparent && !config.isScrolled && 'bg-transparent',
+    config.transparent && config.isScrolled && 'bg-white shadow-md',
+  ]
+    .filter(Boolean)
+    .join(' ')
+}
+
+/**
+ * Logo Component
+ */
+function NavLogo({ logo, logoAlt }: Readonly<{ logo: string; logoAlt?: string }>): Readonly<ReactElement> {
+  const altText = logoAlt ?? 'Logo'
+  return (
+    <a
+      href="/"
+      aria-label=""
+    >
+      <img
+        data-testid="nav-logo"
+        src={logo}
+        alt={altText}
+      />
+    </a>
+  )
+}
+
+/**
+ * CTA Button Component
+ */
+function NavCTA({ cta }: Readonly<{ cta: NavigationProps['cta'] }>): Readonly<ReactElement | undefined> {
+  if (!cta) return undefined
+
+  return (
+    <Button
+      asChild
+      variant={cta.variant}
+      size={cta.size}
+      color={cta.color}
+      icon={cta.icon}
+      iconPosition={cta.iconPosition}
+    >
+      <a
+        href={cta.href}
+        data-testid="nav-cta"
+        role="button"
+      >
+        {cta.text}
+      </a>
+    </Button>
+  )
+}
+
+/**
+ * Search Input Component
+ */
+function NavSearch({ search }: Readonly<{ search: NavigationProps['search'] }>): Readonly<ReactElement | undefined> {
+  if (!search?.enabled) return undefined
+
+  return (
+    <div data-testid="nav-search">
+      <input
+        type="search"
+        placeholder={search.placeholder ?? 'Search...'}
+        aria-label={search.placeholder ?? 'Search...'}
+        className="search-input"
+      />
+    </div>
+  )
+}
+
+/**
+ * User Menu Component
+ */
+function NavUserMenu({ user }: Readonly<{ user: NavigationProps['user'] }>): Readonly<ReactElement | undefined> {
+  if (!user?.enabled) return undefined
+
+  return (
+    <div data-testid="user-menu">
+      <a
+        href={user.loginUrl}
+        data-testid="login-link"
+      >
+        Login
+      </a>
+      <a
+        href={user.signupUrl}
+        data-testid="signup-link"
+      >
+        Sign Up
+      </a>
+    </div>
+  )
+}
+
+/**
  * Navigation Component
  *
  * Renders the main navigation header with logo, links, and optional CTA button.
@@ -118,39 +242,27 @@ export function Navigation({
     return () => window.removeEventListener('scroll', handleScroll)
   }, [transparent])
 
-  const navStyle = buildColorStyles(backgroundColor, textColor)
-  const navClasses = [
-    sticky && 'sticky top-0 z-50',
-    transparent && !isScrolled && 'bg-transparent',
-    transparent && isScrolled && 'bg-white shadow-md',
-  ]
-    .filter(Boolean)
-    .join(' ')
-
-  const altText = logoAlt ?? 'Logo'
+  const styleConfig: NavStyleConfig = {
+    backgroundColor,
+    textColor,
+    sticky,
+    transparent,
+    isScrolled,
+  }
+  const navStyle = buildNavStyleObject(styleConfig)
+  const navClasses = buildNavClassName(styleConfig)
 
   return (
     <nav
       data-testid="navigation"
       aria-label="Main navigation"
-      style={{
-        ...navStyle,
-        ...(sticky && { position: 'sticky', top: 0, zIndex: 50 }),
-        ...(transparent && !isScrolled && { backgroundColor: 'transparent' }),
-        ...(transparent && isScrolled && { backgroundColor: 'white' }),
-      }}
+      style={navStyle}
       className={navClasses}
     >
-      <a
-        href="/"
-        aria-label=""
-      >
-        <img
-          data-testid="nav-logo"
-          src={logo}
-          alt={altText}
-        />
-      </a>
+      <NavLogo
+        logo={logo}
+        logoAlt={logoAlt}
+      />
       {links?.desktop && (
         <div
           data-testid="nav-links"
@@ -164,50 +276,9 @@ export function Navigation({
           ))}
         </div>
       )}
-      {cta && (
-        <Button
-          asChild
-          variant={cta.variant}
-          size={cta.size}
-          color={cta.color}
-          icon={cta.icon}
-          iconPosition={cta.iconPosition}
-        >
-          <a
-            href={cta.href}
-            data-testid="nav-cta"
-            role="button"
-          >
-            {cta.text}
-          </a>
-        </Button>
-      )}
-      {search?.enabled && (
-        <div data-testid="nav-search">
-          <input
-            type="search"
-            placeholder={search.placeholder ?? 'Search...'}
-            aria-label={search.placeholder ?? 'Search...'}
-            className="search-input"
-          />
-        </div>
-      )}
-      {user?.enabled && (
-        <div data-testid="user-menu">
-          <a
-            href={user.loginUrl}
-            data-testid="login-link"
-          >
-            Login
-          </a>
-          <a
-            href={user.signupUrl}
-            data-testid="signup-link"
-          >
-            Sign Up
-          </a>
-        </div>
-      )}
+      <NavCTA cta={cta} />
+      <NavSearch search={search} />
+      <NavUserMenu user={user} />
     </nav>
   )
 }
