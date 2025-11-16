@@ -5,12 +5,12 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
+import { useEffect, useState } from 'react'
 import { Button } from '@/presentation/components/ui/button'
 import { buildColorStyles } from '@/presentation/utils/styles'
 import type { Navigation as NavigationProps } from '@/domain/models/app/page/layout/navigation'
 import type { NavLink } from '@/domain/models/app/page/layout/navigation/nav-links'
 import type { ReactElement } from 'react'
-import { useEffect, useState } from 'react'
 
 /**
  * NavLinkItem Component
