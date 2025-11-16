@@ -57,7 +57,7 @@ test.describe('Local Business Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-LOCALBUSINESS-002: should provide business identity',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
