@@ -50,7 +50,7 @@ function NavLinkItem({ link }: Readonly<{ link: NavLink }>): Readonly<ReactEleme
           data-testid="nav-dropdown"
           className="hidden group-hover:block absolute top-full left-0 mt-1 bg-white shadow-lg rounded p-2"
         >
-          {link.children?.map((child) => (
+          {link.children?.map((child: NavLink) => (
             <a
               key={child.href}
               href={child.href}
