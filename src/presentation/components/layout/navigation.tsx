@@ -5,6 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
+import { useEffect, useState } from 'react'
 import { Button } from '@/presentation/components/ui/button'
 import { buildColorStyles } from '@/presentation/utils/styles'
 import type { Navigation as NavigationProps } from '@/domain/models/app/page/layout/navigation'
@@ -86,32 +87,68 @@ function NavLinkItem({ link }: Readonly<{ link: NavLink }>): Readonly<ReactEleme
  * Navigation Component
  *
  * Renders the main navigation header with logo, links, and optional CTA button.
+ * Supports sticky positioning, transparent background with scroll detection,
+ * search input, and user authentication menu.
  *
  * @param props - Navigation configuration
  * @returns Navigation header element
  */
 export function Navigation({
   logo,
+  logoAlt,
+  sticky,
+  transparent,
   links,
   cta,
+  search,
+  user,
   backgroundColor,
   textColor,
 }: Readonly<NavigationProps>): Readonly<ReactElement> {
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    if (!transparent) return
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [transparent])
+
   const navStyle = buildColorStyles(backgroundColor, textColor)
+  const navClasses = [
+    sticky && 'sticky top-0 z-50',
+    transparent && !isScrolled && 'bg-transparent',
+    transparent && isScrolled && 'bg-white shadow-md',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
+  const altText = logoAlt ?? 'Logo'
 
   return (
     <nav
       data-testid="navigation"
-      style={navStyle}
+      aria-label="Main navigation"
+      style={{
+        ...navStyle,
+        ...(sticky && { position: 'sticky', top: 0, zIndex: 50 }),
+        ...(transparent && !isScrolled && { backgroundColor: 'transparent' }),
+        ...(transparent && isScrolled && { backgroundColor: 'white' }),
+      }}
+      className={navClasses}
     >
       <a
         href="/"
-        data-testid="nav-logo-link"
+        aria-label=""
       >
         <img
           data-testid="nav-logo"
           src={logo}
-          alt="Logo"
+          alt={altText}
         />
       </a>
       {links?.desktop && (
@@ -135,10 +172,41 @@ export function Navigation({
           color={cta.color}
           icon={cta.icon}
           iconPosition={cta.iconPosition}
-          data-testid="nav-cta"
         >
-          <a href={cta.href}>{cta.text}</a>
+          <a
+            href={cta.href}
+            data-testid="nav-cta"
+            role="button"
+          >
+            {cta.text}
+          </a>
         </Button>
+      )}
+      {search?.enabled && (
+        <div data-testid="nav-search">
+          <input
+            type="search"
+            placeholder={search.placeholder ?? 'Search...'}
+            aria-label={search.placeholder ?? 'Search...'}
+            className="search-input"
+          />
+        </div>
+      )}
+      {user?.enabled && (
+        <div data-testid="user-menu">
+          <a
+            href={user.loginUrl}
+            data-testid="login-link"
+          >
+            Login
+          </a>
+          <a
+            href={user.signupUrl}
+            data-testid="signup-link"
+          >
+            Sign Up
+          </a>
+        </div>
       )}
     </nav>
   )
